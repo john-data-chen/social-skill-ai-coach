@@ -96,7 +96,55 @@ describe("POST /api/chat", () => {
       { Authorization: "Bearer my-key" }
     )
     await POST(req)
-    expect(mockGetProvider).toHaveBeenCalledWith("mimo", "my-key")
+    expect(mockGetProvider).toHaveBeenCalledWith("mimo", "my-key", undefined)
+  })
+
+  it("passes BYOK baseUrl through to getProvider", async () => {
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
+    mockGetProvider.mockReturnValue(() => vi.fn())
+
+    const req = makeRequest(
+      {
+        messages: [{ role: "user", content: "hi" }],
+        provider: "mimo",
+        model: "m1",
+        baseUrl: "https://token-plan-cn.xiaomimimo.com/v1",
+        mode: "byok",
+        stage: "analyzer"
+      },
+      { Authorization: "Bearer my-key" }
+    )
+    await POST(req)
+    expect(mockGetProvider).toHaveBeenCalledWith(
+      "mimo",
+      "my-key",
+      "https://token-plan-cn.xiaomimimo.com/v1"
+    )
+  })
+
+  it("uses MIMO_API_BASE_URL env in demo mode", async () => {
+    process.env.MIMO_API_BASE_URL = "https://token-plan-cn.xiaomimimo.com/v1"
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
+    mockGetProvider.mockReturnValue(() => vi.fn())
+
+    const req = makeRequest({
+      messages: [{ role: "user", content: "hi" }],
+      provider: "mimo",
+      model: "m1",
+      mode: "demo",
+      stage: "analyzer"
+    })
+    await POST(req)
+    expect(mockGetProvider).toHaveBeenCalledWith(
+      "mimo",
+      "env-mimo-key",
+      "https://token-plan-cn.xiaomimimo.com/v1"
+    )
+    delete process.env.MIMO_API_BASE_URL
   })
 
   it("uses env key in demo mode for mimo", async () => {
@@ -113,7 +161,7 @@ describe("POST /api/chat", () => {
       stage: "analyzer"
     })
     await POST(req)
-    expect(mockGetProvider).toHaveBeenCalledWith("mimo", "env-mimo-key")
+    expect(mockGetProvider).toHaveBeenCalledWith("mimo", "env-mimo-key", undefined)
   })
 
   it("uses env key in demo mode for deepseek", async () => {
@@ -130,7 +178,7 @@ describe("POST /api/chat", () => {
       stage: "analyzer"
     })
     await POST(req)
-    expect(mockGetProvider).toHaveBeenCalledWith("deepseek", "env-deepseek-key")
+    expect(mockGetProvider).toHaveBeenCalledWith("deepseek", "env-deepseek-key", undefined)
   })
 
   it("handles reflection stage with generateObject", async () => {

@@ -22,7 +22,7 @@ import {
 import { useAppStore } from "@/lib/store"
 
 export function Settings() {
-  const { provider, model, apiKey, mode, setConfig } = useAppStore()
+  const { provider, model, apiKey, baseUrl, mode, setConfig } = useAppStore()
 
   useEffect(() => {
     if (model === "gpt-4o") {
@@ -115,6 +115,23 @@ export function Settings() {
                 }}
                 className="col-span-3"
                 placeholder="sk-..."
+              />
+            </div>
+          )}
+
+          {mode === "byok" && provider === "mimo" && (
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="baseUrl" className="text-right">
+                Base URL
+              </Label>
+              <Input
+                id="baseUrl"
+                value={baseUrl}
+                onChange={(e) => {
+                  setConfig({ baseUrl: e.target.value })
+                }}
+                className="col-span-3"
+                placeholder="Mimo token plan only — e.g. https://token-plan-cn.xiaomimimo.com/v1"
               />
             </div>
           )}

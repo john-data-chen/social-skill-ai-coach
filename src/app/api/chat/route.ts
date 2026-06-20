@@ -22,6 +22,7 @@ const chatBodySchema = z.looseObject({
   ),
   provider: z.string(),
   model: z.string(),
+  baseUrl: z.string().optional(),
   mode: z.string().optional(),
   stage: z.string().default(""),
   roleplayHistory: z.array(z.unknown()).optional()
@@ -40,7 +41,7 @@ export async function POST(req: Request) {
     if (!parsed.success) {
       return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400 })
     }
-    const { messages, provider, model, mode, stage, roleplayHistory } = parsed.data
+    const { messages, provider, model, baseUrl, mode, stage, roleplayHistory } = parsed.data
     const authHeader = req.headers.get("Authorization")
     const byokKey = authHeader?.replace("Bearer ", "")
 
@@ -53,7 +54,10 @@ export async function POST(req: Request) {
       return new Response(JSON.stringify({ error: "Missing API Key" }), { status: 401 })
     }
 
-    const aiProvider = getProvider(provider as "mimo" | "deepseek", apiKey)
+    // MiMo paid plans need a plan-specific base URL: demo reads it from the
+    // server env, BYOK reads the user-supplied value. DeepSeek ignores it.
+    const mimoBaseURL = mode === "demo" ? process.env.MIMO_API_BASE_URL : baseUrl
+    const aiProvider = getProvider(provider as "mimo" | "deepseek", apiKey, mimoBaseURL)
 
     if (stage === "reflection") {
       const transcript = (roleplayHistory || [])
@@ -174,7 +178,10 @@ ${obj.feedback}
     const result = streamText({
       model: aiProvider(model),
       system: systemPrompt,
-      messages: coreMessages
+      messages: coreMessages,
+      onError: ({ error }) => {
+        console.error("STREAM_ERROR", String((error as Error)?.message ?? error))
+      }
     })
 
     return result.toTextStreamResponse()

@@ -20,6 +20,7 @@ export interface AppState {
   provider: "mimo" | "deepseek" | "demo"
   model: string
   apiKey: string
+  baseUrl: string
   mode: "demo" | "byok"
 
   // App state (Transient)
@@ -27,7 +28,9 @@ export interface AppState {
   history: Record<Stage, Message[]>
 
   // Actions
-  setConfig: (config: Partial<Pick<AppState, "provider" | "model" | "apiKey" | "mode">>) => void
+  setConfig: (
+    config: Partial<Pick<AppState, "provider" | "model" | "apiKey" | "baseUrl" | "mode">>
+  ) => void
   setStage: (stage: Stage) => void
   setHistory: (stage: Stage, messages: Message[]) => void
   clearHistory: () => void
@@ -46,6 +49,7 @@ export const useAppStore = create<AppState>()(
       provider: "mimo",
       model: "mimo-v2.5-pro",
       apiKey: "",
+      baseUrl: "",
       mode: "byok",
       currentStage: "analyzer",
       history: initialHistory,
@@ -68,6 +72,7 @@ export const useAppStore = create<AppState>()(
         provider: state.provider,
         model: state.model,
         apiKey: state.apiKey,
+        baseUrl: state.baseUrl,
         mode: state.mode
       })
     }
