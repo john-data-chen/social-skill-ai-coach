@@ -46,7 +46,7 @@ export function Settings() {
             </Label>
             <Select 
               value={provider} 
-              onValueChange={(val) =>{  setConfig({ provider: val as "mimo" | "deepseek" }); }}
+              onValueChange={(val) =>{  setConfig({ provider: val as "mimo" | "deepseek", model: val === "mimo" ? "mimo-v2.5-pro" : "deepseek-v4-pro" }); }}
             >
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select provider" />
