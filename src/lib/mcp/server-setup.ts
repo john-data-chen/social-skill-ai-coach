@@ -42,7 +42,9 @@ export function registerSocialSkillsMcp(server: McpServer): void {
           .describe("One or more topic keys to fetch, e.g. ['opening', 'social-errors']")
       }
     },
-    ({ topics }) => ({ content: [{ type: "text", text: getKnowledgeMany(topics) }] })
+    ({ topics }: { topics: TopicKey[] }) => ({
+      content: [{ type: "text", text: getKnowledgeMany(topics) }]
+    })
   )
 
   // --- Coaching prompts (executed by the client's own model) -------------------
@@ -53,7 +55,7 @@ export function registerSocialSkillsMcp(server: McpServer): void {
       description: "Structure a social situation (who/what/where, channel, scenario type, goal).",
       argsSchema: { situation: z.string().describe("The social situation to analyze") }
     },
-    ({ situation }) => ({
+    ({ situation }: { situation: string }) => ({
       messages: [
         {
           role: "user",
@@ -73,7 +75,7 @@ export function registerSocialSkillsMcp(server: McpServer): void {
       description: "Give concrete, curriculum-grounded advice for a social situation.",
       argsSchema: { situation: z.string().describe("The social situation to get advice on") }
     },
-    ({ situation }) => ({
+    ({ situation }: { situation: string }) => ({
       messages: [
         {
           role: "user",
@@ -94,7 +96,7 @@ export function registerSocialSkillsMcp(server: McpServer): void {
         "Play the other person so the user can practice; react to their social-skill level.",
       argsSchema: { scenario: z.string().describe("The scenario / context for the roleplay") }
     },
-    ({ scenario }) => ({
+    ({ scenario }: { scenario: string }) => ({
       messages: [
         {
           role: "user",
@@ -114,7 +116,7 @@ export function registerSocialSkillsMcp(server: McpServer): void {
       description: "Evaluate a roleplay transcript against the social-skills rubric.",
       argsSchema: { transcript: z.string().describe("The roleplay transcript to evaluate") }
     },
-    ({ transcript }) => ({
+    ({ transcript }: { transcript: string }) => ({
       messages: [
         {
           role: "user",

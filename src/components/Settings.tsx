@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
-import { useAppStore, AppState } from "@/lib/store"
+import { useAppStore, type AppState } from "@/lib/store"
 
 const MODE_LABELS: Record<string, string> = {
   demo: "Demo (Server Key)",
@@ -46,7 +46,7 @@ export function Settings() {
   const handleOpenChange = (isOpen: boolean) => {
     if (isOpen) {
       let draftModel = store.model
-      const allowedModels = MODELS[store.provider] || MODELS["mimo"]
+      const allowedModels = MODELS[store.provider] || MODELS["mimo"]!
       if (!allowedModels.includes(draftModel)) {
         draftModel = allowedModels[0]!
       }
@@ -117,7 +117,7 @@ export function Settings() {
                 setDraft((prev) => ({
                   ...prev,
                   provider: newProvider,
-                  model: MODELS[newProvider]![0]
+                  model: MODELS[newProvider]![0] as string
                 }))
               }}
             >
@@ -140,14 +140,14 @@ export function Settings() {
             <Select
               value={draft.model}
               onValueChange={(val) => {
-                setDraft((prev) => ({ ...prev, model: val }))
+                setDraft((prev) => ({ ...prev, model: val as string }))
               }}
             >
               <SelectTrigger className="col-span-3 w-full">
                 <SelectValue placeholder="Select model" />
               </SelectTrigger>
               <SelectContent>
-                {(MODELS[draft.provider as string] || MODELS["mimo"]).map((m) => (
+                {(MODELS[draft.provider as string] || MODELS["mimo"]!).map((m) => (
                   <SelectItem key={m} value={m}>
                     {m}
                   </SelectItem>
