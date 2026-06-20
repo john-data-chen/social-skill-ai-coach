@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react"
 import { describe, it, expect } from "vitest"
 
-import { ThemeProvider } from "../ThemeProvider"
+import { ThemeProvider } from "../../src/components/ThemeProvider"
 
 describe("ThemeProvider", () => {
   it("renders children without crashing", () => {

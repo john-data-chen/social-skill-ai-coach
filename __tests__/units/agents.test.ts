@@ -6,7 +6,7 @@ import {
   roleplayPrompt,
   reflectionPrompt,
   reflectionSchema
-} from "../agents"
+} from "../../src/lib/agents"
 
 describe("agents", () => {
   it("should export prompts", () => {
