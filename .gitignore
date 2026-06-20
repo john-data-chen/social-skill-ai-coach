@@ -11,3 +11,7 @@ tsconfig.tsbuildinfo
 
 # Next.js
 .next
+
+# Env files
+.env
+.env*.local
