@@ -1,0 +1,58 @@
+{
+  "name": "social-skill-ai-coach",
+  "version": "1.0.0",
+  "private": true,
+  "author": {
+    "name": "jianan.chen",
+    "url": "https://github.com/john-data-chen/social-skill-ai-coach"
+  },
+  "scripts": {
+    "build": "pnpm typecheck && next build",
+    "commit": "git-cz",
+    "dev": "next dev",
+    "format": "oxfmt --no-error-on-unmatched-pattern --config ./.oxfmtrc.json",
+    "lint": "oxlint src --type-aware --fix --no-error-on-unmatched-pattern",
+    "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky; fi",
+    "start": "next start",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
+    "typecheck": "tsgo --noEmit"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "@commitlint/cz-commitlint": "^21.0.2",
+    "@types/node": "^24.13.2",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@typescript/native-preview": "beta",
+    "@vitejs/plugin-react-swc": "^4.3.1",
+    "@vitest/coverage-v8": "^4.1.9",
+    "commitizen": "^4.3.2",
+    "dotenv": "^17.4.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
+    "oxfmt": "^0.55.0",
+    "oxlint": "^1.70.0",
+    "oxlint-tsgolint": "^0.23.0",
+    "vitest": "^4.1.9"
+  },
+  "lint-staged": {
+    "{src/!(components)/**/*.{js,jsx,ts,tsx,css,scss},src/components/!(ui)/**/*.{js,jsx,ts,tsx,css,scss}}": [
+      "oxfmt --no-error-on-unmatched-pattern --config ./.oxfmtrc.json"
+    ],
+    "{src/!(components)/**/*.{js,jsx,ts,tsx},src/components/!(ui)/**/*.{js,jsx,ts,tsx}}": [
+      "oxlint --type-aware --fix --no-error-on-unmatched-pattern"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@11.8.0"
+}
