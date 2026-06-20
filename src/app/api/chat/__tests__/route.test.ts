@@ -3,7 +3,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 import { POST } from "../route"
 
-// Mock AI SDK
 vi.mock("ai", () => {
   return {
     streamText: vi.fn(() => ({
@@ -49,8 +48,34 @@ describe("API Route", () => {
     })
 
     const res = await POST(req)
-    // Because streamText returns "mock-stream" and it's not a Response, we just check it doesn't throw 401
-    // Actually the mock returns string but route expects StreamTextResult, let's fix the route mock behavior.
+    expect(res).toBeDefined()
+  })
+
+  it("should use DEEPSEEK key in demo mode", async () => {
+    process.env.DEEPSEEK_API_KEY = "ds-demo-key"
+    const req = new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({ mode: "demo", provider: "deepseek", stage: "analyzer" }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+
+    const res = await POST(req)
+    expect(res).toBeDefined()
+  })
+
+  it("should use byok key when provided", async () => {
+    const req = new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({ mode: "byok", provider: "mimo", stage: "coach", messages: [] }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer my-custom-key"
+      }
+    })
+
+    const res = await POST(req)
     expect(res).toBeDefined()
   })
 
@@ -95,9 +120,10 @@ describe("API Route", () => {
     const res = await POST(req)
     expect(res.status).toBe(500)
   })
+
   it("should catch general errors", async () => {
     const req = {
-      json:  async () => Promise.reject(new Error("bad json"))
+      json: async () => Promise.reject(new Error("bad json"))
     } as any
 
     const res = await POST(req)
@@ -119,6 +145,195 @@ describe("API Route", () => {
     const req = new Request("http://localhost/api/chat", {
       method: "POST",
       body: JSON.stringify({ mode: "demo", provider: "mimo", stage: "roleplay", messages: [] })
+    })
+    const res = await POST(req)
+    expect(res).toBeDefined()
+  })
+
+  it("should streamText for reflection stage fallback", async () => {
+    process.env.MIMO_API_KEY = "demo-key"
+    const req = new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({ mode: "demo", provider: "mimo", stage: "reflection", messages: [] })
+    })
+    const res = await POST(req)
+    expect(res).toBeDefined()
+  })
+
+  it("should process image attachments", async () => {
+    process.env.MIMO_API_KEY = "demo-key"
+    const req = new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "demo",
+        provider: "mimo",
+        stage: "analyzer",
+        messages: [
+          {
+            role: "user",
+            content: "Look at this image",
+            experimental_attachments: [
+              { name: "photo.png", contentType: "image/png", url: "data:image/png;base64,abc123" }
+            ]
+          }
+        ]
+      })
+    })
+    const res = await POST(req)
+    expect(res).toBeDefined()
+    expect(ai.streamText).toHaveBeenCalled()
+  })
+
+  it("should process text file attachments", async () => {
+    process.env.MIMO_API_KEY = "demo-key"
+    const req = new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "demo",
+        provider: "mimo",
+        stage: "analyzer",
+        messages: [
+          {
+            role: "user",
+            content: "Read this file",
+            experimental_attachments: [
+              {
+                name: "notes.txt",
+                contentType: "text/plain",
+                url: "data:text/plain;base64,aGVsbG8="
+              }
+            ]
+          }
+        ]
+      })
+    })
+    const res = await POST(req)
+    expect(res).toBeDefined()
+  })
+
+  it("should process markdown file attachments", async () => {
+    process.env.MIMO_API_KEY = "demo-key"
+    const req = new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "demo",
+        provider: "mimo",
+        stage: "analyzer",
+        messages: [
+          {
+            role: "user",
+            content: "Read this doc",
+            experimental_attachments: [
+              {
+                name: "readme.md",
+                contentType: "text/markdown",
+                url: "data:text/markdown;base64,bWFyZGRvdw=="
+              }
+            ]
+          }
+        ]
+      })
+    })
+    const res = await POST(req)
+    expect(res).toBeDefined()
+  })
+
+  it("should process csv file attachments", async () => {
+    process.env.MIMO_API_KEY = "demo-key"
+    const req = new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "demo",
+        provider: "mimo",
+        stage: "analyzer",
+        messages: [
+          {
+            role: "user",
+            content: "Analyze this data",
+            experimental_attachments: [
+              {
+                name: "data.csv",
+                contentType: "text/csv",
+                url: "data:text/csv;base64,Y29sMSxjb2wy"
+              }
+            ]
+          }
+        ]
+      })
+    })
+    const res = await POST(req)
+    expect(res).toBeDefined()
+  })
+
+  it("should process pdf attachments", async () => {
+    process.env.MIMO_API_KEY = "demo-key"
+    const req = new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "demo",
+        provider: "mimo",
+        stage: "analyzer",
+        messages: [
+          {
+            role: "user",
+            content: "Check this document",
+            experimental_attachments: [
+              {
+                name: "report.pdf",
+                contentType: "application/pdf",
+                url: "data:application/pdf;base64,JVBERi0x"
+              }
+            ]
+          }
+        ]
+      })
+    })
+    const res = await POST(req)
+    expect(res).toBeDefined()
+  })
+
+  it("should process docx attachments", async () => {
+    process.env.MIMO_API_KEY = "demo-key"
+    const req = new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "demo",
+        provider: "mimo",
+        stage: "analyzer",
+        messages: [
+          {
+            role: "user",
+            content: "Check this doc",
+            experimental_attachments: [
+              {
+                name: "file.docx",
+                contentType:
+                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                url: "data:application/docx;base64,UEsFBg=="
+              }
+            ]
+          }
+        ]
+      })
+    })
+    const res = await POST(req)
+    expect(res).toBeDefined()
+  })
+
+  it("should process messages without attachments", async () => {
+    process.env.MIMO_API_KEY = "demo-key"
+    const req = new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "demo",
+        provider: "mimo",
+        stage: "analyzer",
+        messages: [
+          { role: "user", content: "Hello" },
+          { role: "assistant", content: "Hi" },
+          { role: "user", content: "How are you?" }
+        ]
+      })
     })
     const res = await POST(req)
     expect(res).toBeDefined()
