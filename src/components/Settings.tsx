@@ -79,6 +79,7 @@ export function Settings() {
         <DialogHeader>
           <DialogTitle>AI Provider Settings</DialogTitle>
           <DialogDescription>
+            {/* [SECURITY: Client-side Key Storage] */}
             Configure your AI provider. Your API key is stored only in this browser tab&apos;s
             session memory and is never logged on our servers.
           </DialogDescription>

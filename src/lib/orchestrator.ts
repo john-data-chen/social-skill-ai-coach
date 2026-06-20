@@ -6,12 +6,12 @@ import { TOPICS, type TopicKey, getKnowledgeMany } from "@/lib/knowledge"
 /**
  * Server-only orchestration for the coaching pipeline.
  *
- * Stage routing stays deterministic and client-safe in `router.ts` (the UI also
- * exposes the four stages as tabs). The orchestration value the LLM adds here is
- * retrieval-augmented grounding for the Coach: pick the curriculum topics most
- * relevant to the user's situation, then read just those slices from the
- * `social-skills-coach` skill in-process. This module imports the fs-backed
- * knowledge loader, so it must only be used server-side (the chat route).
+ * Stage routing (Analyzer -> Coach -> Roleplay -> Reflection) stays deterministic
+ * and client-safe in `router.ts`.
+ * The orchestration value the LLM adds here is retrieval-augmented grounding (RAG)
+ * for the Coach: it dynamically picks the curriculum topics most relevant to the
+ * user's situation, then reads just those slices from the `social-skills-coach`
+ * skill in-process. This ensures advice is strictly curriculum-bound.
  */
 
 const topicKeys = Object.keys(TOPICS) as [TopicKey, ...TopicKey[]]
@@ -35,9 +35,11 @@ ${Object.entries(TOPICS)
   .join("\n")}`
 
 /**
+ * FALLBACK_TOPICS:
  * Broadly-useful core slices for when topic selection is unavailable (e.g. a model
- * without structured-output support, or a transient failure). Keeps the Coach
- * grounded rather than ungrounded.
+ * without structured-output support, or a transient failure). This fallback mechanism
+ * ensures the Coach remains grounded in foundational curriculum rather than generating
+ * ungrounded advice.
  */
 export const FALLBACK_TOPICS: TopicKey[] = [
   "opening",

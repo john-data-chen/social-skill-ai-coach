@@ -11,7 +11,8 @@ import {
 import { getProvider } from "@/lib/ai"
 import { groundingFor, selectKnowledgeTopics } from "@/lib/orchestrator"
 
-// Validate the request body at the trust boundary. Loose objects let client-only
+// [SECURITY: Trust Boundary Validation]
+// Validate the request body at the trust boundary using zod. Loose objects let client-only
 // fields (e.g. a message `id`) pass through; we only enforce the shapes we rely on.
 const chatBodySchema = z.looseObject({
   messages: z.array(
@@ -42,6 +43,9 @@ export async function POST(req: Request) {
       return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400 })
     }
     const { messages, provider, model, baseUrl, mode, stage, roleplayHistory } = parsed.data
+    // [SECURITY: BYOK (Bring Your Own Key) & No Persistence]
+    // The API key is passed via the Authorization header and used purely in-memory.
+    // It is never written to console logs, and never persisted to a database.
     const authHeader = req.headers.get("Authorization")
     const byokKey = authHeader?.replace("Bearer ", "")
 
@@ -116,12 +120,16 @@ ${obj.feedback}
       }
     }
 
+    // Multi-Agent Pipeline Dispatch:
+    // Each stage activates a specialized agent prompt to perform a distinct job.
     let systemPrompt = ""
     switch (stage) {
       case "analyzer":
+        // Agent 1: Structures the user's situation without giving advice yet.
         systemPrompt = analyzerPrompt
         break
       case "coach": {
+        // Agent 2: Provides concrete advice.
         // Retrieval-augmented grounding: the orchestrator LLM-selects the relevant
         // curriculum topics for this situation, then we read just those slices from
         // the social-skills-coach skill in-process.
@@ -132,9 +140,11 @@ ${obj.feedback}
         break
       }
       case "roleplay":
+        // Agent 3: Plays the role of the conversational partner for realistic practice.
         systemPrompt = roleplayPrompt
         break
       case "reflection":
+        // Agent 4: Evaluates the roleplay transcript and provides structured feedback.
         systemPrompt = reflectionPrompt
         break
       default:

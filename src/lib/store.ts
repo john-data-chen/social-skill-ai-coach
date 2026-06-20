@@ -68,6 +68,9 @@ export const useAppStore = create<AppState>()(
     {
       name: "social-coach-storage",
       version: 1,
+      // [SECURITY: Session Storage]
+      // Use sessionStorage instead of localStorage so BYOK API keys and chat history
+      // are automatically cleared when the tab is closed, preventing credential leakage.
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
         provider: state.provider,

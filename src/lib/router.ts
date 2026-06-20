@@ -1,5 +1,14 @@
 import type { Stage } from "./store"
 
+/**
+ * Deterministic stage router.
+ *
+ * Instead of relying on a fragile LLM for pipeline state transitions, we use
+ * explicit user intents (e.g. "let's roleplay", "give me feedback") to advance
+ * through the four stages (Analyzer -> Coach -> Roleplay -> Reflection). This
+ * keeps the UX predictable and allows the UI to sync perfectly with the active stage.
+ */
+
 export function advancePipeline(stage: Stage): Stage {
   switch (stage) {
     case "analyzer":
