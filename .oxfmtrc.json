@@ -53,6 +53,7 @@
     "CHANGELOG.md",
     "ai_docs/**",
     ".agents/**",
-    "src/components/ui/**"
+    "src/components/ui/**",
+    "src/app/globals.css"
   ]
 }
