@@ -37,7 +37,7 @@ export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
       provider: "mimo",
-      model: "gpt-4o", // Example default, will be adjusted later
+      model: "mimo-v2.5-pro",
       apiKey: "",
       mode: "byok",
       currentStage: "analyzer",
