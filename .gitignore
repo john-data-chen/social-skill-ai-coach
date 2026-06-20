@@ -15,3 +15,6 @@ tsconfig.tsbuildinfo
 # Env files
 .env
 .env*.local
+
+# test
+coverage
