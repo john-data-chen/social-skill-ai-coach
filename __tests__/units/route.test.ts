@@ -10,10 +10,15 @@ vi.mock("ai", () => ({
 
 vi.mock("../../src/lib/agents", () => ({
   analyzerPrompt: "Social Situation Analyzer prompt",
-  coachPrompt: "Social Skills Coach prompt",
+  buildCoachPrompt: (k: string) => "COACH_SYS::" + k,
   roleplayPrompt: "Roleplay Partner prompt",
   reflectionPrompt: "Reflection Agent prompt",
   reflectionSchema: { parse: vi.fn() }
+}))
+
+vi.mock("../../src/lib/orchestrator", () => ({
+  selectKnowledgeTopics: vi.fn().mockResolvedValue(["opening"]),
+  groundingFor: vi.fn().mockReturnValue("KB")
 }))
 
 const mockGetProvider = vi.fn()
@@ -50,6 +55,27 @@ describe("POST /api/chat", () => {
     expect(res.status).toBe(401)
     const json = await res.json()
     expect(json.error).toBe("Missing API Key")
+  })
+
+  it("returns 400 when the body shape is invalid", async () => {
+    const req = makeRequest(
+      { messages: "not-an-array", provider: "mimo", stage: "analyzer" },
+      { Authorization: "Bearer k" }
+    )
+    const res = await POST(req)
+    expect(res.status).toBe(400)
+    const json = await res.json()
+    expect(json.error).toBe("Invalid request body")
+  })
+
+  it("returns 400 on malformed JSON", async () => {
+    const req = new Request("http://localhost/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: "Bearer k" },
+      body: "{not valid json"
+    })
+    const res = await POST(req)
+    expect(res.status).toBe(400)
   })
 
   it("uses BYOK key from Authorization header", async () => {
@@ -230,7 +256,7 @@ describe("POST /api/chat", () => {
     )
     await POST(req)
     expect(mockStreamText).toHaveBeenCalledWith(
-      expect.objectContaining({ system: "Social Skills Coach prompt" })
+      expect.objectContaining({ system: "COACH_SYS::KB" })
     )
   })
 

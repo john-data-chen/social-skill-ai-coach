@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest"
 import {
   analyzerPrompt,
   coachPrompt,
+  buildCoachPrompt,
   roleplayPrompt,
   reflectionPrompt,
   reflectionSchema,
@@ -23,10 +24,16 @@ describe("agents", () => {
 
   it("composes shared knowledge into the prompts", () => {
     expect(FRIENDSHIP.length).toBeGreaterThan(0)
-    expect(coachPrompt).toContain(OPENING)
-    expect(coachPrompt).toContain(FRIENDSHIP)
     expect(roleplayPrompt).toContain(SOCIAL_ERRORS)
     expect(roleplayPrompt).toContain(HUMOR)
+  })
+
+  it("coach grounds on injected curriculum knowledge", () => {
+    // Coach no longer inlines the whole KB; the route injects selected slices.
+    const composed = buildCoachPrompt(`${OPENING}\n\n${FRIENDSHIP}`)
+    expect(composed).toContain("Social Skills Coach")
+    expect(composed).toContain(OPENING)
+    expect(composed).toContain(FRIENDSHIP)
   })
 })
 

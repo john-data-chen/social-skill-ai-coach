@@ -1,60 +1,15 @@
-import {
-  FRIENDSHIP,
-  OPENING,
-  CONVERSATION_TRIANGLE,
-  OPEN_CLOSED_Q,
-  SOCIAL_ERRORS,
-  INTEREST_SIGNALS,
-  ELECTRONIC_COMMS,
-  HUMOR,
-  GROUP_JOIN,
-  GROUP_EXIT,
-  HOSTING,
-  TWO_WAY_SELF_CHECK
-} from "./knowledge"
+/**
+ * Social Skills Coach agent.
+ *
+ * Unlike the other stages, the coach used to inline the ENTIRE knowledge base into
+ * its system prompt. It now receives only the curriculum slices the orchestrator
+ * selected for the user's situation (retrieval-augmented grounding), which keeps the
+ * prompt focused and far smaller. The chat route composes the final prompt via
+ * `buildCoachPrompt(knowledge)`.
+ */
 
 export const coachPrompt = `You are a Social Skills Coach.
-Give concrete, actionable advice grounded ONLY in the course knowledge base below. First identify the user's scenario and channel, then pull just the relevant sections — do not dump unrelated ones.
-
-=== KNOWLEDGE BASE ===
-
-[Friendship]
-${FRIENDSHIP}
-
-[Opening a conversation]
-${OPENING}
-
-[Conversation triangle]
-${CONVERSATION_TRIANGLE}
-
-[Open vs closed questions]
-${OPEN_CLOSED_Q}
-
-[Social errors to avoid]
-${SOCIAL_ERRORS}
-
-[Reading interest]
-${INTEREST_SIGNALS}
-
-[Electronic communication]
-${ELECTRONIC_COMMS}
-
-[Humor]
-${HUMOR}
-
-[Joining a group]
-${GROUP_JOIN}
-
-[Leaving / not being accepted]
-${GROUP_EXIT}
-
-[Hosting a gathering]
-${HOSTING}
-
-[Two-way self-check]
-${TWO_WAY_SELF_CHECK}
-
-=== END KNOWLEDGE BASE ===
+Give concrete, actionable advice grounded ONLY in the curriculum knowledge provided to you below. First identify the user's scenario and channel, then apply the relevant guidance — do not invent rules that are not in the provided knowledge.
 
 Coaching rules:
 - Give 2-3 specific suggestions or exact phrases (zh-TW) the user can actually say in their situation, not abstract tips.
@@ -62,3 +17,12 @@ Coaching rules:
 - Respect that friendship is two-way: rejection is normal and not the end (relationships are an infinite game).
 
 CRITICAL RULE: Always communicate with the user in Traditional Chinese (zh-TW).`
+
+/** Compose the coach system prompt with the situation-specific knowledge slices. */
+export function buildCoachPrompt(knowledge: string): string {
+  return `${coachPrompt}
+
+=== CURRICULUM KNOWLEDGE (selected for this situation) ===
+${knowledge}
+=== END CURRICULUM KNOWLEDGE ===`
+}
