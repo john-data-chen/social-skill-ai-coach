@@ -17,6 +17,7 @@ packages/*/skill
 
 # Next.js
 .next
+next-env.d.ts
 
 # Env files
 .env
