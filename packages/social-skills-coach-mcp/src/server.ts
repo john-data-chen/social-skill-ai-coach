@@ -51,7 +51,10 @@ export function registerSocialSkillsMcp(server: McpServer): void {
       messages: [
         {
           role: "user",
-          content: { type: "text", text: `${analyzerPrompt}\n\n---\nSituation to analyze:\n${situation}` }
+          content: {
+            type: "text",
+            text: `${analyzerPrompt}\n\n---\nSituation to analyze:\n${situation}`
+          }
         }
       ]
     })
@@ -81,14 +84,18 @@ export function registerSocialSkillsMcp(server: McpServer): void {
     "roleplay",
     {
       title: "Roleplay a social scenario",
-      description: "Play the other person so the user can practice; react to their social-skill level.",
+      description:
+        "Play the other person so the user can practice; react to their social-skill level.",
       argsSchema: { scenario: z.string().describe("The scenario / context for the roleplay") }
     },
     ({ scenario }) => ({
       messages: [
         {
           role: "user",
-          content: { type: "text", text: `${roleplayPrompt}\n\n---\nScenario / context for this roleplay:\n${scenario}` }
+          content: {
+            type: "text",
+            text: `${roleplayPrompt}\n\n---\nScenario / context for this roleplay:\n${scenario}`
+          }
         }
       ]
     })
@@ -105,7 +112,10 @@ export function registerSocialSkillsMcp(server: McpServer): void {
       messages: [
         {
           role: "user",
-          content: { type: "text", text: `${reflectionPrompt}\n\n---\nRoleplay transcript to evaluate:\n${transcript}` }
+          content: {
+            type: "text",
+            text: `${reflectionPrompt}\n\n---\nRoleplay transcript to evaluate:\n${transcript}`
+          }
         }
       ]
     })

@@ -52,7 +52,9 @@ describe("reflectionSchema", () => {
   it("accepts per-dimension rubric entries", () => {
     const parsed = reflectionSchema.parse({
       ...base,
-      dimensions: [{ name: "two-way conversation", status: "good", note: "balanced speaking and listening" }]
+      dimensions: [
+        { name: "two-way conversation", status: "good", note: "balanced speaking and listening" }
+      ]
     })
     expect(parsed.dimensions?.[0]?.status).toBe("good")
   })

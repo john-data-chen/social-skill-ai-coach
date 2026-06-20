@@ -50,7 +50,7 @@ export const useAppStore = create<AppState>()(
       model: "mimo-v2.5-pro",
       apiKey: "",
       baseUrl: "",
-      mode: "byok",
+      mode: "demo",
       currentStage: "analyzer",
       history: initialHistory,
 
@@ -67,6 +67,7 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: "social-coach-storage",
+      version: 1,
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
         provider: state.provider,
