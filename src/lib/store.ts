@@ -1,9 +1,16 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from "zustand/middleware"
+export interface Attachment {
+  name: string
+  contentType: string
+  url: string
+}
+
 export interface Message {
   id: string
   role: string
   content: string
+  experimental_attachments?: Attachment[]
 }
 
 export type Stage = "analyzer" | "coach" | "roleplay" | "reflection"

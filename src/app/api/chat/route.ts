@@ -87,10 +87,43 @@ ${obj.feedback}
         break
     }
 
+    const coreMessages = messages.map((m: any) => {
+      if (m.experimental_attachments && m.experimental_attachments.length > 0) {
+        const parts: any[] = [{ type: "text", text: m.content }]
+
+        m.experimental_attachments.forEach((att: any) => {
+          if (att.contentType.startsWith("image/")) {
+            parts.push({ type: "image", image: att.url })
+          } else if (
+            att.contentType.startsWith("text/") ||
+            att.name.endsWith(".md") ||
+            att.name.endsWith(".txt") ||
+            att.name.endsWith(".csv")
+          ) {
+            const base64Data = att.url.split(",")[1] || att.url
+            const textContent = Buffer.from(base64Data, "base64").toString("utf-8")
+            parts.push({
+              type: "text",
+              text: `\n\n--- Attachment: ${att.name} ---\n${textContent}\n--- End Attachment ---`
+            })
+          } else {
+            // For pdf or docs, try passing as file or just text placeholder
+            const base64Data = att.url.split(",")[1] || att.url
+            parts.push({ type: "file", data: base64Data, mimeType: att.contentType })
+          }
+        })
+        return { role: m.role, content: parts }
+      }
+      return {
+        role: m.role,
+        content: m.content
+      }
+    })
+
     const result = streamText({
       model: aiProvider(model),
       system: systemPrompt,
-      messages
+      messages: coreMessages
     })
 
     return result.toTextStreamResponse()

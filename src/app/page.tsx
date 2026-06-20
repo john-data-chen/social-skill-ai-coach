@@ -1,5 +1,6 @@
 "use client"
 
+import { Paperclip, X } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 import ReactMarkdown from "react-markdown"
 
@@ -10,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { determineNextStage } from "@/lib/router"
-import { useAppStore } from "@/lib/store"
+import { useAppStore, type Attachment } from "@/lib/store"
 
 export default function Home() {
   const { provider, model, apiKey, mode, currentStage, setStage, history, setHistory } =
@@ -18,6 +19,8 @@ export default function Home() {
 
   const [input, setInput] = useState("")
   const [messages, setMessages] = useState<any[]>(history[currentStage] || [])
+  const [attachments, setAttachments] = useState<Attachment[]>([])
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Restore history when stage changes
   useEffect(() => {
@@ -34,10 +37,39 @@ export default function Home() {
     setInput(e.target.value)
   }
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return
+    }
+
+    Array.from(e.target.files).forEach((file) => {
+      const reader = new FileReader()
+      reader.onload = () => {
+        setAttachments((prev) => [
+          ...prev,
+          {
+            name: file.name,
+            contentType: file.type,
+            url: reader.result as string
+          }
+        ])
+      }
+      reader.readAsDataURL(file)
+    })
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
+  }
+
+  const removeAttachment = (index: number) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index))
+  }
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     void (async () => {
-      if (!input.trim()) {
+      if (!input.trim() && attachments.length === 0) {
         setStage(determineNextStage(currentStage, ""))
         return
       }
@@ -49,10 +81,16 @@ export default function Home() {
         return
       }
 
-      const userMessage = { id: Date.now().toString(), role: "user", content: input }
+      const userMessage = {
+        id: Date.now().toString(),
+        role: "user",
+        content: input,
+        ...(attachments.length > 0 && { experimental_attachments: attachments })
+      }
       const newMessages = [...messages, userMessage]
       setMessages(newMessages)
       setInput("")
+      setAttachments([])
 
       try {
         const response = await fetch("/api/chat", {
@@ -156,6 +194,26 @@ export default function Home() {
                       className={`p-4 rounded-xl max-w-[85%] prose dark:prose-invert text-sm leading-relaxed ${m.role === "user" ? "bg-blue-600 text-white" : "bg-white dark:bg-gray-800 shadow-sm border dark:border-gray-700"}`}
                     >
                       <ReactMarkdown>{m.content}</ReactMarkdown>
+                      {m.experimental_attachments && m.experimental_attachments.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {m.experimental_attachments.map((att: Attachment, i: number) => (
+                            <div
+                              key={i}
+                              className="rounded overflow-hidden border border-gray-300 dark:border-gray-600 bg-white/10"
+                            >
+                              {att.contentType.startsWith("image/") ? (
+                                <img
+                                  src={att.url}
+                                  alt={att.name}
+                                  className="max-h-40 object-cover"
+                                />
+                              ) : (
+                                <div className="p-2 text-xs flex items-center">{att.name}</div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))
@@ -163,22 +221,65 @@ export default function Home() {
               <div ref={messagesEndRef} />
             </div>
 
-            <form
-              onSubmit={onSubmit}
-              className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-800"
-            >
-              <Input
-                value={input}
-                onChange={handleInputChange}
-                placeholder={
-                  currentStage === "reflection"
-                    ? "Type 'Review me' to start reflection..."
-                    : "Type your message (or empty to next stage)..."
-                }
-                className="flex-1 bg-white dark:bg-gray-950"
-              />
-              <Button type="submit">Send</Button>
-            </form>
+            <div className="flex flex-col border-t border-gray-200 dark:border-gray-800 pt-4">
+              {attachments.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {attachments.map((att, i) => (
+                    <div
+                      key={i}
+                      className="relative rounded overflow-hidden border bg-background group"
+                    >
+                      {att.contentType.startsWith("image/") ? (
+                        <img src={att.url} alt={att.name} className="w-16 h-16 object-cover" />
+                      ) : (
+                        <div className="w-16 h-16 flex items-center justify-center bg-muted text-[10px] text-center p-1 break-all overflow-hidden">
+                          {att.name}
+                        </div>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          removeAttachment(i)
+                        }}
+                        className="absolute top-0.5 right-0.5 bg-black/50 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <form onSubmit={onSubmit} className="flex gap-2">
+                <input
+                  type="file"
+                  multiple
+                  className="hidden"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept="image/*,text/*,.pdf,.doc,.docx"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="shrink-0"
+                >
+                  <Paperclip size={18} />
+                </Button>
+                <Input
+                  value={input}
+                  onChange={handleInputChange}
+                  placeholder={
+                    currentStage === "reflection"
+                      ? "Type 'Review me' to start reflection..."
+                      : "Type your message (or empty to next stage)..."
+                  }
+                  className="flex-1 bg-white dark:bg-gray-950"
+                />
+                <Button type="submit">Send</Button>
+              </form>
+            </div>
           </CardContent>
         </Card>
       </main>
