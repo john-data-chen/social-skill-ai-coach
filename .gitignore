@@ -18,3 +18,5 @@ tsconfig.tsbuildinfo
 
 # test
 coverage
+test-results
+playwright-report
