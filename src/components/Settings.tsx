@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useAppStore } from "@/lib/store";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -8,6 +9,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export function Settings() {
   const { provider, model, apiKey, mode, setConfig } = useAppStore();
+
+  useEffect(() => {
+    if (model === "gpt-4o") {
+      setConfig({ model: provider === "mimo" ? "mimo-v2.5-pro" : "deepseek-v4-pro" });
+    }
+  }, [model, provider, setConfig]);
 
   return (
     <Dialog>
