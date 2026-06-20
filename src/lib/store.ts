@@ -2,7 +2,7 @@ import { create } from "zustand"
 import { persist, createJSONStorage } from "zustand/middleware"
 export interface Message {
   id: string
-  role: "system" | "user" | "assistant"
+  role: string
   content: string
 }
 
