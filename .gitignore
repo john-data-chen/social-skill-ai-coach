@@ -8,6 +8,10 @@ GEMINI.md
 
 node_modules
 tsconfig.tsbuildinfo
+dist
+
+# Generated copy of the Agent Skill inside the npm package (source of truth: skills/)
+packages/*/skill
 
 # Next.js
 .next

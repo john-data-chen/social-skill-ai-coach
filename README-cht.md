@@ -70,7 +70,7 @@ skills/social-skills-coach/        Agent Skill＝課程，唯一真實來源（s
 
 - **四階段教練循環**——Analyzer → Coach → Roleplay → Reflection。
 - **Agent Skill 課程**——社交知識撰寫成可重用的 Skill。
-- **MCP 知識伺服器**——課程不只本應用可用，任何 MCP client 都能接。
+- **MCP 伺服器（自帶你的模型）**——四個 agent 以 MCP prompts + 知識 tools 形式開放，任何 MCP client 都能用自己的模型跑整套教練。可發佈成 npm stdio 套件（`social-skills-coach-mcp`）。
 - **檢索增強式教練**——Coach 只依據與你情境相關的片段落地建議。
 - **BYOK（自帶金鑰）**——直接在瀏覽器 session 使用你自己的 API key。
 - **多模型**——可在 Xiaomi MiMo 與 DeepSeek（OpenAI-compatible）間切換。
@@ -79,16 +79,37 @@ skills/social-skills-coach/        Agent Skill＝課程，唯一真實來源（s
 
 ---
 
-## 🔌 使用 MCP 伺服器
+## 🧰 當成 MCP 伺服器用（自帶你的模型）
 
-MCP 伺服器是一個獨立、符合協議的端點，任何 MCP client 都能取用社交課程知識。
+整套教練能力**同時也是一個獨立 MCP 伺服器**，任何人都能用**自己的模型**跑它。四個
+agent 以 MCP **prompts** 形式開放——它們在**連線方 client 的模型**上執行——所以伺服器
+本身不需要任何 API key、也不跑任何推論。這就是別人能換上比 demo 更強（或不同）模型的方式。
 
-- **端點：** `POST <你的網址>/api/mcp`（Streamable HTTP transport）
-- **工具：**
-  - `list_social_topics`——列出 12 個課程主題（key + 說明）。
-  - `get_social_knowledge({ topics: string[] })`——取回指定主題 key 的逐字片段。
+- **Prompts**（在你的模型上跑）：`analyze_situation` · `coach` · `roleplay` · `reflect`
+- **Tools**（知識 grounding）：`list_social_topics` · `get_social_knowledge({ topics })`
 
-對執行中的伺服器做快速煙霧測試：
+### 方式一 — npm 套件（stdio，本機 client 推薦）
+
+發佈為 [`social-skills-coach-mcp`](./packages/social-skills-coach-mcp)。加進 Claude Desktop
+的 `claude_desktop_config.json`：
+
+```json
+{
+  "mcpServers": {
+    "social-skills-coach": { "command": "npx", "args": ["-y", "social-skills-coach-mcp"] }
+  }
+}
+```
+
+或用 MCP Inspector 互動檢視：
+
+```bash
+npx @modelcontextprotocol/inspector npx -y social-skills-coach-mcp
+```
+
+### 方式二 — hosted HTTP（已部署的 app）
+
+同一套能力也在 `POST <你的網址>/api/mcp`（Streamable HTTP）提供。快速煙霧測試：
 
 ```bash
 curl -s -X POST http://localhost:3000/api/mcp \
@@ -97,14 +118,16 @@ curl -s -X POST http://localhost:3000/api/mcp \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_social_knowledge","arguments":{"topics":["opening"]}}}'
 ```
 
-你也可以用 **MCP Inspector** 或 **Claude Desktop** 連到同一個端點，互動式瀏覽與呼叫這些工具。
+兩種形式共用同一個 core（`registerSocialSkillsMcp`）與同一份課程來源（Agent Skill），不會漂移。
 
 ---
 
 ## 📂 專案結構
 
 ```text
-├── skills/social-skills-coach/  # Agent Skill：課程（SKILL.md + references/*.md）
+├── skills/social-skills-coach/  # Agent Skill：課程（SKILL.md + references/*.md）— 唯一來源
+├── packages/
+│   └── social-skills-coach-mcp/ # 可發佈的 npm stdio MCP 伺服器（prompts + tools）
 ├── .github/workflows/           # CI/CD（測試與 Vercel 部署）
 ├── __tests__/
 │   ├── e2e/                      # Playwright 端對端測試
@@ -120,6 +143,7 @@ curl -s -X POST http://localhost:3000/api/mcp \
 │   └── lib/
 │       ├── agents/                   # 階段代理 + 知識 adapter
 │       ├── knowledge/                # 讀取 Agent Skill 片段的 loader
+│       ├── mcp/server-setup.ts       # 共用 MCP 註冊（tools + agent prompts）
 │       ├── orchestrator.ts           # LLM 主題挑選 + 落地（server-only）
 │       ├── router.ts                 # Deterministic 階段路由（client 安全）
 │       ├── ai.ts                     # 供應商初始化（MiMo / DeepSeek）
