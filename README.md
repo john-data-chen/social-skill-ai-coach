@@ -70,7 +70,7 @@ skills/social-skills-coach/        Agent Skill = the curriculum, single source o
 
 - **4-stage coaching loop** — Analyzer → Coach → Roleplay → Reflection.
 - **Agent Skill curriculum** — social-skills knowledge authored as a reusable Skill.
-- **MCP knowledge server** — the curriculum is available to any MCP client, not just this app.
+- **MCP server (bring your own model)** — the four agents are exposed as MCP prompts + knowledge tools, so any MCP client can run the whole coach with its own model. Distributable as an npm stdio package (`social-skills-coach-mcp`).
 - **Retrieval-augmented coaching** — the Coach is grounded only in the slices relevant to your situation.
 - **BYOK (Bring Your Own Key)** — use your own API key directly from the browser session.
 - **Multi-model** — switch between Xiaomi MiMo and DeepSeek (OpenAI-compatible).
@@ -79,15 +79,39 @@ skills/social-skills-coach/        Agent Skill = the curriculum, single source o
 
 ---
 
-## 🔌 Using the MCP server
+## 🧰 Use it as an MCP server (bring your own model)
 
-The MCP server is a standalone, protocol-compliant endpoint, so any MCP client can pull the social-skills curriculum.
+The whole coaching capability is **also a standalone MCP server**, so anyone can run
+it with their OWN model. The four agents are exposed as MCP **prompts** — they execute
+on the _connecting client's_ model — so the server needs no API key and runs no
+inference itself. That is how others can plug in a more capable model than the demo's
+(cheap) MiMo/DeepSeek.
 
-- **Endpoint:** `POST <your-host>/api/mcp` (Streamable HTTP transport)
-- **Tools:**
-  - `list_social_topics` — list the 12 curriculum topics (key + description).
-  - `get_social_knowledge({ topics: string[] })` — fetch the verbatim slice(s) for the given topic key(s).
+- **Prompts** (run on your model): `analyze_situation` · `coach` · `roleplay` · `reflect`
+- **Tools** (knowledge grounding): `list_social_topics` · `get_social_knowledge({ topics })`
 
+### Option 1 — npm package over stdio (recommended for local clients)
+
+Published as [`social-skills-coach-mcp`](./packages/social-skills-coach-mcp). Add it to
+Claude Desktop's `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "social-skills-coach": { "command": "npx", "args": ["-y", "social-skills-coach-mcp"] }
+  }
+}
+```
+
+Or inspect it interactively:
+
+```bash
+npx @modelcontextprotocol/inspector npx -y social-skills-coach-mcp
+```
+
+### Option 2 — hosted HTTP (the deployed app)
+
+The same capability is served at `POST <your-host>/api/mcp` (Streamable HTTP transport).
 Quick smoke test against a running server:
 
 ```bash
@@ -97,14 +121,17 @@ curl -s -X POST http://localhost:3000/api/mcp \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_social_knowledge","arguments":{"topics":["opening"]}}}'
 ```
 
-You can also point **MCP Inspector** or **Claude Desktop** at the same endpoint to browse and call the tools interactively.
+Both forms share one core (`registerSocialSkillsMcp`) and one curriculum source (the
+Agent Skill), so they never drift.
 
 ---
 
 ## 📂 Repository structure
 
 ```text
-├── skills/social-skills-coach/  # Agent Skill: the curriculum (SKILL.md + references/*.md)
+├── skills/social-skills-coach/  # Agent Skill: the curriculum (SKILL.md + references/*.md) — single source
+├── packages/
+│   └── social-skills-coach-mcp/ # Publishable npm stdio MCP server (prompts + tools)
 ├── .github/workflows/           # CI/CD (testing & Vercel deployment)
 ├── __tests__/
 │   ├── e2e/                      # Playwright end-to-end tests
@@ -120,6 +147,7 @@ You can also point **MCP Inspector** or **Claude Desktop** at the same endpoint 
 │   └── lib/
 │       ├── agents/                   # Stage agents + knowledge adapter
 │       ├── knowledge/                # Loader that reads the Agent Skill slices
+│       ├── mcp/server-setup.ts       # Shared MCP registration (tools + agent prompts)
 │       ├── orchestrator.ts           # LLM topic selection + grounding (server-only)
 │       ├── router.ts                 # Deterministic stage routing (client-safe)
 │       ├── ai.ts                     # Provider init (MiMo / DeepSeek)

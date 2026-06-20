@@ -8,7 +8,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./vitest-setup.ts"],
-    exclude: ["__tests__/e2e/**", "node_modules/**"],
+    exclude: ["__tests__/e2e/**", "**/node_modules/**", "packages/**"],
     coverage: {
       include: ["src/**/*.{ts,tsx}"],
       exclude: [
