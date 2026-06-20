@@ -12,6 +12,8 @@ const notoSansTC = Noto_Sans_TC({
   variable: "--font-noto-sans-tc"
 })
 
+import { ThemeProvider } from "@/components/ThemeProvider"
+
 export const metadata: Metadata = {
   title: "Social Skills AI Coach",
   description: "AI Social Skills Coach"
@@ -23,8 +25,17 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)}>
-      <body className={`${notoSansTC.className} antialiased`}>{children}</body>
+    <html lang="en" className={cn("font-sans", geist.variable)} suppressHydrationWarning>
+      <body className={`${notoSansTC.className} antialiased`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   )
 }
