@@ -52,6 +52,7 @@
     ".vercel/**",
     "CHANGELOG.md",
     "ai_docs/**",
-    ".agents/**"
+    ".agents/**",
+    "src/components/ui/**"
   ]
 }
