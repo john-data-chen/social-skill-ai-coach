@@ -1,7 +1,7 @@
 # Social Skills AI Coach
 
 [![codecov](https://codecov.io/gh/john-data-chen/social-skill-ai-coach/graph/badge.svg?token=Gj6H1mEAAz)](https://codecov.io/gh/john-data-chen/social-skill-ai-coach)
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=john-data-chen_social-skill-ai-coach)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_social-skill-ai-coach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
 [![CI](https://github.com/john-data-chen/social-skill-ai-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/social-skill-ai-coach/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -11,13 +11,13 @@ A multi-agent web app that helps people **practice and improve real social inter
 
 > **Live demo:** deployed on Vercel — _add your deployment URL here_.
 
-> ⚠️ **Disclaimer:** This project — the demo, the MCP server, and the Skill — is **not a substitute for a trained, licensed therapist or clinician**. It is a **concept product** built for the Kaggle *AI Agents: Intensive Vibe Coding Capstone Project* and **must not be used for medical purposes**.
+> ⚠️ **Disclaimer:** This project — the demo, the MCP server, and the Skill — is **not a substitute for a trained, licensed therapist or clinician**. It is a **concept product** built for the Kaggle _AI Agents: Intensive Vibe Coding Capstone Project_ and **must not be used for medical purposes**.
 
 ---
 
 ## 🧩 The problem
 
-Social skills are learnable, but they are hard to *practice*: real conversations are high-stakes, one-shot, and rarely come with honest feedback. People who most want to improve have the fewest low-risk reps. This project turns an 8-lesson social-skills curriculum into an on-demand coach you can rehearse with as many times as you like.
+Social skills are learnable, but they are hard to _practice_: real conversations are high-stakes, one-shot, and rarely come with honest feedback. People who most want to improve have the fewest low-risk reps. This project turns an 8-lesson social-skills curriculum into an on-demand coach you can rehearse with as many times as you like.
 
 ## 💡 Why this matters
 
@@ -28,21 +28,21 @@ But the reality is harsh:
 - Many parents (especially in Asia) don't realize — or struggle to admit — that their child has a social-skills problem, because it can feel like an admission of their own incapacity or failure as educators.
 - The entry-level PEERS program is aimed at teens: ~8 sessions per round at roughly **US$90 each**. Social skills are subtle and hard, so missing even one session matters — you have to attend every one. A full course is ~16 sessions, which many families simply can't afford.
 - Once bad social habits set in, the person often faces bullying and exclusion all the way into adulthood. Learning as an adult is hard but not impossible — except that by then most people can't face going back to "learn social skills alongside children," so they never do.
-- Like any sport: knowing the rules and knowing *how* to do it is a completely different level from actually being *good* at it. Social interaction may be even harder than sport — it looks rule-based but is deeply subtle and complex. In Asian society especially, no one tells you when you make a social mistake; everyone assumes you "should already know," and you are quietly distanced, excluded, even bullied.
+- Like any sport: knowing the rules and knowing _how_ to do it is a completely different level from actually being _good_ at it. Social interaction may be even harder than sport — it looks rule-based but is deeply subtle and complex. In Asian society especially, no one tells you when you make a social mistake; everyone assumes you "should already know," and you are quietly distanced, excluded, even bullied.
 - Most importantly: even if you complete every PEERS session, when you go out to practice for real, the therapist can't stand next to you and tell you what you did right or wrong — and the environment and other people's reactions are entirely outside your control or prediction. A single loud noise can blank your mind. If it were me, I'd want a social-skills coach in my pocket I could consult anytime.
 
-For all these reasons, this project takes a PEERS-like curriculum as its blueprint to build an AI social coach: anyone can open the web app (or bring their own API key) and rehearse anytime through an **Analyze → Coach → Roleplay → Reflect** loop — lowering the barrier to *starting* practice as far as possible.
+For all these reasons, this project takes a PEERS-like curriculum as its blueprint to build an AI social coach: anyone can open the web app (or bring their own API key) and rehearse anytime through an **Analyze → Coach → Roleplay → Reflect** loop — lowering the barrier to _starting_ practice as far as possible.
 
 ## 🤖 Why agents?
 
 A single chatbot would blur four very different jobs. Coaching is naturally a **pipeline of specialists**, so the app uses one agent per job:
 
-| Stage | Agent | Job |
-| :--- | :--- | :--- |
-| 1 | **Analyzer** | Structures the situation (who/what/where, channel, scenario type, goal) without giving advice yet. |
-| 2 | **Coach** | Gives concrete, situation-specific advice — grounded only in the curriculum slices selected for this case. |
-| 3 | **Roleplay** | Plays the other person so you can practice, reacting realistically to your social-skill level. |
-| 4 | **Reflection** | Reviews the roleplay transcript against the rubric and returns a structured, per-dimension evaluation. |
+| Stage | Agent          | Job                                                                                                        |
+| :---- | :------------- | :--------------------------------------------------------------------------------------------------------- |
+| 1     | **Analyzer**   | Structures the situation (who/what/where, channel, scenario type, goal) without giving advice yet.         |
+| 2     | **Coach**      | Gives concrete, situation-specific advice — grounded only in the curriculum slices selected for this case. |
+| 3     | **Roleplay**   | Plays the other person so you can practice, reacting realistically to your social-skill level.             |
+| 4     | **Reflection** | Reviews the roleplay transcript against the rubric and returns a structured, per-dimension evaluation.     |
 
 The agents are coordinated by an **orchestrator** that performs retrieval-augmented grounding: for the Coach stage it LLM-selects the curriculum topics most relevant to the user's situation, then loads just those knowledge slices.
 
@@ -71,14 +71,14 @@ skills/social-skills-coach/        Agent Skill = the curriculum, single source o
 
 ### Course concepts demonstrated
 
-| Concept | Where | How it is demonstrated |
-| :--- | :--- | :--- |
-| **Agent / Multi-agent system** | Code | Four specialized agents in a staged pipeline, coordinated by an orchestrator with LLM-driven knowledge routing. |
-| **MCP Server** | Code | `/api/mcp` exposes `list_social_topics` + `get_social_knowledge` over MCP for any external client. |
-| **Agent Skills** | Code | `skills/social-skills-coach/` packages the curriculum as a loadable Skill — the single source of truth for all knowledge. |
-| **Security features** | Code | BYOK (your API key stays in the browser session, never stored server-side) + zod validation of every request at the API trust boundary. |
-| **Deployability** | Docs / Video | Deployed on Vercel; reproduce steps below. |
-| **Antigravity** | Video | Shown in the submission video. |
+| Concept                        | Where        | How it is demonstrated                                                                                                                  |
+| :----------------------------- | :----------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
+| **Agent / Multi-agent system** | Code         | Four specialized agents in a staged pipeline, coordinated by an orchestrator with LLM-driven knowledge routing.                         |
+| **MCP Server**                 | Code         | `/api/mcp` exposes `list_social_topics` + `get_social_knowledge` over MCP for any external client.                                      |
+| **Agent Skills**               | Code         | `skills/social-skills-coach/` packages the curriculum as a loadable Skill — the single source of truth for all knowledge.               |
+| **Security features**          | Code         | BYOK (your API key stays in the browser session, never stored server-side) + zod validation of every request at the API trust boundary. |
+| **Deployability**              | Docs / Video | Deployed on Vercel; reproduce steps below.                                                                                              |
+| **Antigravity**                | Video        | Shown in the submission video.                                                                                                          |
 
 ---
 
