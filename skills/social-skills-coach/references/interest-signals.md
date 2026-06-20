@@ -1,0 +1,2 @@
+Gauging engagement (in the moment): Are they talking with you or shutting you down? Do they look at you, smile, get distracted? Is their body turned toward you (open) or away (closed)? Leave politely if uninterested; continue if interested.
+Gauging their longer-term interest in you: they seek you out or respond to you, invite you to do things, accept your invitations, leave or ask for contact info, call or message just to chat, take your calls and reply, accept your social-media requests, say things that make you feel accepted.

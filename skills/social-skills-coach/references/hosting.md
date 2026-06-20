@@ -1,0 +1,7 @@
+Plan a gathering with 5W: Who (how many, which people), What (activity), Where, When (start/end, phased schedule), How.
+Prep: contact attendees and helpers to confirm; clean the space (in a private space, put away anything you don't want seen); have drinks, snacks, and backup activities ready.
+Start: greet -> invite them in -> introduce people (at least names; if they share something, help open a topic) -> introduce the space (in a private space, always point out the restroom and the gathering area) -> serve snacks -> start the activity or ask what they'd like to do.
+Principles: the gathering is activity-based but socializing is the main point - spend at least half the time chatting and exchanging info; attend to every guest, don't leave anyone out; keep gatherings short until you're experienced at hosting.
+Activities: winning/losing isn't the point (winners don't gloat, losers don't get emotional; throw the game if needed); following rules isn't the point (state them upfront, remind occasionally, don't constantly correct or coach); be a good participant who keeps the energy up.
+Ending: state an end time in advance, or wait for a lull -> give a reason to end while standing up and slowly moving toward the door with a see-you-out gesture -> thank everyone again and say goodbye.
+Prerequisite: every conversation at a gathering rests on the basic conversation steps and rules, so practice conversation fundamentals - especially group conversation - extensively before hosting.
