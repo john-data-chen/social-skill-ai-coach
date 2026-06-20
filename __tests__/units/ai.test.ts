@@ -1,7 +1,7 @@
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible"
 import { describe, it, expect, vi } from "vitest"
 
-import { getProvider } from "../ai"
+import { getProvider } from "../../src/lib/ai"
 
 vi.mock("@ai-sdk/openai-compatible", () => ({
   createOpenAICompatible: vi.fn((config) => config)

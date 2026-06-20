@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 
-import { advancePipeline, determineNextStage } from "../router"
+import { advancePipeline, determineNextStage } from "../../src/lib/router"
 
 describe("router", () => {
   it("advancePipeline", () => {

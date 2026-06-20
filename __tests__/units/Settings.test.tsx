@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 import { useAppStore } from "@/lib/store"
 
-import { Settings } from "../Settings"
+import { Settings } from "../../src/components/Settings"
 
 // We need to test if the dialog renders and handles interactions
 describe("Settings", () => {
@@ -37,12 +37,12 @@ describe("Settings", () => {
 
     // Model ID input
     const modelInput = screen.getAllByRole("textbox")[0]
-    fireEvent.change(modelInput, { target: { value: "test-model" } })
+    fireEvent.change(modelInput!, { target: { value: "test-model" } })
     expect(useAppStore.getState().model).toBe("test-model")
 
     // API key input (password type so not standard textbox)
     const apiKeyInput = screen.getByPlaceholderText("sk-...")
-    fireEvent.change(apiKeyInput, { target: { value: "test-key" } })
+    fireEvent.change(apiKeyInput!, { target: { value: "test-key" } })
     expect(useAppStore.getState().apiKey).toBe("test-key")
   })
 })
