@@ -12,35 +12,35 @@
 
 ### Universal
 
-| Condition | Skill |
-| :-- | :-- |
-| Any coding task | `karpathy-guidelines` |
-| Any task | `caveman` (makes agent talk like caveman — cuts ~75% of output tokens) |
+| Condition       | Skill                                                                  |
+| :-------------- | :--------------------------------------------------------------------- |
+| Any coding task | `karpathy-guidelines`                                                  |
+| Any task        | `caveman` (makes agent talk like caveman — cuts ~75% of output tokens) |
 
 ### Workflow
 
-| Condition | Skill |
-| :-- | :-- |
+| Condition                                      | Skill             |
+| :--------------------------------------------- | :---------------- |
 | Multi-session task, handoff, progress tracking | `session-handoff` |
-| Writing docs, proposals, specs, decision docs | `doc-coauthoring` |
+| Writing docs, proposals, specs, decision docs  | `doc-coauthoring` |
 
 ### Web
 
-| Condition | Skill |
-| :-- | :-- |
-| Next.js file conventions, RSC, data fetching, metadata, route handlers, async APIs | `next-best-practices` |
-| `use cache`, PPR, cacheLife, cacheTag, updateTag | `next-cache-components` |
-| Component API design, compound components, boolean prop cleanup | `vercel-composition-patterns` |
-| React/Next.js performance: re-renders, bundle size, waterfalls | `vercel-react-best-practices` |
-| UI review, accessibility audit, UX compliance | `web-design-guidelines` |
+| Condition                                                                          | Skill                         |
+| :--------------------------------------------------------------------------------- | :---------------------------- |
+| Next.js file conventions, RSC, data fetching, metadata, route handlers, async APIs | `next-best-practices`         |
+| `use cache`, PPR, cacheLife, cacheTag, updateTag                                   | `next-cache-components`       |
+| Component API design, compound components, boolean prop cleanup                    | `vercel-composition-patterns` |
+| React/Next.js performance: re-renders, bundle size, waterfalls                     | `vercel-react-best-practices` |
+| UI review, accessibility audit, UX compliance                                      | `web-design-guidelines`       |
 
 ## MCP Servers
 
-| Server | Use When |
-| :-- | :-- |
-| `context7` | Need current library/package docs |
-| `next-devtools` | Dev server diagnostics, route inspection. Call `init` tool FIRST when starting Next.js work (confirm with user). |
-| `chrome-devtools` | Browser debugging, DOM inspection, performance analysis, network requests |
+| Server            | Use When                                                                                                         |
+| :---------------- | :--------------------------------------------------------------------------------------------------------------- |
+| `context7`        | Need current library/package docs                                                                                |
+| `next-devtools`   | Dev server diagnostics, route inspection. Call `init` tool FIRST when starting Next.js work (confirm with user). |
+| `chrome-devtools` | Browser debugging, DOM inspection, performance analysis, network requests                                        |
 
 ## Project Context
 
