@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
 import { useAppStore } from "@/lib/store"
 
-import Page from "../page"
+import Page from "../../src/app/page"
 
 vi.mock("next-themes", () => ({
   useTheme: vi.fn(() => ({ theme: "light", setTheme: vi.fn() }))
