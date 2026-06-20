@@ -9,7 +9,7 @@
 
 一個多代理（multi-agent）網頁應用，在安全的環境裡幫助你**練習並改善真實的社交互動**。你描述一個情境，得到以結構化社交課程為依據的具體建議，透過角色扮演實際演練，再收到結構化的回饋——一個隨時可用的完整教練循環。
 
-> **線上 Demo：** 已部署於 Vercel —— _請在此填入你的部署網址_。
+> **線上 Demo：** 已部署於 Vercel —— [https://social-skill-ai-coach.vercel.app](https://social-skill-ai-coach.vercel.app)。
 
 > ⚠️ **免責聲明：** 本專案（含 Demo、MCP、Skill）皆**不能取代受過訓練且具合法認證的心理師／治療師**。這是為 Kaggle《AI Agents: Intensive Vibe Coding Capstone Project》競賽製作的**概念性產品**，**請勿用於醫療用途**。
 
@@ -50,22 +50,7 @@
 
 ## 🏗️ 架構
 
-```text
-skills/social-skills-coach/        Agent Skill＝課程，唯一真實來源（single source of truth）
-  SKILL.md + references/*.md        （從 8 堂課蒸餾出的 12 個主題片段）
-        │
-        │  src/lib/knowledge — server 端 loader（讀取片段並快取）
-        ├───────────────────────────────┐
-        ▼                               ▼
-  MCP Server  /api/mcp            Orchestrator + 4 個階段代理
-  (mcp-handler + MCP SDK)         - router.ts：deterministic 階段路由（client 安全）
-  把課程以 MCP tool 形式             - orchestrator.ts：LLM 挑相關主題 →
-  對「任何」MCP client 開放            in-process 讀取片段 → 落地給 Coach
-  (MCP Inspector、Claude Desktop) - /api/chat：串流當前代理的回覆
-        │
-        ▼
-  外部 agent／工具可透過協議重用同一份知識
-```
+![Architecture Diagram](./public/architecture.svg)
 
 **核心概念：** 課程只撰寫一次、做成 **Agent Skill**，並以兩種方式被消費——對內由教練代理直接 in-process 使用（求速度），對外則透過 **Model Context Protocol（MCP）** 開放給任何 MCP client（求重用與互通）。
 
@@ -141,7 +126,8 @@ curl -s -X POST http://localhost:3000/api/mcp \
 ## 📂 專案結構
 
 ```text
-├── skills/social-skills-coach/  # Agent Skill：課程（SKILL.md + references/*.md）— 唯一來源
+├── skills/social-skills-coach/  # Agent Skill：課程（產品環境運作的知識，唯一真實來源）
+├── .agents/skills/              # Antigravity agent skills（開發期 AI 輔助技能，如 karpathy/vercel）
 ├── packages/
 │   └── social-skills-coach-mcp/ # 可發佈的 npm stdio MCP 伺服器（prompts + tools）
 ├── .github/workflows/           # CI/CD（測試與 Vercel 部署）
@@ -164,6 +150,10 @@ curl -s -X POST http://localhost:3000/api/mcp \
 │       ├── router.ts                 # Deterministic 階段路由（client 安全）
 │       ├── ai.ts                     # 供應商初始化（MiMo / DeepSeek）
 │       └── store.ts                  # Zustand 狀態（歷史、設定）
+├── public/
+│   └── architecture.svg         # 系統架構圖
+├── ai-docs/
+│   └── task-template.md         # 用於氛圍編碼的 AI 代理任務模板
 ├── next.config.mjs              # outputFileTracingIncludes 把 skill md 打包進 Vercel
 ├── playwright.config.ts
 ├── vitest.config.ts

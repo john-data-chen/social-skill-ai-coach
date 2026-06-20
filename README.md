@@ -9,7 +9,7 @@
 
 A multi-agent web app that helps people **practice and improve real social interactions** in a safe space. You describe a situation, get concrete advice grounded in a structured social-skills curriculum, rehearse it in a roleplay, and receive a structured reflection — a full coaching loop, on demand.
 
-> **Live demo:** deployed on Vercel — _add your deployment URL here_.
+> **Live demo:** deployed on Vercel — [https://social-skill-ai-coach.vercel.app](https://social-skill-ai-coach.vercel.app).
 
 > ⚠️ **Disclaimer:** This project — the demo, the MCP server, and the Skill — is **not a substitute for a trained, licensed therapist or clinician**. It is a **concept product** built for the Kaggle _AI Agents: Intensive Vibe Coding Capstone Project_ and **must not be used for medical purposes**.
 
@@ -50,22 +50,7 @@ The agents are coordinated by an **orchestrator** that performs retrieval-augmen
 
 ## 🏗️ Architecture
 
-```text
-skills/social-skills-coach/        Agent Skill = the curriculum, single source of truth
-  SKILL.md + references/*.md        (12 topic slices distilled from the 8-lesson course)
-        │
-        │  src/lib/knowledge  — server-side loader (reads a slice, caches it)
-        ├───────────────────────────────┐
-        ▼                               ▼
-  MCP Server  /api/mcp            Orchestrator + 4 stage agents
-  (mcp-handler + MCP SDK)         - router.ts: deterministic stage routing (client-safe)
-  exposes the curriculum as       - orchestrator.ts: LLM picks relevant topics →
-  tools to ANY MCP client           reads slices in-process → grounds the Coach
-  (MCP Inspector, Claude Desktop) - /api/chat: streams the active agent's reply
-        │
-        ▼
-  External agents / tools can reuse the same knowledge over the protocol
-```
+![Architecture Diagram](./public/architecture.svg)
 
 **Key idea:** the curriculum is authored once as an **Agent Skill** and consumed two ways — internally by the coaching agents (in-process, for speed) and externally by any MCP client over the **Model Context Protocol** (for reuse and interoperability).
 
@@ -145,7 +130,8 @@ Agent Skill), so they never drift.
 ## 📂 Repository structure
 
 ```text
-├── skills/social-skills-coach/  # Agent Skill: the curriculum (SKILL.md + references/*.md) — single source
+├── skills/social-skills-coach/  # Agent Skill: the curriculum (runtime product knowledge, single source of truth)
+├── .agents/skills/              # Antigravity agent skills (development-time AI assistants like karpathy/vercel)
 ├── packages/
 │   └── social-skills-coach-mcp/ # Publishable npm stdio MCP server (prompts + tools)
 ├── .github/workflows/           # CI/CD (testing & Vercel deployment)
@@ -168,6 +154,10 @@ Agent Skill), so they never drift.
 │       ├── router.ts                 # Deterministic stage routing (client-safe)
 │       ├── ai.ts                     # Provider init (MiMo / DeepSeek)
 │       └── store.ts                  # Zustand state (history, config)
+├── public/
+│   └── architecture.svg         # System architecture diagram
+├── ai-docs/
+│   └── task-template.md         # A task template for AI agent to assist in vibe coding
 ├── next.config.mjs              # outputFileTracingIncludes ships the skill md to Vercel
 ├── playwright.config.ts
 ├── vitest.config.ts
