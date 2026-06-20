@@ -1,5 +1,6 @@
 import "./globals.css"
 
+import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next"
 import { Noto_Sans_TC, Geist } from "next/font/google"
 
@@ -27,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("font-sans", geist.variable)} suppressHydrationWarning>
       <body className={`${notoSansTC.className} antialiased`}>
+        <Analytics />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
