@@ -118,7 +118,7 @@ export function Settings() {
                 setDraft((prev) => ({
                   ...prev,
                   provider: newProvider,
-                  model: MODELS[newProvider]![0] as string
+                  model: MODELS[newProvider]![0]!
                 }))
               }}
             >
@@ -141,7 +141,7 @@ export function Settings() {
             <Select
               value={draft.model}
               onValueChange={(val) => {
-                setDraft((prev) => ({ ...prev, model: val as string }))
+                setDraft((prev) => ({ ...prev, model: val! }))
               }}
             >
               <SelectTrigger className="col-span-3 w-full">

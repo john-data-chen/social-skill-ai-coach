@@ -34,7 +34,9 @@ const cache = new Map<TopicKey, string>()
 
 export function getKnowledge(topic: TopicKey): string {
   const cached = cache.get(topic)
-  if (cached !== undefined) return cached
+  if (cached !== undefined) {
+    return cached
+  }
   const value = readFileSync(join(REFS_DIR, `${topic}.md`), "utf-8").trim()
   cache.set(topic, value)
   return value
