@@ -1,0 +1,9 @@
+# MacOS
+.DS_Store
+
+# AI files
+.claude
+CLAUDE.md
+GEMINI.md
+
+node_modules
