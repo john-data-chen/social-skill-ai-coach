@@ -15,8 +15,8 @@
     "lint": "oxlint src packages/social-skills-coach-mcp/src --type-aware --fix --no-error-on-unmatched-pattern",
     "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky; fi",
     "start": "next start",
-    "test": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "test": "vitest run && pnpm --filter social-skills-coach-mcp test",
+    "test:coverage": "vitest run --coverage && pnpm --filter social-skills-coach-mcp test:coverage",
     "test:e2e": "playwright test",
     "test:watch": "vitest",
     "typecheck": "tsgo --noEmit"
