@@ -304,7 +304,7 @@ describe("POST /api/chat", () => {
       { Authorization: "Bearer k" }
     )
     await POST(req)
-    const call = mockStreamText.mock.calls[0][0]
+    const call = mockStreamText.mock.calls[0]![0]
     expect(call.messages[0].content).toEqual([
       { type: "text", text: "look at this" },
       { type: "image", image: "data:image/png;base64,abc123" }
@@ -340,7 +340,7 @@ describe("POST /api/chat", () => {
       { Authorization: "Bearer k" }
     )
     await POST(req)
-    const call = mockStreamText.mock.calls[0][0]
+    const call = mockStreamText.mock.calls[0]![0]
     const parts = call.messages[0].content
     expect(parts).toHaveLength(2)
     expect(parts[1].type).toBe("text")
@@ -377,7 +377,7 @@ describe("POST /api/chat", () => {
       { Authorization: "Bearer k" }
     )
     await POST(req)
-    const call = mockStreamText.mock.calls[0][0]
+    const call = mockStreamText.mock.calls[0]![0]
     const parts = call.messages[0].content
     expect(parts[1].type).toBe("text")
     expect(parts[1].text).toContain("doc.md")
@@ -408,7 +408,7 @@ describe("POST /api/chat", () => {
       { Authorization: "Bearer k" }
     )
     await POST(req)
-    const call = mockStreamText.mock.calls[0][0]
+    const call = mockStreamText.mock.calls[0]![0]
     expect(call.messages[0].content[1].type).toBe("text")
   })
 
@@ -441,7 +441,7 @@ describe("POST /api/chat", () => {
       { Authorization: "Bearer k" }
     )
     await POST(req)
-    const call = mockStreamText.mock.calls[0][0]
+    const call = mockStreamText.mock.calls[0]![0]
     const parts = call.messages[0].content
     expect(parts[1].type).toBe("file")
     expect(parts[1].mimeType).toBe("application/pdf")
@@ -472,7 +472,7 @@ describe("POST /api/chat", () => {
       { Authorization: "Bearer k" }
     )
     await POST(req)
-    const call = mockStreamText.mock.calls[0][0]
+    const call = mockStreamText.mock.calls[0]![0]
     expect(call.messages[0].content[1].type).toBe("text")
   })
 
@@ -493,7 +493,7 @@ describe("POST /api/chat", () => {
       { Authorization: "Bearer k" }
     )
     await POST(req)
-    const call = mockStreamText.mock.calls[0][0]
+    const call = mockStreamText.mock.calls[0]![0]
     expect(call.messages[0].content).toBe("hello")
   })
 
@@ -514,7 +514,7 @@ describe("POST /api/chat", () => {
       { Authorization: "Bearer k" }
     )
     await POST(req)
-    const call = mockStreamText.mock.calls[0][0]
+    const call = mockStreamText.mock.calls[0]![0]
     expect(call.messages[0]).toEqual({ role: "user", content: "plain msg" })
   })
 
@@ -609,7 +609,7 @@ describe("POST /api/chat", () => {
       { Authorization: "Bearer k" }
     )
     await POST(req)
-    const call = mockStreamText.mock.calls[0][0]
+    const call = mockStreamText.mock.calls[0]![0]
     expect(call.messages[0].content[1]).toEqual({ type: "image", image: "rawbase64data" })
   })
 
@@ -642,7 +642,7 @@ describe("POST /api/chat", () => {
       { Authorization: "Bearer k" }
     )
     await POST(req)
-    const call = mockStreamText.mock.calls[0][0]
+    const call = mockStreamText.mock.calls[0]![0]
     const parts = call.messages[0].content
     expect(parts[1].type).toBe("file")
     expect(parts[1].mimeType).toBe("application/zip")
@@ -677,7 +677,7 @@ describe("POST /api/chat", () => {
       { Authorization: "Bearer k" }
     )
     await POST(req)
-    const call = mockStreamText.mock.calls[0][0]
+    const call = mockStreamText.mock.calls[0]![0]
     expect(call.messages[0].content[1].type).toBe("text")
     expect(call.messages[0].content[1].text).toContain("readme.md")
   })
