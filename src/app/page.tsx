@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import ReactMarkdown from "react-markdown"
 
 import { Settings } from "@/components/Settings"
+import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -102,9 +103,15 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col p-8 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <header className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">Social Skills AI Coach</h1>
-        <Settings />
+      <header className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold">Social Skills Coach</h1>
+          <p className="text-gray-500">Practice and improve your social interactions</p>
+        </div>
+        <div className="flex gap-2">
+          <ThemeToggle />
+          <Settings />
+        </div>
       </header>
 
       <main className="flex-1 max-w-4xl w-full mx-auto flex flex-col gap-6">
