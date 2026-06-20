@@ -1,4 +1,2 @@
 #!/bin/sh
-pnpm lint
-pnpm format
-pnpm typecheck
+pnpm lint-staged
