@@ -1,6 +1,7 @@
 "use client"
 
 import { Paperclip, X } from "lucide-react"
+import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import ReactMarkdown from "react-markdown"
 
@@ -202,10 +203,13 @@ export default function Home() {
                               className="rounded overflow-hidden border border-gray-300 dark:border-gray-600 bg-white/10"
                             >
                               {att.contentType.startsWith("image/") ? (
-                                <img
+                                <Image
                                   src={att.url}
                                   alt={att.name}
+                                  width={0}
+                                  height={0}
                                   className="max-h-40 object-cover"
+                                  sizes="100vw"
                                 />
                               ) : (
                                 <div className="p-2 text-xs flex items-center">{att.name}</div>
@@ -230,7 +234,13 @@ export default function Home() {
                       className="relative rounded overflow-hidden border bg-background group"
                     >
                       {att.contentType.startsWith("image/") ? (
-                        <img src={att.url} alt={att.name} className="w-16 h-16 object-cover" />
+                        <Image
+                          src={att.url}
+                          alt={att.name}
+                          width={64}
+                          height={64}
+                          className="w-16 h-16 object-cover"
+                        />
                       ) : (
                         <div className="w-16 h-16 flex items-center justify-center bg-muted text-[10px] text-center p-1 break-all overflow-hidden">
                           {att.name}
