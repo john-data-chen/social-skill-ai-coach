@@ -1,0 +1,1 @@
+After a conversation, ask yourself: Did you start it or did they? Did they seem to want to talk, and how do you know? Did you exchange info - what did you learn about them? What are their interests, and what could you do together? Do they seem to want to do something with you, and do you want to with them?
