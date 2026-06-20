@@ -48,9 +48,19 @@ ${messages[messages.length - 1]?.content || ""}
         })
 
         const obj = result.object
+        const dimensionsSection =
+          obj.dimensions && obj.dimensions.length
+            ? `\n**Dimensions:**\n${obj.dimensions
+                .map((d: { name: string; status: string; note: string }) => {
+                  const icon = d.status === "good" ? "✅" : d.status === "needs_work" ? "⚠️" : "➖"
+                  return `- ${icon} ${d.name}: ${d.note}`
+                })
+                .join("\n")}\n`
+            : ""
+
         const markdown = `
 ### Overall Assessment: ${obj.overallStatus === "pass" ? "✅ Pass" : "⚠️ Needs Practice"}
-
+${dimensionsSection}
 **Strengths:**
 ${obj.strengths.map((s: string) => `- ${s}`).join("\n")}
 
