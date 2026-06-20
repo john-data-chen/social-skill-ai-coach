@@ -1,0 +1,2 @@
+Steps to join a group conversation: listen to the conversation -> observe from more than an arm's length -> identify the topic -> find a shared topic -> move in to about an arm's length -> opener ("I overheard what you were saying...") -> pause and watch their reaction to the opener -> continue -> check whether you're accepted (facing you? responding? open body language?) -> introduce yourself.
+Common practice mistake: cutting in with your own topic before someone has answered a question. Pause more, observe reactions, let others say more - don't hijack the conversation.

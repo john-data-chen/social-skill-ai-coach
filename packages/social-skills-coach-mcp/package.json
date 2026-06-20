@@ -1,0 +1,33 @@
+{
+  "name": "social-skills-coach-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for a social-skills coaching curriculum — knowledge tools + analyze/coach/roleplay/reflect prompts. Bring your own model.",
+  "type": "module",
+  "license": "MIT",
+  "author": "jianan.chen",
+  "keywords": ["mcp", "model-context-protocol", "social-skills", "coaching", "agent"],
+  "bin": {
+    "social-skills-coach-mcp": "dist/index.js"
+  },
+  "exports": {
+    ".": "./dist/server.js"
+  },
+  "files": ["dist", "skill", "README.md"],
+  "scripts": {
+    "sync-skill": "node scripts/sync-skill.mjs",
+    "build": "pnpm sync-skill && tsup",
+    "typecheck": "tsgo --noEmit",
+    "prepack": "pnpm build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.26.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.2",
+    "tsup": "^8.3.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

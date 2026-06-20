@@ -1,17 +1,46 @@
 import { streamText, generateObject } from "ai"
+import { z } from "zod"
 
 import {
   analyzerPrompt,
-  coachPrompt,
+  buildCoachPrompt,
   roleplayPrompt,
   reflectionPrompt,
   reflectionSchema
 } from "@/lib/agents"
 import { getProvider } from "@/lib/ai"
+import { groundingFor, selectKnowledgeTopics } from "@/lib/orchestrator"
+
+// Validate the request body at the trust boundary. Loose objects let client-only
+// fields (e.g. a message `id`) pass through; we only enforce the shapes we rely on.
+const chatBodySchema = z.looseObject({
+  messages: z.array(
+    z.looseObject({
+      role: z.string(),
+      content: z.union([z.string(), z.array(z.unknown())]).optional()
+    })
+  ),
+  provider: z.string(),
+  model: z.string(),
+  mode: z.string().optional(),
+  stage: z.string().default(""),
+  roleplayHistory: z.array(z.unknown()).optional()
+})
 
 export async function POST(req: Request) {
   try {
-    const { messages, provider, model, mode, stage, roleplayHistory } = await req.json()
+    let rawBody: unknown
+    try {
+      rawBody = await req.json()
+    } catch {
+      return new Response(JSON.stringify({ error: "Invalid JSON body" }), { status: 400 })
+    }
+
+    const parsed = chatBodySchema.safeParse(rawBody)
+    if (!parsed.success) {
+      return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400 })
+    }
+    const { messages, provider, model, mode, stage, roleplayHistory } = parsed.data
     const authHeader = req.headers.get("Authorization")
     const byokKey = authHeader?.replace("Bearer ", "")
 
@@ -31,12 +60,14 @@ export async function POST(req: Request) {
         .map((m: any) => `${m.role === "user" ? "User" : "Roleplay Partner"}: ${m.content}`)
         .join("\n")
 
+      const lastContent = messages[messages.length - 1]?.content
+      const userRequest = typeof lastContent === "string" ? lastContent : ""
       const promptText = `
 Roleplay Transcript:
 ${transcript}
 
 User's request:
-${messages[messages.length - 1]?.content || ""}
+${userRequest}
       `
 
       try {
@@ -48,9 +79,19 @@ ${messages[messages.length - 1]?.content || ""}
         })
 
         const obj = result.object
+        const dimensionsSection =
+          obj.dimensions && obj.dimensions.length
+            ? `\n**Dimensions:**\n${obj.dimensions
+                .map((d: { name: string; status: string; note: string }) => {
+                  const icon = d.status === "good" ? "✅" : d.status === "needs_work" ? "⚠️" : "➖"
+                  return `- ${icon} ${d.name}: ${d.note}`
+                })
+                .join("\n")}\n`
+            : ""
+
         const markdown = `
 ### Overall Assessment: ${obj.overallStatus === "pass" ? "✅ Pass" : "⚠️ Needs Practice"}
-
+${dimensionsSection}
 **Strengths:**
 ${obj.strengths.map((s: string) => `- ${s}`).join("\n")}
 
@@ -76,14 +117,24 @@ ${obj.feedback}
       case "analyzer":
         systemPrompt = analyzerPrompt
         break
-      case "coach":
-        systemPrompt = coachPrompt
+      case "coach": {
+        // Retrieval-augmented grounding: the orchestrator LLM-selects the relevant
+        // curriculum topics for this situation, then we read just those slices from
+        // the social-skills-coach skill in-process.
+        const last = messages[messages.length - 1]?.content
+        const situation = typeof last === "string" ? last : ""
+        const topics = await selectKnowledgeTopics(aiProvider(model), situation)
+        systemPrompt = buildCoachPrompt(groundingFor(topics))
         break
+      }
       case "roleplay":
         systemPrompt = roleplayPrompt
         break
       case "reflection":
         systemPrompt = reflectionPrompt
+        break
+      default:
+        systemPrompt = ""
         break
     }
 

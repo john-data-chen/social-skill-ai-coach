@@ -91,7 +91,7 @@ describe("Settings", () => {
     fireEvent.click(screen.getByText("Settings"))
 
     const selects = screen.getAllByTestId("mock-select")
-    fireEvent.change(selects[0], { target: { value: "demo" } })
+    fireEvent.change(selects[0]!!, { target: { value: "demo" } })
 
     expect(useAppStore.getState().mode).toBe("demo")
   })
@@ -102,7 +102,7 @@ describe("Settings", () => {
     fireEvent.click(screen.getByText("Settings"))
 
     const selects = screen.getAllByTestId("mock-select")
-    fireEvent.change(selects[0], { target: { value: "byok" } })
+    fireEvent.change(selects[0]!, { target: { value: "byok" } })
 
     expect(useAppStore.getState().mode).toBe("byok")
   })
@@ -112,7 +112,7 @@ describe("Settings", () => {
     fireEvent.click(screen.getByText("Settings"))
 
     const selects = screen.getAllByTestId("mock-select")
-    fireEvent.change(selects[1], { target: { value: "deepseek" } })
+    fireEvent.change(selects[1]!, { target: { value: "deepseek" } })
 
     expect(useAppStore.getState().provider).toBe("deepseek")
     expect(useAppStore.getState().model).toBe("deepseek-v4-pro")
@@ -124,7 +124,7 @@ describe("Settings", () => {
     fireEvent.click(screen.getByText("Settings"))
 
     const selects = screen.getAllByTestId("mock-select")
-    fireEvent.change(selects[1], { target: { value: "mimo" } })
+    fireEvent.change(selects[1]!, { target: { value: "mimo" } })
 
     expect(useAppStore.getState().provider).toBe("mimo")
     expect(useAppStore.getState().model).toBe("mimo-v2.5-pro")
