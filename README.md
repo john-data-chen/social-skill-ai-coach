@@ -11,7 +11,7 @@ A multi-agent web app that helps people **practice and improve real social inter
 
 > **Live demo:** deployed on Vercel — [https://social-skill-ai-coach.vercel.app](https://social-skill-ai-coach.vercel.app).
 
-> ⚠️ **Disclaimer:** This project — the demo, the MCP server, and the Skill — is **not a substitute for a trained, licensed therapist or clinician**. It is a **concept product** built for the Kaggle _AI Agents: Intensive Vibe Coding Capstone Project_ and **must not be used for medical purposes**.
+> ⚠️ **Disclaimer:** This project is a **concept product (minimum MVP)** built exclusively for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) under the **Agents for Good** track. It is intended solely for reviewers and interested parties to study. All features of this project—including but not limited to the Demo, AI agents, Skill, and MCP—**cannot replace trained, licensed psychologists, therapists, or helping professionals**, and **cannot provide any medical or counseling services**.
 
 ---
 

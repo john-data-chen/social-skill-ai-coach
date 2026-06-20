@@ -11,7 +11,7 @@
 
 > **線上 Demo：** 已部署於 Vercel —— [https://social-skill-ai-coach.vercel.app](https://social-skill-ai-coach.vercel.app)。
 
-> ⚠️ **免責聲明：** 本專案（含 Demo、MCP、Skill）皆**不能取代受過訓練且具合法認證的心理師／治療師**。這是為 Kaggle《AI Agents: Intensive Vibe Coding Capstone Project》競賽製作的**概念性產品**，**請勿用於醫療用途**。
+> ⚠️ **免責聲明：** 此專案是為了 [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) 所開發的概念性產品（最小 MVP），參加組別為 **Agents for Good**，僅供評審與有興趣者研究。專案所有的功能（包含但不限於 Demo、AI agent、Skill、MCP）皆**無法取代受過專業訓練且擁有合格證照的心理師或助人工作者**，且**無法提供任何醫療與諮商行為**。
 
 ---
 
