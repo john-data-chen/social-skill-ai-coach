@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
-      <body className={`${notoSansTC.variable} antialiased`}>{children}</body>
+      <body className={`${notoSansTC.className} antialiased`}>{children}</body>
     </html>
   )
 }
