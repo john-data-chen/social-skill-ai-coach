@@ -86,7 +86,7 @@ describe("Page", () => {
     })
   })
 
-  it("jumps stage when typing jump command", async () => {
+  it("jumps stage when typing jump command", () => {
     render(<Page />)
     const input = screen.getByPlaceholderText(/Type your message/i)
     fireEvent.change(input, { target: { value: "give me advice" } })
@@ -95,7 +95,7 @@ describe("Page", () => {
     expect(useAppStore.getState().currentStage).toBe("coach")
   })
 
-  it("advances stage on empty submit", async () => {
+  it("advances stage on empty submit", () => {
     render(<Page />)
     const input = screen.getByPlaceholderText(/Type your message/i)
     fireEvent.change(input, { target: { value: "" } })
@@ -183,7 +183,7 @@ describe("Page", () => {
     })
 
     const removeButtons = document.querySelectorAll(".lucide-x")
-    fireEvent.click(removeButtons[0].closest("button")!)
+    fireEvent.click(removeButtons[0]!.closest("button")!)
 
     await waitFor(() => {
       expect(screen.queryByText("test.txt")).toBeNull()
@@ -329,7 +329,7 @@ describe("Page", () => {
     })
   })
 
-  it("handles file input change with no files", async () => {
+  it("handles file input change with no files", () => {
     render(<Page />)
 
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement

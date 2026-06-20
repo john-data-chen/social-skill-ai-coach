@@ -35,7 +35,7 @@ export function Settings() {
             </Label>
             <Select 
               value={mode} 
-              onValueChange={(val) =>{  setConfig({ mode: val as "demo" | "byok" }); }}
+              onValueChange={(val) =>{  setConfig({ mode: val! }); }}
             >
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select mode" />
