@@ -27,8 +27,8 @@
     "build": "pnpm sync-skill && tsup",
     "prepack": "pnpm build",
     "sync-skill": "node scripts/sync-skill.mjs",
-    "test": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "test": "pnpm sync-skill && vitest run",
+    "test:coverage": "pnpm sync-skill && vitest run --coverage",
     "typecheck": "tsgo --noEmit"
   },
   "dependencies": {
