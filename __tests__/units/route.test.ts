@@ -39,7 +39,13 @@ describe("POST /api/chat", () => {
   })
 
   it("returns 401 when no API key provided", async () => {
-    const req = makeRequest({ messages: [], provider: "mimo", model: "m1", mode: "byok", stage: "analyzer" })
+    const req = makeRequest({
+      messages: [],
+      provider: "mimo",
+      model: "m1",
+      mode: "byok",
+      stage: "analyzer"
+    })
     const res = await POST(req)
     expect(res.status).toBe(401)
     const json = await res.json()
@@ -48,11 +54,19 @@ describe("POST /api/chat", () => {
 
   it("uses BYOK key from Authorization header", async () => {
     const mockFn = vi.fn().mockReturnValue("stream")
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => mockFn)
 
     const req = makeRequest(
-      { messages: [{ role: "user", content: "hello" }], provider: "mimo", model: "m1", mode: "byok", stage: "analyzer" },
+      {
+        messages: [{ role: "user", content: "hello" }],
+        provider: "mimo",
+        model: "m1",
+        mode: "byok",
+        stage: "analyzer"
+      },
       { Authorization: "Bearer my-key" }
     )
     await POST(req)
@@ -60,7 +74,9 @@ describe("POST /api/chat", () => {
   })
 
   it("uses env key in demo mode for mimo", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest({
@@ -75,7 +91,9 @@ describe("POST /api/chat", () => {
   })
 
   it("uses env key in demo mode for deepseek", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest({
@@ -172,12 +190,20 @@ describe("POST /api/chat", () => {
   })
 
   it("uses analyzerPrompt for analyzer stage", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     const modelFn = vi.fn()
     mockGetProvider.mockReturnValue(() => modelFn)
 
     const req = makeRequest(
-      { messages: [{ role: "user", content: "hi" }], provider: "mimo", model: "m1", mode: "byok", stage: "analyzer" },
+      {
+        messages: [{ role: "user", content: "hi" }],
+        provider: "mimo",
+        model: "m1",
+        mode: "byok",
+        stage: "analyzer"
+      },
       { Authorization: "Bearer k" }
     )
     await POST(req)
@@ -187,11 +213,19 @@ describe("POST /api/chat", () => {
   })
 
   it("uses coachPrompt for coach stage", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
-      { messages: [{ role: "user", content: "hi" }], provider: "mimo", model: "m1", mode: "byok", stage: "coach" },
+      {
+        messages: [{ role: "user", content: "hi" }],
+        provider: "mimo",
+        model: "m1",
+        mode: "byok",
+        stage: "coach"
+      },
       { Authorization: "Bearer k" }
     )
     await POST(req)
@@ -201,11 +235,19 @@ describe("POST /api/chat", () => {
   })
 
   it("uses roleplayPrompt for roleplay stage", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
-      { messages: [{ role: "user", content: "hi" }], provider: "mimo", model: "m1", mode: "byok", stage: "roleplay" },
+      {
+        messages: [{ role: "user", content: "hi" }],
+        provider: "mimo",
+        model: "m1",
+        mode: "byok",
+        stage: "roleplay"
+      },
       { Authorization: "Bearer k" }
     )
     await POST(req)
@@ -215,11 +257,19 @@ describe("POST /api/chat", () => {
   })
 
   it("uses reflectionPrompt for reflection stage in switch", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
-      { messages: [{ role: "user", content: "hi" }], provider: "mimo", model: "m1", mode: "byok", stage: "reflection" },
+      {
+        messages: [{ role: "user", content: "hi" }],
+        provider: "mimo",
+        model: "m1",
+        mode: "byok",
+        stage: "reflection"
+      },
       { Authorization: "Bearer k" }
     )
     await POST(req)
@@ -230,7 +280,9 @@ describe("POST /api/chat", () => {
   })
 
   it("handles messages with image attachments", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
@@ -260,7 +312,9 @@ describe("POST /api/chat", () => {
   })
 
   it("handles messages with text file attachments", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
@@ -270,7 +324,11 @@ describe("POST /api/chat", () => {
             role: "user",
             content: "read this",
             experimental_attachments: [
-              { contentType: "text/plain", url: "data:text/plain;base64,dGVzdA==", name: "notes.txt" }
+              {
+                contentType: "text/plain",
+                url: "data:text/plain;base64,dGVzdA==",
+                name: "notes.txt"
+              }
             ]
           }
         ],
@@ -291,7 +349,9 @@ describe("POST /api/chat", () => {
   })
 
   it("handles messages with markdown file attachments", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
@@ -301,7 +361,11 @@ describe("POST /api/chat", () => {
             role: "user",
             content: "check this",
             experimental_attachments: [
-              { contentType: "text/markdown", url: "data:text/markdown;base64,aGVsbG8=", name: "doc.md" }
+              {
+                contentType: "text/markdown",
+                url: "data:text/markdown;base64,aGVsbG8=",
+                name: "doc.md"
+              }
             ]
           }
         ],
@@ -320,7 +384,9 @@ describe("POST /api/chat", () => {
   })
 
   it("handles messages with csv file attachments", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
@@ -347,7 +413,9 @@ describe("POST /api/chat", () => {
   })
 
   it("handles messages with pdf/doc attachments", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
@@ -357,7 +425,11 @@ describe("POST /api/chat", () => {
             role: "user",
             content: "review doc",
             experimental_attachments: [
-              { contentType: "application/pdf", url: "data:application/pdf;base64,JVBER", name: "file.pdf" }
+              {
+                contentType: "application/pdf",
+                url: "data:application/pdf;base64,JVBER",
+                name: "file.pdf"
+              }
             ]
           }
         ],
@@ -376,7 +448,9 @@ describe("POST /api/chat", () => {
   })
 
   it("handles messages with attachment without comma prefix", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
@@ -403,14 +477,14 @@ describe("POST /api/chat", () => {
   })
 
   it("handles messages with empty attachments array", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
       {
-        messages: [
-          { role: "user", content: "hello", experimental_attachments: [] }
-        ],
+        messages: [{ role: "user", content: "hello", experimental_attachments: [] }],
         provider: "mimo",
         model: "m1",
         mode: "byok",
@@ -424,11 +498,19 @@ describe("POST /api/chat", () => {
   })
 
   it("handles messages without experimental_attachments", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
-      { messages: [{ role: "user", content: "plain msg" }], provider: "mimo", model: "m1", mode: "byok", stage: "analyzer" },
+      {
+        messages: [{ role: "user", content: "plain msg" }],
+        provider: "mimo",
+        model: "m1",
+        mode: "byok",
+        stage: "analyzer"
+      },
       { Authorization: "Bearer k" }
     )
     await POST(req)
@@ -437,10 +519,18 @@ describe("POST /api/chat", () => {
   })
 
   it("returns 500 on unexpected error", async () => {
-    mockGetProvider.mockImplementation(() => { throw new Error("provider init failed") })
+    mockGetProvider.mockImplementation(() => {
+      throw new Error("provider init failed")
+    })
 
     const req = makeRequest(
-      { messages: [{ role: "user", content: "hi" }], provider: "mimo", model: "m1", mode: "byok", stage: "analyzer" },
+      {
+        messages: [{ role: "user", content: "hi" }],
+        provider: "mimo",
+        model: "m1",
+        mode: "byok",
+        stage: "analyzer"
+      },
       { Authorization: "Bearer k" }
     )
     const res = await POST(req)
@@ -450,17 +540,23 @@ describe("POST /api/chat", () => {
   })
 
   it("handles undefined stage with empty systemPrompt", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
-      { messages: [{ role: "user", content: "hi" }], provider: "mimo", model: "m1", mode: "byok", stage: "unknown" },
+      {
+        messages: [{ role: "user", content: "hi" }],
+        provider: "mimo",
+        model: "m1",
+        mode: "byok",
+        stage: "unknown"
+      },
       { Authorization: "Bearer k" }
     )
     await POST(req)
-    expect(mockStreamText).toHaveBeenCalledWith(
-      expect.objectContaining({ system: "" })
-    )
+    expect(mockStreamText).toHaveBeenCalledWith(expect.objectContaining({ system: "" }))
   })
 
   it("handles reflection with undefined roleplayHistory", async () => {
@@ -489,7 +585,9 @@ describe("POST /api/chat", () => {
   })
 
   it("handles messages with image attachment without comma in url", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
@@ -516,7 +614,9 @@ describe("POST /api/chat", () => {
   })
 
   it("handles attachment with unknown content type hitting else branch", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
@@ -526,7 +626,11 @@ describe("POST /api/chat", () => {
             role: "user",
             content: "check file",
             experimental_attachments: [
-              { contentType: "application/zip", url: "data:application/zip;base64,dGVzdA==", name: "archive.zip" }
+              {
+                contentType: "application/zip",
+                url: "data:application/zip;base64,dGVzdA==",
+                name: "archive.zip"
+              }
             ]
           }
         ],
@@ -545,7 +649,9 @@ describe("POST /api/chat", () => {
   })
 
   it("handles attachment with .md extension", async () => {
-    mockStreamText.mockReturnValue({ toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok")) })
+    mockStreamText.mockReturnValue({
+      toTextStreamResponse: vi.fn().mockReturnValue(new Response("ok"))
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
@@ -555,7 +661,11 @@ describe("POST /api/chat", () => {
             role: "user",
             content: "read md",
             experimental_attachments: [
-              { contentType: "application/octet-stream", url: "data:application/octet-stream;base64,Tk9URQ==", name: "readme.md" }
+              {
+                contentType: "application/octet-stream",
+                url: "data:application/octet-stream;base64,Tk9URQ==",
+                name: "readme.md"
+              }
             ]
           }
         ],
