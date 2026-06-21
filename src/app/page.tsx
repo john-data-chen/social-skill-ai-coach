@@ -23,9 +23,9 @@ export default function Home() {
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  // True for the whole send flow (incl. the Analyzer->Coach handoff). Guards against
-  // overlapping requests: streamStage drops `isLoading` once tokens stream, so the Send
-  // button re-enables mid-stream and a second Enter would otherwise fire a duplicate request.
+  // Synchronous re-entry guard for the whole send flow (incl. the Analyzer->Coach handoff).
+  // `isLoading` state drives the disabled UI, but a state read inside a rapid second Enter can
+  // be stale, so this ref blocks overlapping requests race-free.
   const busyRef = useRef(false)
 
   // Restore history when stage changes
@@ -80,14 +80,12 @@ export default function Home() {
     setHistory(stage, seeded)
     setStage(stage)
     setMessages(seeded)
-    setIsLoading(true)
 
     const aiMessageId = (Date.now() + 1).toString()
     // Surface failures instead of leaving an empty bubble. A bad API key or Base URL
     // makes the upstream call fail, which the AI SDK returns as a 200 with an *empty*
     // stream — so we also treat empty output as an error.
     const showError = (text: string) => {
-      setIsLoading(false)
       setMessages([...seeded, { id: aiMessageId, role: "assistant", content: `⚠️ ${text}` }])
     }
 
@@ -126,8 +124,6 @@ export default function Home() {
         return null
       }
 
-      setIsLoading(false)
-
       const decoder = new TextDecoder()
       let aiContent = ""
 
@@ -152,7 +148,6 @@ export default function Home() {
       return aiContent
     } catch (err) {
       console.error(err)
-      setIsLoading(false)
       setMessages([
         ...seeded,
         {
@@ -177,7 +172,10 @@ export default function Home() {
       return
     }
 
-    const nextStage = determineNextStage(currentStage, input)
+    // Only let text drive a stage jump. With empty text we've already passed the "advance
+    // stage" check above, so reaching here means there's an attachment to send — don't let
+    // determineNextStage("") bounce us to the next stage and drop the file.
+    const nextStage = input.trim() ? determineNextStage(currentStage, input) : currentStage
     if (nextStage !== currentStage) {
       setStage(nextStage)
       setInput("")
@@ -203,7 +201,10 @@ export default function Home() {
     setInput("")
     setAttachments([])
 
+    // isLoading stays true for the WHOLE flow (send + Analyzer->Coach handoff), so the Send
+    // button is disabled the entire time — not just until the first token streams in.
     busyRef.current = true
+    setIsLoading(true)
     void (async () => {
       try {
         const analyzerOut = await streamStage(currentStage, [...messages, userMessage])
@@ -220,6 +221,7 @@ export default function Home() {
         }
       } finally {
         busyRef.current = false
+        setIsLoading(false)
       }
     })()
   }
@@ -306,7 +308,7 @@ export default function Home() {
                   </div>
                 ))
               )}
-              {isLoading && (
+              {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
                 <div className="flex justify-start">
                   <div className="p-4 rounded-xl max-w-[85%] bg-white dark:bg-gray-800 shadow-sm border dark:border-gray-700">
                     <div className="flex gap-1 items-center h-6 px-2">
@@ -376,7 +378,10 @@ export default function Home() {
                   value={input}
                   onChange={handleInputChange}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
+                    // `isComposing` guards IME input (Chinese/Japanese/Korean): the Enter that
+                    // confirms a candidate must NOT submit — otherwise it sends early and the
+                    // IME's commit then re-fills the just-cleared box. Press Enter again to send.
+                    if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
                       e.preventDefault()
                       onSubmit({ preventDefault: () => {} } as React.FormEvent<HTMLFormElement>)
                     }
@@ -385,8 +390,8 @@ export default function Home() {
                   maxRows={3}
                   placeholder={
                     currentStage === "reflection"
-                      ? "Type 'Review me' to start reflection..."
-                      : "Type your message (or empty to next stage)..."
+                      ? "Type 'Review me' to start reflection · Enter to send"
+                      : "Type your message · Enter to send (empty = next stage)"
                   }
                   className="flex-1 resize-none rounded-lg border border-input bg-white px-2.5 py-2 text-base outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-gray-950"
                 />
