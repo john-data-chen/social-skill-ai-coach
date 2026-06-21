@@ -52,82 +52,86 @@ describe("Settings", () => {
     expect(screen.getByText("Settings")).toBeDefined()
   })
 
-  it("auto-fixes gpt-4o model", () => {
-    useAppStore.setState({ model: "gpt-4o", provider: "deepseek" })
+  it("auto-fixes invalid model when dialog opens", () => {
+    useAppStore.setState({ model: "invalid-model", provider: "deepseek", mode: "byok" })
     render(<Settings />)
+
+    // Draft normalization only happens on open
+    fireEvent.click(screen.getByText("Settings"))
+
+    // Store shouldn't change until confirmed
+    expect(useAppStore.getState().model).toBe("invalid-model")
+
+    fireEvent.click(screen.getByText("Confirm"))
     expect(useAppStore.getState().model).toBe("deepseek-v4-pro")
   })
 
-  it("auto-fixes gpt-4o model for mimo provider", () => {
-    useAppStore.setState({ model: "gpt-4o", provider: "mimo" })
-    render(<Settings />)
-    expect(useAppStore.getState().model).toBe("mimo-v2.5-pro")
-  })
-
-  it("updates model input", () => {
-    useAppStore.setState({ mode: "byok" })
-    render(<Settings />)
-
-    fireEvent.click(screen.getByText("Settings"))
-
-    const modelInput = screen.getAllByRole("textbox")[0]
-    fireEvent.change(modelInput!, { target: { value: "test-model" } })
-    expect(useAppStore.getState().model).toBe("test-model")
-  })
-
-  it("updates API key input", () => {
-    useAppStore.setState({ mode: "byok" })
+  it("changes in dialog do not affect store until confirmed", () => {
+    useAppStore.setState({ mode: "byok", apiKey: "initial-key" })
     render(<Settings />)
 
     fireEvent.click(screen.getByText("Settings"))
 
     const apiKeyInput = screen.getByPlaceholderText("sk-...")
-    fireEvent.change(apiKeyInput!, { target: { value: "test-key" } })
+    fireEvent.change(apiKeyInput, { target: { value: "test-key" } })
+
+    // Store unchanged
+    expect(useAppStore.getState().apiKey).toBe("initial-key")
+
+    // Cancel -> still unchanged
+    fireEvent.click(screen.getByText("Cancel"))
+    expect(useAppStore.getState().apiKey).toBe("initial-key")
+  })
+
+  it("updates store when confirmed", () => {
+    useAppStore.setState({ mode: "byok", apiKey: "initial-key" })
+    render(<Settings />)
+
+    fireEvent.click(screen.getByText("Settings"))
+
+    const apiKeyInput = screen.getByPlaceholderText("sk-...")
+    fireEvent.change(apiKeyInput, { target: { value: "test-key" } })
+
+    fireEvent.click(screen.getByText("Confirm"))
     expect(useAppStore.getState().apiKey).toBe("test-key")
   })
 
+  it("updates model using select", () => {
+    useAppStore.setState({ mode: "byok", provider: "mimo" })
+    render(<Settings />)
+
+    fireEvent.click(screen.getByText("Settings"))
+
+    const selects = screen.getAllByTestId("mock-select")
+    // index 0: mode, 1: provider, 2: model
+    fireEvent.change(selects[2]!, { target: { value: "mimo-v2.5" } })
+
+    fireEvent.click(screen.getByText("Confirm"))
+    expect(useAppStore.getState().model).toBe("mimo-v2.5")
+  })
+
   it("changes mode to demo", () => {
+    useAppStore.setState({ mode: "byok" })
     render(<Settings />)
     fireEvent.click(screen.getByText("Settings"))
 
     const selects = screen.getAllByTestId("mock-select")
-    fireEvent.change(selects[0]!!, { target: { value: "demo" } })
+    fireEvent.change(selects[0]!, { target: { value: "demo" } })
+    fireEvent.click(screen.getByText("Confirm"))
 
     expect(useAppStore.getState().mode).toBe("demo")
   })
 
-  it("changes mode to byok", () => {
-    useAppStore.setState({ mode: "demo" })
-    render(<Settings />)
-    fireEvent.click(screen.getByText("Settings"))
-
-    const selects = screen.getAllByTestId("mock-select")
-    fireEvent.change(selects[0]!, { target: { value: "byok" } })
-
-    expect(useAppStore.getState().mode).toBe("byok")
-  })
-
-  it("changes provider to deepseek", () => {
+  it("changes provider and resets model", () => {
     render(<Settings />)
     fireEvent.click(screen.getByText("Settings"))
 
     const selects = screen.getAllByTestId("mock-select")
     fireEvent.change(selects[1]!, { target: { value: "deepseek" } })
+    fireEvent.click(screen.getByText("Confirm"))
 
     expect(useAppStore.getState().provider).toBe("deepseek")
     expect(useAppStore.getState().model).toBe("deepseek-v4-pro")
-  })
-
-  it("changes provider to mimo", () => {
-    useAppStore.setState({ provider: "deepseek", model: "deepseek-v4-pro" })
-    render(<Settings />)
-    fireEvent.click(screen.getByText("Settings"))
-
-    const selects = screen.getAllByTestId("mock-select")
-    fireEvent.change(selects[1]!, { target: { value: "mimo" } })
-
-    expect(useAppStore.getState().provider).toBe("mimo")
-    expect(useAppStore.getState().model).toBe("mimo-v2.5-pro")
   })
 
   it("hides API key field when in demo mode", () => {
@@ -136,13 +140,5 @@ describe("Settings", () => {
     fireEvent.click(screen.getByText("Settings"))
 
     expect(screen.queryByPlaceholderText("sk-...")).toBeNull()
-  })
-
-  it("shows API key field when in byok mode", () => {
-    useAppStore.setState({ mode: "byok" })
-    render(<Settings />)
-    fireEvent.click(screen.getByText("Settings"))
-
-    expect(screen.getByPlaceholderText("sk-...")).toBeDefined()
   })
 })

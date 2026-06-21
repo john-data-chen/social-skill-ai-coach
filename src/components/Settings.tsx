@@ -1,14 +1,16 @@
 "use client"
 
-import { useEffect } from "react"
+import { useState } from "react"
 
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
+  DialogFooter
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -19,19 +21,57 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
-import { useAppStore } from "@/lib/store"
+import { useAppStore, type AppState } from "@/lib/store"
+
+const MODE_LABELS: Record<string, string> = {
+  demo: "Demo (Server Key)",
+  byok: "BYOK (Bring Your Own Key)"
+}
+
+const PROVIDER_LABELS: Record<string, string> = {
+  mimo: "Xiaomi MiMo",
+  deepseek: "DeepSeek"
+}
+
+const MODELS: Record<string, string[]> = {
+  mimo: ["mimo-v2.5-pro", "mimo-v2.5"],
+  deepseek: ["deepseek-v4-pro", "deepseek-v4-flash"]
+}
 
 export function Settings() {
-  const { provider, model, apiKey, mode, setConfig } = useAppStore()
+  const store = useAppStore()
+  const [open, setOpen] = useState(false)
+  const [draft, setDraft] = useState<Partial<AppState>>({})
 
-  useEffect(() => {
-    if (model === "gpt-4o") {
-      setConfig({ model: provider === "mimo" ? "mimo-v2.5-pro" : "deepseek-v4-pro" })
+  const handleOpenChange = (isOpen: boolean) => {
+    if (isOpen) {
+      let draftModel = store.model
+      const allowedModels = MODELS[store.provider] || MODELS["mimo"]!
+      if (!allowedModels.includes(draftModel)) {
+        draftModel = allowedModels[0]!
+      }
+      setDraft({
+        mode: store.mode,
+        provider: store.provider,
+        model: draftModel,
+        apiKey: store.apiKey,
+        baseUrl: store.baseUrl
+      })
     }
-  }, [model, provider, setConfig])
+    setOpen(isOpen)
+  }
+
+  const handleConfirm = () => {
+    store.setConfig(draft)
+    setOpen(false)
+  }
+
+  const handleCancel = () => {
+    setOpen(false)
+  }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
         Settings
       </DialogTrigger>
@@ -39,6 +79,7 @@ export function Settings() {
         <DialogHeader>
           <DialogTitle>AI Provider Settings</DialogTitle>
           <DialogDescription>
+            {/* [SECURITY: Client-side Key Storage] */}
             Configure your AI provider. Your API key is stored only in this browser tab&apos;s
             session memory and is never logged on our servers.
           </DialogDescription>
@@ -49,13 +90,15 @@ export function Settings() {
               Mode
             </Label>
             <Select
-              value={mode}
+              value={draft.mode}
               onValueChange={(val) => {
-                setConfig({ mode: val! })
+                setDraft((prev) => ({ ...prev, mode: val as any }))
               }}
             >
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Select mode" />
+              <SelectTrigger className="col-span-3 w-full">
+                <SelectValue placeholder="Select mode">
+                  {(v: any) => (v ? MODE_LABELS[v as string] : null)}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="demo">Demo (Server Key)</SelectItem>
@@ -69,16 +112,20 @@ export function Settings() {
               Provider
             </Label>
             <Select
-              value={provider}
+              value={draft.provider}
               onValueChange={(val) => {
-                setConfig({
-                  provider: val as "mimo" | "deepseek",
-                  model: val === "mimo" ? "mimo-v2.5-pro" : "deepseek-v4-pro"
-                })
+                const newProvider = val as "mimo" | "deepseek"
+                setDraft((prev) => ({
+                  ...prev,
+                  provider: newProvider,
+                  model: MODELS[newProvider]![0]!
+                }))
               }}
             >
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Select provider" />
+              <SelectTrigger className="col-span-3 w-full">
+                <SelectValue placeholder="Select provider">
+                  {(v: any) => (v ? PROVIDER_LABELS[v as string] : null)}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="mimo">Xiaomi MiMo</SelectItem>
@@ -91,17 +138,26 @@ export function Settings() {
             <Label htmlFor="model" className="text-right">
               Model ID
             </Label>
-            <Input
-              id="model"
-              value={model}
-              onChange={(e) => {
-                setConfig({ model: e.target.value })
+            <Select
+              value={draft.model}
+              onValueChange={(val) => {
+                setDraft((prev) => ({ ...prev, model: val! }))
               }}
-              className="col-span-3"
-            />
+            >
+              <SelectTrigger className="col-span-3 w-full">
+                <SelectValue placeholder="Select model" />
+              </SelectTrigger>
+              <SelectContent>
+                {(MODELS[draft.provider as string] || MODELS["mimo"]!).map((m) => (
+                  <SelectItem key={m} value={m}>
+                    {m}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
-          {mode === "byok" && (
+          {draft.mode === "byok" && (
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="apiKey" className="text-right">
                 API Key
@@ -109,16 +165,39 @@ export function Settings() {
               <Input
                 id="apiKey"
                 type="password"
-                value={apiKey}
+                value={draft.apiKey || ""}
                 onChange={(e) => {
-                  setConfig({ apiKey: e.target.value })
+                  setDraft((prev) => ({ ...prev, apiKey: e.target.value }))
                 }}
                 className="col-span-3"
                 placeholder="sk-..."
               />
             </div>
           )}
+
+          {draft.mode === "byok" && draft.provider === "mimo" && (
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="baseUrl" className="text-right">
+                Base URL
+              </Label>
+              <Input
+                id="baseUrl"
+                value={draft.baseUrl || ""}
+                onChange={(e) => {
+                  setDraft((prev) => ({ ...prev, baseUrl: e.target.value }))
+                }}
+                className="col-span-3"
+                placeholder="Mimo token plan only — e.g. https://token-plan-cn.xiaomimimo.com/v1"
+              />
+            </div>
+          )}
         </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={handleCancel}>
+            Cancel
+          </Button>
+          <Button onClick={handleConfirm}>Confirm</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

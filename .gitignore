@@ -5,6 +5,8 @@
 .claude
 CLAUDE.md
 GEMINI.md
+# session-handoff now lives globally in ~/.agents/skills — never track it here again
+.agents/skills/session-handoff/
 
 node_modules
 tsconfig.tsbuildinfo
@@ -15,6 +17,7 @@ packages/*/skill
 
 # Next.js
 .next
+next-env.d.ts
 
 # Env files
 .env

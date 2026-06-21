@@ -15,7 +15,7 @@ import { determineNextStage } from "@/lib/router"
 import { useAppStore, type Attachment } from "@/lib/store"
 
 export default function Home() {
-  const { provider, model, apiKey, mode, currentStage, setStage, history, setHistory } =
+  const { provider, model, apiKey, baseUrl, mode, currentStage, setStage, history, setHistory } =
     useAppStore()
 
   const [input, setInput] = useState("")
@@ -101,24 +101,40 @@ export default function Home() {
             messages: newMessages,
             provider,
             model,
+            baseUrl,
             mode,
             stage: currentStage,
             roleplayHistory: history["roleplay"] || []
           })
         })
 
+        const aiMessageId = (Date.now() + 1).toString()
+        // Surface failures instead of leaving an empty bubble. A bad API key or
+        // Base URL makes the upstream call fail, which the AI SDK returns as a
+        // 200 with an *empty* stream — so we also treat empty output as an error.
+        const showError = (text: string) => {
+          setMessages([
+            ...newMessages,
+            { id: aiMessageId, role: "assistant", content: `⚠️ ${text}` }
+          ])
+        }
+
         if (!response.ok) {
-          throw new Error("Fetch failed")
+          const detail = (await response.text().catch(() => "")) || ""
+          showError(
+            `Request failed (${response.status}). ${detail || "Check your API key / Base URL / mode in Settings."}`
+          )
+          return
         }
 
         const reader = response.body?.getReader()
         if (!reader) {
+          showError("No response stream returned.")
           return
         }
 
         const decoder = new TextDecoder()
         let aiContent = ""
-        const aiMessageId = (Date.now() + 1).toString()
 
         while (true) {
           const { done, value } = await reader.read()
@@ -130,12 +146,27 @@ export default function Home() {
           setMessages([...newMessages, { id: aiMessageId, role: "assistant", content: aiContent }])
         }
 
+        if (!aiContent.trim()) {
+          showError(
+            "Empty response from the model — likely a wrong API key or Base URL. Check Settings, or switch to Demo mode."
+          )
+          return
+        }
+
         setHistory(currentStage, [
           ...newMessages,
           { id: aiMessageId, role: "assistant", content: aiContent }
         ])
       } catch (err) {
         console.error(err)
+        setMessages([
+          ...newMessages,
+          {
+            id: (Date.now() + 1).toString(),
+            role: "assistant",
+            content: `⚠️ ${err instanceof Error ? err.message : "Network error"}`
+          }
+        ])
       }
     })()
   }

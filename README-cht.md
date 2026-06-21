@@ -1,7 +1,7 @@
 # 社交技巧 AI 教練（Social Skills AI Coach）
 
 [![codecov](https://codecov.io/gh/john-data-chen/social-skill-ai-coach/graph/badge.svg?token=Gj6H1mEAAz)](https://codecov.io/gh/john-data-chen/social-skill-ai-coach)
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=john-data-chen_social-skill-ai-coach)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_social-skill-ai-coach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
 [![CI](https://github.com/john-data-chen/social-skill-ai-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/social-skill-ai-coach/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -9,9 +9,9 @@
 
 一個多代理（multi-agent）網頁應用，在安全的環境裡幫助你**練習並改善真實的社交互動**。你描述一個情境，得到以結構化社交課程為依據的具體建議，透過角色扮演實際演練，再收到結構化的回饋——一個隨時可用的完整教練循環。
 
-> **線上 Demo：** 已部署於 Vercel —— _請在此填入你的部署網址_。
+> **線上 Demo：** 已部署於 Vercel —— [https://social-skill-ai-coach.vercel.app](https://social-skill-ai-coach.vercel.app)。
 
-> ⚠️ **免責聲明：** 本專案（含 Demo、MCP、Skill）皆**不能取代受過訓練且具合法認證的心理師／治療師**。這是為 Kaggle《AI Agents: Intensive Vibe Coding Capstone Project》競賽製作的**概念性產品**，**請勿用於醫療用途**。
+> ⚠️ **免責聲明：** 此專案是為了 [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) 所開發的概念性產品（最小 MVP），參加組別為 **Agents for Good**，僅供評審與有興趣者研究。專案所有的功能（包含但不限於 Demo、AI agent、Skill、MCP）皆**無法取代受過專業訓練且擁有合格證照的心理師或助人工作者**，且**無法提供任何醫療與諮商行為**。
 
 ---
 
@@ -21,28 +21,24 @@
 
 ## 💡 為什麼做這個
 
-對高功能自閉／亞斯伯格（Asperger）的人來說，社交技巧的學習必須透過**實際演練**——因為除了心理師以外，幾乎沒有人有耐心包容你的「與眾不同」。最理想的情況是：一旦發現孩子有社交技巧上的障礙，就立刻讓他去上社交技巧訓練課程（例如 [PEERS](https://www.semel.ucla.edu/peers/)），越早學會，受益一生。
+對高功能自閉或亞斯伯格（Asperger）的人來說，社交技巧主要靠**實際演練**學會——但有結構的練習既稀少又昂貴：
 
-但很殘酷的現實是：
+- **費用高昂。** 像 [PEERS](https://www.semel.ucla.edu/peers/) 這類實證課程約 16 堂、每堂約 **90 美金**，而且課程是累積式的——缺一堂，後面全受影響。很多家庭（尤其在亞洲）負擔不起完整課程，或難以承認有此需求。
+- **當下沒有回饋。** 即使上完課程，真實對話中也不會有教練站在你旁邊告訴你哪裡做對、哪裡做錯。他人反應無法預測，一個突如其來的干擾就可能讓你腦中一片空白。
+- **太晚開始的代價。** 一旦社交習慣固定下來，排擠與霸凌往往延續到成年——而極少有成年人願意回去「和小孩子一起學」。
 
-- 亞洲大部分父母不知道、或很難承認孩子的社交有問題——因為那彷彿代表自己沒有能力、或在教育上失敗了。
-- PEERS 最初階的課程是給國高中生的，一輪 8 堂、每堂約 **90 美金**。社交是隱晦而困難的，一旦缺了任何一堂都影響很大，所以每一堂都必須去上。要上完完整課程需要 16 堂，這對很多家庭來說無法負擔。
-- 一旦社交的不良習慣固定下來，當事人往往只會發現自己不斷面對霸凌與排擠，直到成年。這時候才開始學雖然很難、但不是完全不可能——只是此時的他們很可能無法面對現實，絕大多數人不會再回去跟小孩子一起學社交。
-- 如同你練習任何一種運動：你知道規則、知道怎麼做，跟你「做得很熟、很好」是完全不同等級的事。社交可能比運動還更難，因為它看似有規則，實則十分隱晦而複雜。如果你身在亞洲社會，你在社交上犯了錯是沒有人會告訴你的——每個人都預設你「應該知道」，然後你就慢慢地被疏遠、排擠，甚至被欺負。
-- 最重要的是：就算你真的上完所有 PEERS 課程，實際出去練習時，心理師不可能站在你旁邊告訴你做對做錯；而且環境與其他人的反應全都不受你控制、也無法預測，光是巨大的聲響都可能讓你腦中一片空白。如果是我，我會希望口袋裡有一個能隨時諮詢的社交技巧教練。
-
-基於以上原因，本專案選擇以類似 PEERS 的課程為藍圖，設計一套 AI 社交教練：任何人都可以連上網頁（或自帶 API key），隨時隨地用「分析 → 建議 → 角色扮演 → 回饋」的循環反覆練習，把開始練習的門檻降到最低。
+本專案以 PEERS 風格的課程為藍圖，打造一位你能隨時演練的教練，透過「分析 → 建議 → 角色扮演 → 回饋」的循環——把_開始_練習的門檻降到最低。
 
 ## 🤖 為什麼用代理（agents）？
 
 單一聊天機器人會把四件性質完全不同的工作混在一起。教練本質上是一條**專家流水線**，所以本應用每個工作各用一個代理：
 
-| 階段 | 代理 | 工作 |
-| :--- | :--- | :--- |
-| 1 | **Analyzer（分析）** | 結構化整理情境（誰／什麼／何地、管道、情境類型、目標），此階段不給建議。 |
-| 2 | **Coach（教練）** | 給出具體、貼合情境的建議——只依據為此情境挑選出的課程片段。 |
-| 3 | **Roleplay（角色扮演）** | 扮演對方讓你練習，並依你的社交表現給出真實反應。 |
-| 4 | **Reflection（反思）** | 依評分準則檢視角色扮演逐字稿，回傳結構化、逐面向的評估。 |
+| 階段 | 代理                     | 工作                                                                     |
+| :--- | :----------------------- | :----------------------------------------------------------------------- |
+| 1    | **Analyzer（分析）**     | 結構化整理情境（誰／什麼／何地、管道、情境類型、目標），此階段不給建議。 |
+| 2    | **Coach（教練）**        | 給出具體、貼合情境的建議——只依據為此情境挑選出的課程片段。               |
+| 3    | **Roleplay（角色扮演）** | 扮演對方讓你練習，並依你的社交表現給出真實反應。                         |
+| 4    | **Reflection（反思）**   | 依評分準則檢視角色扮演逐字稿，回傳結構化、逐面向的評估。                 |
 
 這些代理由一個 **orchestrator（協調器）** 串接，並執行檢索增強式的知識落地（retrieval-augmented grounding）：在 Coach 階段，先由 LLM 挑出與使用者情境最相關的課程主題，再只載入那些知識片段。
 
@@ -50,35 +46,20 @@
 
 ## 🏗️ 架構
 
-```text
-skills/social-skills-coach/        Agent Skill＝課程，唯一真實來源（single source of truth）
-  SKILL.md + references/*.md        （從 8 堂課蒸餾出的 12 個主題片段）
-        │
-        │  src/lib/knowledge — server 端 loader（讀取片段並快取）
-        ├───────────────────────────────┐
-        ▼                               ▼
-  MCP Server  /api/mcp            Orchestrator + 4 個階段代理
-  (mcp-handler + MCP SDK)         - router.ts：deterministic 階段路由（client 安全）
-  把課程以 MCP tool 形式             - orchestrator.ts：LLM 挑相關主題 →
-  對「任何」MCP client 開放            in-process 讀取片段 → 落地給 Coach
-  (MCP Inspector、Claude Desktop) - /api/chat：串流當前代理的回覆
-        │
-        ▼
-  外部 agent／工具可透過協議重用同一份知識
-```
+![Architecture Diagram](./public/architecture.svg)
 
 **核心概念：** 課程只撰寫一次、做成 **Agent Skill**，並以兩種方式被消費——對內由教練代理直接 in-process 使用（求速度），對外則透過 **Model Context Protocol（MCP）** 開放給任何 MCP client（求重用與互通）。
 
 ### 對應到課程概念
 
-| 概念 | 位置 | 如何呈現 |
-| :--- | :--- | :--- |
-| **Agent／多代理系統** | Code | 四個專職代理組成階段式流水線，由 orchestrator 以 LLM 驅動的知識路由協調。 |
-| **MCP Server** | Code | `/api/mcp` 以 MCP 形式對外開放 `list_social_topics` + `get_social_knowledge`。 |
-| **Agent Skills** | Code | `skills/social-skills-coach/` 把課程封裝成可載入的 Skill——所有知識的唯一來源。 |
-| **安全性** | Code | BYOK（你的 API key 留在瀏覽器 session、不在 server 端儲存）+ 於 API 信任邊界用 zod 驗證每一個請求。 |
-| **可部署性** | Docs／Video | 已部署於 Vercel；重現步驟見下文。 |
-| **Antigravity** | Video | 於投稿影片中展示。 |
+| 概念                  | 位置        | 如何呈現                                                                                            |
+| :-------------------- | :---------- | :-------------------------------------------------------------------------------------------------- |
+| **Agent／多代理系統** | Code        | 四個專職代理組成階段式流水線，由 orchestrator 以 LLM 驅動的知識路由協調。                           |
+| **MCP Server**        | Code        | `/api/mcp` 以 MCP 形式對外開放 `list_social_topics` + `get_social_knowledge`。                      |
+| **Agent Skills**      | Code        | `skills/social-skills-coach/` 把課程封裝成可載入的 Skill——所有知識的唯一來源。                      |
+| **安全性**            | Code        | BYOK（你的 API key 留在瀏覽器 session、不在 server 端儲存）+ 於 API 信任邊界用 zod 驗證每一個請求。 |
+| **可部署性**          | Docs／Video | 已部署於 Vercel；重現步驟見下文。                                                                   |
+| **Antigravity**       | Video       | 於投稿影片中展示。                                                                                  |
 
 ---
 
@@ -141,7 +122,8 @@ curl -s -X POST http://localhost:3000/api/mcp \
 ## 📂 專案結構
 
 ```text
-├── skills/social-skills-coach/  # Agent Skill：課程（SKILL.md + references/*.md）— 唯一來源
+├── skills/social-skills-coach/  # Agent Skill：課程（產品環境運作的知識，唯一真實來源）
+├── .agents/skills/              # Antigravity agent skills（開發期 AI 輔助技能，如 karpathy/vercel）
 ├── packages/
 │   └── social-skills-coach-mcp/ # 可發佈的 npm stdio MCP 伺服器（prompts + tools）
 ├── .github/workflows/           # CI/CD（測試與 Vercel 部署）
@@ -164,6 +146,10 @@ curl -s -X POST http://localhost:3000/api/mcp \
 │       ├── router.ts                 # Deterministic 階段路由（client 安全）
 │       ├── ai.ts                     # 供應商初始化（MiMo / DeepSeek）
 │       └── store.ts                  # Zustand 狀態（歷史、設定）
+├── public/
+│   └── architecture.svg         # 系統架構圖
+├── ai-docs/
+│   └── task-template.md         # 用於氛圍編碼的 AI 代理任務模板
 ├── next.config.mjs              # outputFileTracingIncludes 把 skill md 打包進 Vercel
 ├── playwright.config.ts
 ├── vitest.config.ts

@@ -54,6 +54,7 @@
     "ai_docs/**",
     ".agents/**",
     "src/components/ui/**",
-    "src/app/globals.css"
+    "src/app/globals.css",
+    "next-env.d.ts"
   ]
 }

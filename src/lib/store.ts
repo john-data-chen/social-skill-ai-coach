@@ -20,6 +20,7 @@ export interface AppState {
   provider: "mimo" | "deepseek" | "demo"
   model: string
   apiKey: string
+  baseUrl: string
   mode: "demo" | "byok"
 
   // App state (Transient)
@@ -27,7 +28,9 @@ export interface AppState {
   history: Record<Stage, Message[]>
 
   // Actions
-  setConfig: (config: Partial<Pick<AppState, "provider" | "model" | "apiKey" | "mode">>) => void
+  setConfig: (
+    config: Partial<Pick<AppState, "provider" | "model" | "apiKey" | "baseUrl" | "mode">>
+  ) => void
   setStage: (stage: Stage) => void
   setHistory: (stage: Stage, messages: Message[]) => void
   clearHistory: () => void
@@ -46,7 +49,8 @@ export const useAppStore = create<AppState>()(
       provider: "mimo",
       model: "mimo-v2.5-pro",
       apiKey: "",
-      mode: "byok",
+      baseUrl: "",
+      mode: "demo",
       currentStage: "analyzer",
       history: initialHistory,
 
@@ -63,11 +67,16 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: "social-coach-storage",
+      version: 1,
+      // [SECURITY: Session Storage]
+      // Use sessionStorage instead of localStorage so BYOK API keys and chat history
+      // are automatically cleared when the tab is closed, preventing credential leakage.
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
         provider: state.provider,
         model: state.model,
         apiKey: state.apiKey,
+        baseUrl: state.baseUrl,
         mode: state.mode
       })
     }

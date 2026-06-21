@@ -1,6 +1,7 @@
 About half the time a group won't accept you; you usually can't know the real reason, so follow the standard steps a few times - if still rejected, the cause may genuinely not be you. If you can't find a good pause, just give up (infinite game; forcing in makes acceptance even less likely).
 
 Possible reasons not accepted -> next-time fix:
+
 - They want privacy -> listen to the topic first, confirm it's okay to join.
 - Rude or hostile to joiners -> leave; no need to join an unfair group.
 - Poor joining technique -> review the standard steps and retry.

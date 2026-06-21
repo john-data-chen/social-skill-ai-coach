@@ -11,7 +11,8 @@ import {
 import { getProvider } from "@/lib/ai"
 import { groundingFor, selectKnowledgeTopics } from "@/lib/orchestrator"
 
-// Validate the request body at the trust boundary. Loose objects let client-only
+// [SECURITY: Trust Boundary Validation]
+// Validate the request body at the trust boundary using zod. Loose objects let client-only
 // fields (e.g. a message `id`) pass through; we only enforce the shapes we rely on.
 const chatBodySchema = z.looseObject({
   messages: z.array(
@@ -22,6 +23,7 @@ const chatBodySchema = z.looseObject({
   ),
   provider: z.string(),
   model: z.string(),
+  baseUrl: z.string().optional(),
   mode: z.string().optional(),
   stage: z.string().default(""),
   roleplayHistory: z.array(z.unknown()).optional()
@@ -40,7 +42,10 @@ export async function POST(req: Request) {
     if (!parsed.success) {
       return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400 })
     }
-    const { messages, provider, model, mode, stage, roleplayHistory } = parsed.data
+    const { messages, provider, model, baseUrl, mode, stage, roleplayHistory } = parsed.data
+    // [SECURITY: BYOK (Bring Your Own Key) & No Persistence]
+    // The API key is passed via the Authorization header and used purely in-memory.
+    // It is never written to console logs, and never persisted to a database.
     const authHeader = req.headers.get("Authorization")
     const byokKey = authHeader?.replace("Bearer ", "")
 
@@ -53,7 +58,10 @@ export async function POST(req: Request) {
       return new Response(JSON.stringify({ error: "Missing API Key" }), { status: 401 })
     }
 
-    const aiProvider = getProvider(provider as "mimo" | "deepseek", apiKey)
+    // MiMo paid plans need a plan-specific base URL: demo reads it from the
+    // server env, BYOK reads the user-supplied value. DeepSeek ignores it.
+    const mimoBaseURL = mode === "demo" ? process.env.MIMO_API_BASE_URL : baseUrl
+    const aiProvider = getProvider(provider as "mimo" | "deepseek", apiKey, mimoBaseURL)
 
     if (stage === "reflection") {
       const transcript = (roleplayHistory || [])
@@ -112,12 +120,16 @@ ${obj.feedback}
       }
     }
 
+    // Multi-Agent Pipeline Dispatch:
+    // Each stage activates a specialized agent prompt to perform a distinct job.
     let systemPrompt = ""
     switch (stage) {
       case "analyzer":
+        // Agent 1: Structures the user's situation without giving advice yet.
         systemPrompt = analyzerPrompt
         break
       case "coach": {
+        // Agent 2: Provides concrete advice.
         // Retrieval-augmented grounding: the orchestrator LLM-selects the relevant
         // curriculum topics for this situation, then we read just those slices from
         // the social-skills-coach skill in-process.
@@ -128,9 +140,11 @@ ${obj.feedback}
         break
       }
       case "roleplay":
+        // Agent 3: Plays the role of the conversational partner for realistic practice.
         systemPrompt = roleplayPrompt
         break
       case "reflection":
+        // Agent 4: Evaluates the roleplay transcript and provides structured feedback.
         systemPrompt = reflectionPrompt
         break
       default:
@@ -174,7 +188,10 @@ ${obj.feedback}
     const result = streamText({
       model: aiProvider(model),
       system: systemPrompt,
-      messages: coreMessages
+      messages: coreMessages,
+      onError: ({ error }) => {
+        console.error("STREAM_ERROR", String((error as Error)?.message ?? error))
+      }
     })
 
     return result.toTextStreamResponse()
