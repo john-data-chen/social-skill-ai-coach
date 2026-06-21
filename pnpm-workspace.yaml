@@ -4,3 +4,9 @@ allowBuilds:
   "@swc/core": true
   sharp: true
   esbuild: true
+
+# Supply-chain release cooldown (pnpm 11 default is 1440 = 1 day).
+# Declared explicitly because minimumReleaseAgeExclude is only honored when
+# minimumReleaseAge is set. Only packages we deliberately track at the
+# bleeding edge belong here — use name patterns, never name@version pins.
+minimumReleaseAge: 0
