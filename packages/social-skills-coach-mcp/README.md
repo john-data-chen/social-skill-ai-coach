@@ -21,7 +21,7 @@ so:
 
 - **No API key needed** by this server.
 - **Works with any model** your client supports (Anthropic, OpenAI, Google Gemini, local
-  models, etc.) — plug in a more capable model than any single hosted demo.
+  models, etc.) — plug in a more capable model than Demo Web App.
 - **No data stored.** The server reads curriculum markdown and returns text; it persists
   nothing.
 
@@ -75,6 +75,12 @@ npm install -g social-skills-coach-mcp
 # or: pnpm add -g social-skills-coach-mcp
 social-skills-coach-mcp               # runs the stdio server
 ```
+
+## 🔒 Security
+
+- **No secrets to leak.** The server holds no API key and runs no inference — all reasoning happens on the connecting client's model. There is nothing here to exfiltrate.
+- **zod validation at the trust boundary.** Every tool/prompt argument is validated with zod (topic keys are a fixed enum, `min 1`); malformed or out-of-range input is rejected before use.
+- **Stateless by design.** It reads the bundled curriculum markdown and returns text — no database, no persistence, no telemetry.
 
 ## ⚠️ Disclaimer
 

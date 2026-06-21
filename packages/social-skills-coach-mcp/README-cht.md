@@ -5,11 +5,11 @@
 > For English, see [README.md](./README.md).
 
 一個 [MCP](https://modelcontextprotocol.io) 伺服器,將 PEERS 式的社交技巧課程轉成完整的
-教練循環 —— **分析 → 教練 → 角色扮演 → 反思** —— 讓**任何 MCP client 都能用自己的模型執行**。
+教練循環 —— **分析 → 教練 → 角色扮演 → 復盤** —— 讓**任何 MCP client 都能用自己的模型執行**。
 
 它是 [Social Skills AI Coach](https://github.com/john-data-chen/social-skill-ai-coach)
 專案的獨立、可發布形式:描述一個情境,獲得以課程為依據的具體建議,透過角色扮演演練,
-再得到結構化的反思回饋。
+再得到結構化的復盤回饋。
 
 ## 為何「自帶模型」(BYO model)
 
@@ -17,8 +17,7 @@
 只提供 prompts 與課程知識,**自己不跑任何推論(inference)**,所以:
 
 - 本伺服器**不需要 API key**。
-- **相容任何模型**(Anthropic、OpenAI、Google Gemini、本地模型等)—— 你可以接上比任何單一
-  代管 demo 更強的模型。
+- **相容任何模型**(Anthropic、OpenAI、Google Gemini、本地模型等)—— 你可以接上比 Demo Web App 更強的模型。
 - **不儲存資料。** 伺服器讀取課程 markdown 並回傳文字,不保存任何東西。
 
 ## 提供的功能
@@ -71,6 +70,12 @@ npm install -g social-skills-coach-mcp
 # 或:pnpm add -g social-skills-coach-mcp
 social-skills-coach-mcp               # 執行 stdio 伺服器
 ```
+
+## 🔒 安全性
+
+- **沒有機密可外洩。** 伺服器不持有任何 API key、也不跑推論——所有推理都在連線方 client 的模型上發生,這裡沒有東西可被竊取。
+- **信任邊界以 zod 驗證。** 每個 tool／prompt 參數都用 zod 驗證(topic key 為固定 enum、`min 1`);格式錯誤或超出範圍的輸入會在使用前被擋下。
+- **無狀態設計。** 只讀取打包進來的課程 markdown 並回傳文字——沒有資料庫、不留存、無遙測。
 
 ## ⚠️ 免責聲明
 

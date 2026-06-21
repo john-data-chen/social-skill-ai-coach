@@ -67,13 +67,24 @@
 
 ---
 
+## 🔒 安全性
+
+安全性在每一個信任邊界都有落實——瀏覽器、API、以及 MCP 伺服器：
+
+- **BYOK，永不留存。** API key 以每次請求的 `Authorization: Bearer` header 傳送，僅在記憶體中使用；不寫入 log、也不寫入資料庫。
+- **僅限 session 的儲存。** 瀏覽器把 key 與聊天紀錄存在 `sessionStorage`（而非 `localStorage`），關閉分頁即自動清除——不會外洩憑證。
+- **信任邊界以 zod 驗證。** 每個 `/api/chat` 與 MCP 的請求 body／參數都用 zod 解析；格式錯誤的 JSON 或結構在進入任何模型前就被擋下（`400`），缺少金鑰則直接 gating（`401`）。
+- **不洩漏內部資訊。** 錯誤只在 server 端記錄;client 只拿到通用訊息（`Internal Server Error`），絕不回傳 stack trace 或機密。
+- **無狀態設計。** 沒有資料庫、沒有 server 端使用者資料——你的隱私安全無虞。
+
+---
+
 ## ✨ 功能
 
 - **四階段教練循環**——Analyzer → Coach → Role-Play → Reflection。
 - **Agent Skill 課程**——社交知識撰寫成可重用的 Skill。
 - **MCP 伺服器（自帶你的模型）**——四個 agent 以 MCP prompts + 知識 tools 形式開放，任何 MCP client 都能用自己的模型跑整套教練。可發佈成 npm stdio 套件（`social-skills-coach-mcp`）。
 - **檢索增強式教練**——Coach 只依據與你情境相關的片段給出實用的建議。
-- **BYOK（自帶金鑰）**——直接在瀏覽器 session 使用你自己的 API key，沒有資料庫，不儲存個資跟 key，隨開即用，關閉分頁後就清除，隱私第一。
 - **多模型**——可在 Xiaomi MiMo 與 DeepSeek 間切換。
 - **附件**——上傳圖片與文字檔（`.md`、`.txt`、`.csv`）供 AI 分析。
 - **針對手機操作優化**——過往上了 PEERS 課程後，還是會碰到教練不可能貼身陪伴並給出反饋，或是神經多樣性特質的人容易焦慮，焦慮時腦袋就一片空白，社交場合又不可能隨時拿出筆記來查閱。這些問題只要你能聯網打開 Demo 網頁，AI 就是你最棒的夥伴，隨時隨地都能用。
