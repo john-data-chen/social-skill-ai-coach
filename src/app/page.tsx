@@ -123,7 +123,13 @@ export default function Home() {
         }
 
         if (!response.ok) {
-          const detail = (await response.text().catch(() => "")) || ""
+          let detail = ""
+          try {
+            const data = await response.json()
+            detail = data.error || data.message || ""
+          } catch {
+            detail = (await response.text().catch(() => "")) || ""
+          }
           showError(
             `Request failed (${response.status}). ${detail || "Check your API key / Base URL / mode in Settings."}`
           )
