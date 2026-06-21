@@ -37,7 +37,7 @@ test.describe("UI Components E2E", () => {
   test("tabs can be switched", async ({ page }) => {
     const analyzerTab = page.getByText("1. Analyzer", { exact: true })
     const coachTab = page.getByText("2. Coach", { exact: true })
-    const roleplayTab = page.getByText("3. Roleplay", { exact: true })
+    const roleplayTab = page.getByText("3. Role-Play", { exact: true })
     const reflectionTab = page.getByText("4. Reflection", { exact: true })
 
     await expect(analyzerTab).toBeVisible()

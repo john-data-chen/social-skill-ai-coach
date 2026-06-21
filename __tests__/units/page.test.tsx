@@ -89,24 +89,36 @@ describe("Page", () => {
   it("jumps stage when typing jump command", () => {
     render(<Page />)
     const input = screen.getByPlaceholderText(/Type your message/i)
-    fireEvent.change(input, { target: { value: "give me advice" } })
+    fireEvent.change(input, { target: { value: "/coach" } })
     fireEvent.submit(input.closest("form")!)
 
     expect(useAppStore.getState().currentStage).toBe("coach")
   })
 
-  it("advances stage on empty submit", () => {
+  it("a command with leftover text jumps AND hands the text to the destination agent", async () => {
+    render(<Page />)
+    const input = screen.getByPlaceholderText(/Type your message/i)
+    fireEvent.change(input, { target: { value: "跟我做個角色模擬 /roleplay" } })
+    fireEvent.submit(input.closest("form")!)
+
+    expect(useAppStore.getState().currentStage).toBe("roleplay")
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalled()
+    })
+  })
+
+  it("empty submit does nothing (no accidental stage advance)", () => {
     render(<Page />)
     const input = screen.getByPlaceholderText(/Type your message/i)
     fireEvent.change(input, { target: { value: "" } })
     fireEvent.submit(input.closest("form")!)
 
-    expect(useAppStore.getState().currentStage).toBe("coach")
+    expect(useAppStore.getState().currentStage).toBe("analyzer")
   })
 
   it("switches tabs", () => {
     render(<Page />)
-    const roleplayTab = screen.getByText("3. Roleplay")
+    const roleplayTab = screen.getByText("3. Role-Play")
     fireEvent.click(roleplayTab)
     expect(useAppStore.getState().currentStage).toBe("roleplay")
   })
@@ -278,7 +290,12 @@ describe("Page", () => {
     const form = document.querySelector("form")!
     fireEvent.submit(form)
 
-    expect(useAppStore.getState().currentStage).toBe("coach")
+    // Empty text + attachment SENDS the file (fetch called) and stays put — it must NOT
+    // bounce to the next stage and drop the attachment.
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalled()
+    })
+    expect(useAppStore.getState().currentStage).toBe("analyzer")
   })
 
   it("shows no messages placeholder", () => {

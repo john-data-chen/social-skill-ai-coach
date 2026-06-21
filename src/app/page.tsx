@@ -11,8 +11,17 @@ import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { determineNextStage } from "@/lib/router"
+import { parseStageCommand } from "@/lib/router"
 import { useAppStore, type Attachment, type Stage } from "@/lib/store"
+
+// Display labels for each stage. Internal Stage ids stay as-is (e.g. "roleplay"); the UI shows
+// the hyphenated "Role-Play".
+const STAGE_LABELS: Record<Stage, string> = {
+  analyzer: "Analyzer",
+  coach: "Coach",
+  roleplay: "Role-Play",
+  reflection: "Reflection"
+}
 
 export default function Home() {
   const { provider, model, apiKey, baseUrl, mode, currentStage, setStage, history, setHistory } =
@@ -167,18 +176,38 @@ export default function Home() {
       return
     }
 
+    // Empty input does nothing — navigate via the tabs or a /command, never by accident.
     if (!input.trim() && attachments.length === 0) {
-      setStage(determineNextStage(currentStage, ""))
       return
     }
 
-    // Only let text drive a stage jump. With empty text we've already passed the "advance
-    // stage" check above, so reaching here means there's an attachment to send — don't let
-    // determineNextStage("") bounce us to the next stage and drop the file.
-    const nextStage = input.trim() ? determineNextStage(currentStage, input) : currentStage
-    if (nextStage !== currentStage) {
-      setStage(nextStage)
+    // A slash command (anywhere in the message) jumps to that stage. Any leftover content — the
+    // text minus the command, and/or an attachment — is handed straight to the destination agent
+    // so the jump actually does something instead of dropping you on an empty stage.
+    const command = input.trim() ? parseStageCommand(input) : null
+    if (command) {
       setInput("")
+      if (!command.rest && attachments.length === 0) {
+        setStage(command.stage)
+        return
+      }
+      const commandMessage = {
+        id: Date.now().toString(),
+        role: "user",
+        content: command.rest,
+        ...(attachments.length > 0 && { experimental_attachments: attachments })
+      }
+      setAttachments([])
+      busyRef.current = true
+      setIsLoading(true)
+      void (async () => {
+        try {
+          await streamStage(command.stage, [...(history[command.stage] || []), commandMessage])
+        } finally {
+          busyRef.current = false
+          setIsLoading(false)
+        }
+      })()
       return
     }
 
@@ -249,14 +278,14 @@ export default function Home() {
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="analyzer">1. Analyzer</TabsTrigger>
             <TabsTrigger value="coach">2. Coach</TabsTrigger>
-            <TabsTrigger value="roleplay">3. Roleplay</TabsTrigger>
+            <TabsTrigger value="roleplay">3. Role-Play</TabsTrigger>
             <TabsTrigger value="reflection">4. Reflection</TabsTrigger>
           </TabsList>
         </Tabs>
 
         <Card className="flex-1 flex flex-col overflow-hidden min-h-[600px] max-h-[80vh]">
           <CardHeader>
-            <CardTitle className="capitalize">{currentStage} Stage</CardTitle>
+            <CardTitle>{STAGE_LABELS[currentStage]} Stage</CardTitle>
             <CardDescription>
               {currentStage === "analyzer" && "Describe your social situation. Who, what, where?"}
               {currentStage === "coach" && "Get concrete advice on what to say and do."}
@@ -391,7 +420,7 @@ export default function Home() {
                   placeholder={
                     currentStage === "reflection"
                       ? "Type 'Review me' to start reflection · Enter to send"
-                      : "Type your message · Enter to send (empty = next stage)"
+                      : "Type your message · Enter to send · /coach /role-play /reflect to switch"
                   }
                   className="flex-1 resize-none rounded-lg border border-input bg-white px-2.5 py-2 text-base outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-gray-950"
                 />
