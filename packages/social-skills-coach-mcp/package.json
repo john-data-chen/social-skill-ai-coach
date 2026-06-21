@@ -17,7 +17,8 @@
   "files": [
     "dist",
     "skill",
-    "README.md"
+    "README.md",
+    "README-cht.md"
   ],
   "type": "module",
   "exports": {
