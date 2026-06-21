@@ -1,6 +1,6 @@
 # Social Skills AI Coach
 
-**Practice real social situations with a multi-agent AI coach — analyze, get advice, role-play, and reflect — anytime, for the cost of an API key.**
+**Practice real social situations with a multi-agent AI coach — analyze, get advice, role-play, and reflect — anytime, for the cost only 2~6 USD/month.**
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-000?logo=vercel)](https://social-skill-ai-coach.vercel.app)
 [![NPM Version](https://img.shields.io/npm/v/social-skills-coach-mcp.svg?logo=npm)](https://www.npmjs.com/package/social-skills-coach-mcp)
@@ -9,10 +9,11 @@
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_social-skill-ai-coach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-🔗 **[Live Demo](https://social-skill-ai-coach.vercel.app)** · 🎬 **[Video walkthrough](https://youtu.be/REPLACE_WITH_VIDEO_ID)** · 📦 **[npm: `social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇹🇼 **[繁體中文](./README-cht.md)**
+🔗 **[Live Demo](https://social-skill-ai-coach.vercel.app)** · 🎬 **Video walkthrough (in progress)** · 📦 **[npm: `social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇹🇼 **[繁體中文](./README-cht.md)**
 
-> ⚠️ Conceptual MVP for the [Kaggle AI Agents Capstone](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) (track: **Agents for Good**), for review and research only. **It cannot replace a licensed psychologist or therapist.** Full disclaimer at the [bottom](#-disclaimer).
+> ⚠️ Conceptual MVP for the [Kaggle AI Agents Capstone](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) (track: **Agents for Good**), for review and research only. **It cannot replace a licensed psychologist or therapist.** Full disclaimer at the bottom.
 
+Demo GIF is in progress.
 ![Social Skills AI Coach — coaching loop demo](./public/screenshots/demo.gif)
 
 ---
@@ -204,7 +205,7 @@ pnpm build        # production build (typecheck + Next build)
 The app deploys to Vercel with no special configuration:
 
 1. Import the GitHub repo into Vercel.
-2. (Optional) set `MIMO_API_KEY` / `DEEPSEEK_API_KEY` in the project's Environment Variables to enable Demo mode in production. BYOK works without any server keys.
+2. (Optional) set `MIMO_API_KEY` + `MIMO_API_BASE_URL` / `DEEPSEEK_API_KEY` in the project's Environment Variables to enable Demo mode in production. BYOK works without any server keys.
 3. Deploy. The `outputFileTracingIncludes` setting in `next.config.mjs` bundles the Agent Skill markdown into the serverless functions, so both `/api/chat` and `/api/mcp` can read the curriculum at runtime.
 
 > **Never commit API keys or passwords.** Use environment variables.
@@ -227,7 +228,7 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 
 This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating team is **Agents for Good**, and it is for review and research by interested parties only. All functions (including but not limited to the Demo, AI agents, Skill, and MCP) **cannot replace professionally trained and licensed psychologists or helping professionals**, and cannot provide any medical treatment or consultation.
 
-The demo website currently runs on a Xiaomi MiMo monthly subscription (a minimum-viable product at the lowest cost) and can be used directly. **The subscription will be deactivated after Kaggle review.** You can top up at [DeepSeek](https://platform.deepseek.com/) to get your own key (BYOK) for a minimum of about $2.
+The demo website currently runs on a [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) (a minimum-viable product at the lowest cost) and can be used directly. **The token plan will be deactivated after Kaggle review.** You can top up at [DeepSeek](https://platform.deepseek.com/) to get your own key (BYOK) for a minimum of about $2.
 
 Please always remember: **you are talking to an AI.** Avoid mentioning personal information such as your real name, phone number, or address; use a pseudonym if needed. AI can make mistakes and hallucinate — all suggestions are for reference only.
 
