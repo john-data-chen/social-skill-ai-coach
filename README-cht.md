@@ -182,7 +182,7 @@ pnpm install
 
 ```bash
 cp env.example .env
-# 接著填入 MIMO_API_KEY 與／或 DEEPSEEK_API_KEY
+# 接著填入 MIMO_API_KEY + MIMO_API_BASE_URL ／ DEEPSEEK_API_KEY
 ```
 
 ### 4. 執行

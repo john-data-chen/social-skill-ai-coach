@@ -186,7 +186,7 @@ The app defaults to **BYOK**: you can paste your own API key in the Settings dia
 
 ```bash
 cp env.example .env
-# then fill in MIMO_API_KEY and/or DEEPSEEK_API_KEY
+# then fill in MIMO_API_KEY + MIMO_API_BASE_URL and/or DEEPSEEK_API_KEY
 ```
 
 ### 4. Run
