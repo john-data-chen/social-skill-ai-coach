@@ -11,6 +11,11 @@
   ],
   "license": "MIT",
   "author": "jianan.chen",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/john-data-chen/social-skill-ai-coach.git",
+    "directory": "packages/social-skills-coach-mcp"
+  },
   "bin": {
     "social-skills-coach-mcp": "dist/index.js"
   },

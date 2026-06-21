@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> 繁體中文版說明請見 [README-cht.md](./README-cht.md)。
+> 繁體中文版說明請見 [README-cht.md](https://github.com/john-data-chen/social-skill-ai-coach/blob/main/packages/social-skills-coach-mcp/README-cht.md)。
 
 An [MCP](https://modelcontextprotocol.io) server that turns a PEERS-style social-skills
 curriculum into a full coaching loop — **Analyze → Coach → Role-Play → Reflect** — that
