@@ -4,12 +4,12 @@ import { Paperclip, X } from "lucide-react"
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import ReactMarkdown from "react-markdown"
+import TextareaAutosize from "react-textarea-autosize"
 
 import { Settings } from "@/components/Settings"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { determineNextStage } from "@/lib/router"
 import { useAppStore, type Attachment } from "@/lib/store"
@@ -35,7 +35,7 @@ export default function Home() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, isLoading])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setInput(e.target.value)
   }
 
@@ -123,7 +123,13 @@ export default function Home() {
         }
 
         if (!response.ok) {
-          const detail = (await response.text().catch(() => "")) || ""
+          let detail = ""
+          try {
+            const data = await response.json()
+            detail = data.error || data.message || ""
+          } catch {
+            detail = (await response.text().catch(() => "")) || ""
+          }
           showError(
             `Request failed (${response.status}). ${detail || "Check your API key / Base URL / mode in Settings."}`
           )
@@ -325,15 +331,23 @@ export default function Home() {
                 >
                   <Paperclip size={18} />
                 </Button>
-                <Input
+                <TextareaAutosize
                   value={input}
                   onChange={handleInputChange}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault()
+                      onSubmit({ preventDefault: () => {} } as React.FormEvent<HTMLFormElement>)
+                    }
+                  }}
+                  minRows={1}
+                  maxRows={3}
                   placeholder={
                     currentStage === "reflection"
                       ? "Type 'Review me' to start reflection..."
                       : "Type your message (or empty to next stage)..."
                   }
-                  className="flex-1 bg-white dark:bg-gray-950"
+                  className="flex-1 resize-none rounded-lg border border-input bg-white px-2.5 py-2 text-base outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-gray-950"
                 />
                 <Button type="submit" disabled={isLoading}>
                   {isLoading ? "Thinking..." : "Send"}

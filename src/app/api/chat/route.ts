@@ -51,7 +51,35 @@ export async function POST(req: Request) {
 
     let apiKey = byokKey
     if (mode === "demo") {
-      apiKey = provider === "mimo" ? process.env.MIMO_API_KEY : process.env.DEEPSEEK_API_KEY
+      if (!process.env.MIMO_API_KEY && !process.env.DEEPSEEK_API_KEY) {
+        return new Response(
+          JSON.stringify({
+            error:
+              "Server missing environment variables: Please set MIMO_API_KEY or DEEPSEEK_API_KEY."
+          }),
+          { status: 400 }
+        )
+      }
+
+      if (provider === "mimo") {
+        if (!process.env.MIMO_API_KEY || !process.env.MIMO_API_BASE_URL) {
+          return new Response(
+            JSON.stringify({
+              error:
+                "Server configuration error: Xiaomi MiMo requires both MIMO_API_KEY and MIMO_API_BASE_URL."
+            }),
+            { status: 400 }
+          )
+        }
+        apiKey = process.env.MIMO_API_KEY
+      } else {
+        if (!process.env.DEEPSEEK_API_KEY) {
+          return new Response(JSON.stringify({ error: "DeepSeek API Key is missing." }), {
+            status: 400
+          })
+        }
+        apiKey = process.env.DEEPSEEK_API_KEY
+      }
     }
 
     if (!apiKey) {
@@ -62,6 +90,8 @@ export async function POST(req: Request) {
     // server env, BYOK reads the user-supplied value. DeepSeek ignores it.
     const mimoBaseURL = mode === "demo" ? process.env.MIMO_API_BASE_URL : baseUrl
     const aiProvider = getProvider(provider as "mimo" | "deepseek", apiKey, mimoBaseURL)
+
+    let selectedModel = aiProvider(model) as any
 
     if (stage === "reflection") {
       const transcript = (roleplayHistory || [])
@@ -79,12 +109,38 @@ ${userRequest}
       `
 
       try {
-        const result = await generateObject({
-          model: aiProvider(model) as any,
-          schema: reflectionSchema,
-          system: reflectionPrompt,
-          prompt: promptText
-        })
+        let result
+        try {
+          result = await generateObject({
+            model: selectedModel,
+            schema: reflectionSchema,
+            system: reflectionPrompt,
+            prompt: promptText
+          })
+        } catch (err: any) {
+          const isAuthError =
+            err.message?.includes("401") ||
+            err.message?.includes("403") ||
+            err.message?.toLowerCase().includes("unauthorized")
+          if (!(provider === "mimo" && mode === "demo" && isAuthError)) {
+            throw err
+          }
+          if (!process.env.DEEPSEEK_API_KEY) {
+            return new Response(
+              JSON.stringify({
+                error: "Xiaomi MiMo API Key expired and no DEEPSEEK_API_KEY fallback is available."
+              }),
+              { status: 401 }
+            )
+          }
+          const deepseekProvider = getProvider("deepseek", process.env.DEEPSEEK_API_KEY)
+          result = await generateObject({
+            model: deepseekProvider("deepseek-chat") as any,
+            schema: reflectionSchema,
+            system: reflectionPrompt,
+            prompt: promptText
+          })
+        }
 
         const obj = result.object
         const dimensionsSection =
@@ -111,10 +167,31 @@ ${obj.feedback}
         `.trim()
 
         return new Response(markdown, { headers: { "Content-Type": "text/plain" } })
-      } catch (err) {
+      } catch (err: any) {
         console.error("Evaluation Error:", err)
+        const isAuthError =
+          err.message?.includes("401") ||
+          err.message?.includes("403") ||
+          err.message?.toLowerCase().includes("unauthorized")
+        if (
+          provider === "mimo" &&
+          mode === "demo" &&
+          isAuthError &&
+          !process.env.DEEPSEEK_API_KEY
+        ) {
+          return new Response(
+            JSON.stringify({
+              error: "Xiaomi MiMo API Key expired and no DEEPSEEK_API_KEY fallback is available."
+            }),
+            { status: 401 }
+          )
+        }
         return new Response(
-          "Error generating evaluation. Please ensure your model supports structured outputs.",
+          JSON.stringify({
+            error:
+              err.message ||
+              "Error generating evaluation. Please ensure your model supports structured outputs."
+          }),
           { status: 500 }
         )
       }
@@ -135,7 +212,7 @@ ${obj.feedback}
         // the social-skills-coach skill in-process.
         const last = messages[messages.length - 1]?.content
         const situation = typeof last === "string" ? last : ""
-        const topics = await selectKnowledgeTopics(aiProvider(model), situation)
+        const topics = await selectKnowledgeTopics(selectedModel, situation)
         systemPrompt = buildCoachPrompt(groundingFor(topics))
         break
       }
@@ -185,8 +262,8 @@ ${obj.feedback}
       }
     })
 
-    const result = streamText({
-      model: aiProvider(model),
+    let result = streamText({
+      model: selectedModel,
       system: systemPrompt,
       messages: coreMessages,
       onError: ({ error }) => {
@@ -194,7 +271,76 @@ ${obj.feedback}
       }
     })
 
-    return result.toTextStreamResponse()
+    let stream = result.textStream
+    let reader = stream.getReader()
+    let firstChunk: ReadableStreamReadResult<string>
+    try {
+      firstChunk = await reader.read()
+    } catch (err: any) {
+      const isAuthError =
+        err.message?.includes("401") ||
+        err.message?.includes("403") ||
+        err.message?.toLowerCase().includes("unauthorized")
+      if (provider === "mimo" && mode === "demo" && isAuthError) {
+        if (process.env.DEEPSEEK_API_KEY) {
+          const deepseekProvider = getProvider("deepseek", process.env.DEEPSEEK_API_KEY)
+          result = streamText({
+            model: deepseekProvider("deepseek-chat") as any,
+            system: systemPrompt,
+            messages: coreMessages,
+            onError: ({ error }) => {
+              console.error("STREAM_ERROR_FALLBACK", String((error as Error)?.message ?? error))
+            }
+          })
+          stream = result.textStream
+          reader = stream.getReader()
+          try {
+            firstChunk = await reader.read()
+          } catch (fallbackErr: any) {
+            return new Response(
+              JSON.stringify({ error: fallbackErr.message || "AI API Error during fallback" }),
+              { status: 500 }
+            )
+          }
+        } else {
+          return new Response(
+            JSON.stringify({
+              error: "Xiaomi MiMo API Key expired and no DEEPSEEK_API_KEY fallback is available."
+            }),
+            { status: 401 }
+          )
+        }
+      } else {
+        return new Response(JSON.stringify({ error: err.message || "AI API Error" }), {
+          status: 500
+        })
+      }
+    }
+
+    const responseStream = new ReadableStream({
+      async start(controller) {
+        if (!firstChunk.done) {
+          controller.enqueue(new TextEncoder().encode(firstChunk.value))
+          while (true) {
+            try {
+              const { done, value } = await reader.read()
+              if (done) {
+                break
+              }
+              controller.enqueue(new TextEncoder().encode(value))
+            } catch (err) {
+              controller.error(err)
+              break
+            }
+          }
+        }
+        controller.close()
+      }
+    })
+
+    return new Response(responseStream, {
+      headers: { "Content-Type": "text/plain; charset=utf-8" }
+    })
   } catch (error) {
     console.error("Chat API Error:", error)
     return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 })
