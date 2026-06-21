@@ -31,7 +31,7 @@ ${TWO_WAY_SELF_CHECK}
 
 Return a structured evaluation: a per-dimension assessment, what they did well, what to improve, an overall pass / needs_practice, and a concise actionable summary.
 
-CRITICAL RULE: All textual feedback and strings within the structured output MUST be in Traditional Chinese (zh-TW).`
+CRITICAL RULE: All textual feedback and strings within the structured output MUST be in the exact same language the user uses in their input.`
 
 export const reflectionSchema = z.object({
   overallStatus: z.enum(["pass", "needs_practice"]).describe("Overall assessment of the roleplay"),
@@ -44,7 +44,7 @@ export const reflectionSchema = z.object({
             "Rubric dimension, e.g. two-way conversation / open questions / common interests / engagement / social errors"
           ),
         status: z.enum(["good", "ok", "needs_work"]).describe("Per-dimension rating"),
-        note: z.string().describe("Short evidence-based note in zh-TW")
+        note: z.string().describe("Short evidence-based note in the user's language")
       })
     )
     .optional()

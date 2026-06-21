@@ -182,7 +182,7 @@ pnpm install
 
 ```bash
 cp env.example .env
-# 接著填入 MIMO_API_KEY 與／或 DEEPSEEK_API_KEY
+# 接著填入 MIMO_API_KEY + MIMO_API_BASE_URL ／ DEEPSEEK_API_KEY
 ```
 
 ### 4. 執行
@@ -208,9 +208,11 @@ pnpm build        # 正式建置（typecheck + Next build）
 
 ---
 
-## 未來發展
+## 📋 未來發展
 
 - 支援更多的 AI 供應商如 Anthropic, OpenAI, Google Gemini 等等
+
+---
 
 ## 📄 授權
 

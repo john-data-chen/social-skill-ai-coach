@@ -21,6 +21,7 @@ export default function Home() {
   const [input, setInput] = useState("")
   const [messages, setMessages] = useState<any[]>(history[currentStage] || [])
   const [attachments, setAttachments] = useState<Attachment[]>([])
+  const [isLoading, setIsLoading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Restore history when stage changes
@@ -32,7 +33,7 @@ export default function Home() {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages])
+  }, [messages, isLoading])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value)
@@ -92,6 +93,7 @@ export default function Home() {
       setMessages(newMessages)
       setInput("")
       setAttachments([])
+      setIsLoading(true)
 
       try {
         const response = await fetch("/api/chat", {
@@ -113,6 +115,7 @@ export default function Home() {
         // Base URL makes the upstream call fail, which the AI SDK returns as a
         // 200 with an *empty* stream — so we also treat empty output as an error.
         const showError = (text: string) => {
+          setIsLoading(false)
           setMessages([
             ...newMessages,
             { id: aiMessageId, role: "assistant", content: `⚠️ ${text}` }
@@ -132,6 +135,8 @@ export default function Home() {
           showError("No response stream returned.")
           return
         }
+
+        setIsLoading(false)
 
         const decoder = new TextDecoder()
         let aiContent = ""
@@ -159,6 +164,7 @@ export default function Home() {
         ])
       } catch (err) {
         console.error(err)
+        setIsLoading(false)
         setMessages([
           ...newMessages,
           {
@@ -253,6 +259,17 @@ export default function Home() {
                   </div>
                 ))
               )}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="p-4 rounded-xl max-w-[85%] bg-white dark:bg-gray-800 shadow-sm border dark:border-gray-700">
+                    <div className="flex gap-1 items-center h-6 px-2">
+                      <span className="w-2 h-2 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.3s]" />
+                      <span className="w-2 h-2 rounded-full bg-gray-400 animate-bounce [animation-delay:-0.15s]" />
+                      <span className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" />
+                    </div>
+                  </div>
+                </div>
+              )}
               <div ref={messagesEndRef} />
             </div>
 
@@ -318,7 +335,9 @@ export default function Home() {
                   }
                   className="flex-1 bg-white dark:bg-gray-950"
                 />
-                <Button type="submit">Send</Button>
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? "Thinking..." : "Send"}
+                </Button>
               </form>
             </div>
           </CardContent>

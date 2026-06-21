@@ -186,7 +186,7 @@ The app defaults to **BYOK**: you can paste your own API key in the Settings dia
 
 ```bash
 cp env.example .env
-# then fill in MIMO_API_KEY and/or DEEPSEEK_API_KEY
+# then fill in MIMO_API_KEY + MIMO_API_BASE_URL and/or DEEPSEEK_API_KEY
 ```
 
 ### 4. Run
@@ -209,6 +209,12 @@ The app is deployed on Vercel and needs no special configuration:
 3. Deploy. The `outputFileTracingIncludes` setting in `next.config.mjs` ensures the Agent Skill markdown is bundled into the serverless functions, so both `/api/chat` and `/api/mcp` can read the curriculum at runtime.
 
 > **Never commit API keys or passwords.** Use environment variables.
+
+---
+
+## 📋 Future development
+
+- Support more AI providers such as Anthropic, OpenAI, Google Gemini, etc.
 
 ---
 
