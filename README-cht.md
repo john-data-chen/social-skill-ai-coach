@@ -1,7 +1,7 @@
 # 社交技巧 AI 教練（Social Skills AI Coach）
 
 [![codecov](https://codecov.io/gh/john-data-chen/social-skill-ai-coach/graph/badge.svg?token=Gj6H1mEAAz)](https://codecov.io/gh/john-data-chen/social-skill-ai-coach)
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=john-data-chen_social-skill-ai-coach)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_social-skill-ai-coach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
 [![CI](https://github.com/john-data-chen/social-skill-ai-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/social-skill-ai-coach/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -21,17 +21,13 @@
 
 ## 💡 為什麼做這個
 
-對高功能自閉／亞斯伯格（Asperger）的人來說，社交技巧的學習必須透過**實際演練**——因為除了心理師以外，幾乎沒有人有耐心包容你的「與眾不同」。最理想的情況是：一旦發現孩子有社交技巧上的障礙，就立刻讓他去上社交技巧訓練課程（例如 [PEERS](https://www.semel.ucla.edu/peers/)），越早學會，受益一生。
+對高功能自閉或亞斯伯格（Asperger）的人來說，社交技巧主要靠**實際演練**學會——但有結構的練習既稀少又昂貴：
 
-但很殘酷的現實是：
+- **費用高昂。** 像 [PEERS](https://www.semel.ucla.edu/peers/) 這類實證課程約 16 堂、每堂約 **90 美金**，而且課程是累積式的——缺一堂，後面全受影響。很多家庭（尤其在亞洲）負擔不起完整課程，或難以承認有此需求。
+- **當下沒有回饋。** 即使上完課程，真實對話中也不會有教練站在你旁邊告訴你哪裡做對、哪裡做錯。他人反應無法預測，一個突如其來的干擾就可能讓你腦中一片空白。
+- **太晚開始的代價。** 一旦社交習慣固定下來，排擠與霸凌往往延續到成年——而極少有成年人願意回去「和小孩子一起學」。
 
-- 亞洲大部分父母不知道、或很難承認孩子的社交有問題——因為那彷彿代表自己沒有能力、或在教育上失敗了。
-- PEERS 最初階的課程是給國高中生的，一輪 8 堂、每堂約 **90 美金**。社交是隱晦而困難的，一旦缺了任何一堂都影響很大，所以每一堂都必須去上。要上完完整課程需要 16 堂，這對很多家庭來說無法負擔。
-- 一旦社交的不良習慣固定下來，當事人往往只會發現自己不斷面對霸凌與排擠，直到成年。這時候才開始學雖然很難、但不是完全不可能——只是此時的他們很可能無法面對現實，絕大多數人不會再回去跟小孩子一起學社交。
-- 如同你練習任何一種運動：你知道規則、知道怎麼做，跟你「做得很熟、很好」是完全不同等級的事。社交可能比運動還更難，因為它看似有規則，實則十分隱晦而複雜。如果你身在亞洲社會，你在社交上犯了錯是沒有人會告訴你的——每個人都預設你「應該知道」，然後你就慢慢地被疏遠、排擠，甚至被欺負。
-- 最重要的是：就算你真的上完所有 PEERS 課程，實際出去練習時，心理師不可能站在你旁邊告訴你做對做錯；而且環境與其他人的反應全都不受你控制、也無法預測，光是巨大的聲響都可能讓你腦中一片空白。如果是我，我會希望口袋裡有一個能隨時諮詢的社交技巧教練。
-
-基於以上原因，本專案選擇以類似 PEERS 的課程為藍圖，設計一套 AI 社交教練：任何人都可以連上網頁（或自帶 API key），隨時隨地用「分析 → 建議 → 角色扮演 → 回饋」的循環反覆練習，把開始練習的門檻降到最低。
+本專案以 PEERS 風格的課程為藍圖，打造一位你能隨時演練的教練，透過「分析 → 建議 → 角色扮演 → 回饋」的循環——把_開始_練習的門檻降到最低。
 
 ## 🤖 為什麼用代理（agents）？
 

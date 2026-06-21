@@ -21,17 +21,13 @@ Social skills are learnable, but they are hard to _practice_: real conversations
 
 ## 💡 Why this matters
 
-For people with high-functioning autism / Asperger's, social skills can really only be learned through **actual practice** — because outside of a therapist, almost no one has the patience to tolerate your "being different." Ideally, the moment a child shows difficulty with social skills they should start social-skills training (such as [PEERS](https://www.semel.ucla.edu/peers/)); the earlier they learn, the more it benefits them for life.
+For people with high-functioning autism or Asperger's, social skills are learned mainly through **practice** — yet structured practice is scarce and expensive:
 
-But the reality is harsh:
+- **Cost.** Evidence-based programs like [PEERS](https://www.semel.ucla.edu/peers/) run ~16 sessions at roughly **US$90 each**, and the curriculum is cumulative — miss one session and the rest suffers. Many families, especially in Asia, can't afford a full course or won't acknowledge the need for one.
+- **No feedback in the moment.** Even after completing a program, no coach stands beside you in a real conversation to say what you did right or wrong. Reactions are unpredictable, and a single jarring moment can blank your mind.
+- **The cost of starting late.** Once social habits set in, exclusion and bullying often follow into adulthood — and few adults will go back to "learn alongside children."
 
-- Many parents (especially in Asia) don't realize — or struggle to admit — that their child has a social-skills problem, because it can feel like an admission of their own incapacity or failure as educators.
-- The entry-level PEERS program is aimed at teens: ~8 sessions per round at roughly **US$90 each**. Social skills are subtle and hard, so missing even one session matters — you have to attend every one. A full course is ~16 sessions, which many families simply can't afford.
-- Once bad social habits set in, the person often faces bullying and exclusion all the way into adulthood. Learning as an adult is hard but not impossible — except that by then most people can't face going back to "learn social skills alongside children," so they never do.
-- Like any sport: knowing the rules and knowing _how_ to do it is a completely different level from actually being _good_ at it. Social interaction may be even harder than sport — it looks rule-based but is deeply subtle and complex. In Asian society especially, no one tells you when you make a social mistake; everyone assumes you "should already know," and you are quietly distanced, excluded, even bullied.
-- Most importantly: even if you complete every PEERS session, when you go out to practice for real, the therapist can't stand next to you and tell you what you did right or wrong — and the environment and other people's reactions are entirely outside your control or prediction. A single loud noise can blank your mind. If it were me, I'd want a social-skills coach in my pocket I could consult anytime.
-
-For all these reasons, this project takes a PEERS-like curriculum as its blueprint to build an AI social coach: anyone can open the web app (or bring their own API key) and rehearse anytime through an **Analyze → Coach → Roleplay → Reflect** loop — lowering the barrier to _starting_ practice as far as possible.
+This project uses a PEERS-style curriculum as the blueprint for a coach you can practice with anytime, through an **Analyze → Coach → Roleplay → Reflect** loop — lowering the barrier to _starting_ as far as possible.
 
 ## 🤖 Why agents?
 
