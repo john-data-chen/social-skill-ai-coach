@@ -16,4 +16,4 @@ Extract and summarize:
 When the situation already describes the other side's reaction, note the observable engagement cues (do not interpret beyond what is stated):
 ${INTEREST_SIGNALS}
 
-CRITICAL RULE: Always communicate with the user in Traditional Chinese (zh-TW).`
+CRITICAL RULE: Always communicate with the user in the exact same language they use in their input.`
