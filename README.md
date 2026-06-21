@@ -18,7 +18,7 @@ Demo GIF is in progress.
 
 ---
 
-Social skills can be learned — but they're hard to *practice*. Real conversations are high-risk, the chances are one-off, and almost no one gives you honest feedback in the moment. **Social Skills AI Coach** turns a PEERS-style curriculum into a coach you can rehearse with anytime, through a four-stage loop:
+Social skills can be learned — but they're hard to _practice_. Real conversations are high-risk, the chances are one-off, and almost no one gives you honest feedback in the moment. **Social Skills AI Coach** turns a PEERS-style curriculum into a coach you can rehearse with anytime, through a four-stage loop:
 
 **Analyze → Coach → Role-Play → Reflect** — one specialized AI agent per stage, grounded in a real curriculum.
 
@@ -30,11 +30,11 @@ For people with high-functioning autism or Asperger's, social skills are learned
 - **No feedback in the moment.** Even after the course, no coach stands beside you in a real conversation. People rarely tell you what you did wrong — they just quietly distance themselves. And a sudden interruption (noise, surprise) can blank your mind so you can't recall any technique.
 - **The cost of starting late.** Once social habits set, exclusion follows into adulthood — and few adults will sit in a class of much younger students to relearn the basics.
 
-This project lowers the barrier to *starting* as far as possible: a private, judgment-free place to practice, on demand.
+This project lowers the barrier to _starting_ as far as possible: a private, judgment-free place to practice, on demand.
 
 ## 🤖 Why agents?
 
-A single chatbot would blur four very different jobs. Coaching is naturally a **pipeline of specialists**, so the app runs one agent per job, coordinated by an orchestrator:
+A single chatbot would blur four very different jobs. Coaching is naturally a **pipeline of specialists**, so the app runs one agent per job — advanced through the pipeline by a deterministic stage router, with an LLM orchestrator grounding the Coach in curriculum (RAG):
 
 | Stage | Agent          | Job                                                                                                        |
 | :---- | :------------- | :--------------------------------------------------------------------------------------------------------- |
@@ -55,21 +55,21 @@ The **orchestrator** performs retrieval-augmented grounding: for the Coach stage
 
 ### Course concepts demonstrated
 
-| Concept                        | Where        | How it is demonstrated                                                                                                                   |
-| :----------------------------- | :----------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
-| **Agent / Multi-agent system** | Code         | Four specialized agents in a staged pipeline, coordinated by an orchestrator with LLM-driven knowledge routing.                          |
-| **MCP Server**                 | Code         | `/api/mcp` exposes `list_social_topics` + `get_social_knowledge` (tools) and the four agents (prompts) over MCP for any external client. |
-| **Agent Skills**               | Code         | `skills/social-skills-coach/` packages the curriculum as a loadable Skill — the single source of truth for all knowledge.                |
-| **Security features**          | Code         | BYOK (your API key stays in the browser session, never stored server-side) + zod validation of every request at the API trust boundary. |
-| **Deployability**              | Docs / Video | Deployed on Vercel; reproduce steps below.                                                                                               |
-| **Antigravity**                | Video        | Built with the Antigravity IDE + CLI; shown in the submission video.                                                                     |
+| Concept                        | Where        | How it is demonstrated                                                                                                                                         |
+| :----------------------------- | :----------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Agent / Multi-agent system** | Code         | Four specialized agents in a staged pipeline with deterministic stage routing, plus an LLM orchestrator that does knowledge routing (RAG) to ground the Coach. |
+| **MCP Server**                 | Code         | `/api/mcp` exposes `list_social_topics` + `get_social_knowledge` (tools) and the four agents (prompts) over MCP for any external client.                       |
+| **Agent Skills**               | Code         | `skills/social-skills-coach/` packages the curriculum as a loadable Skill — the single source of truth for all knowledge.                                      |
+| **Security features**          | Code         | BYOK (your API key stays in the browser session, never stored server-side) + zod validation of every request at the API trust boundary.                        |
+| **Deployability**              | Docs / Video | Deployed on Vercel; reproduce steps below.                                                                                                                     |
+| **Antigravity**                | Video        | Built with the Antigravity IDE + CLI; shown in the submission video.                                                                                           |
 
 ---
 
 ## ✨ Features
 
 - **4-stage coaching loop** — Analyzer → Coach → Role-Play → Reflection.
-- **Curriculum-grounded advice** — the Coach answers only from curriculum slices retrieved for *your* situation (RAG), not generic tips.
+- **Curriculum-grounded advice** — the Coach answers only from curriculum slices retrieved for _your_ situation (RAG), not generic tips.
 - **Agent Skill curriculum** — social-skills knowledge authored once as a reusable Skill, the single source of truth.
 - **MCP server (bring your own model)** — the four agents are exposed as MCP prompts + knowledge tools, so any MCP client can run the whole coach with its own model. Shipped as an npm stdio package, [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp).
 - **Multi-model** — switch between Xiaomi MiMo and DeepSeek; automatic failover when the demo key expires.

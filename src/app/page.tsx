@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { determineNextStage } from "@/lib/router"
-import { useAppStore, type Attachment } from "@/lib/store"
+import { useAppStore, type Attachment, type Stage } from "@/lib/store"
 
 export default function Home() {
   const { provider, model, apiKey, baseUrl, mode, currentStage, setStage, history, setHistory } =
@@ -23,6 +23,10 @@ export default function Home() {
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  // True for the whole send flow (incl. the Analyzer->Coach handoff). Guards against
+  // overlapping requests: streamStage drops `isLoading` once tokens stream, so the Send
+  // button re-enables mid-stream and a second Enter would otherwise fire a duplicate request.
+  const busyRef = useRef(false)
 
   // Restore history when stage changes
   useEffect(() => {
@@ -68,117 +72,154 @@ export default function Home() {
     setAttachments((prev) => prev.filter((_, i) => i !== index))
   }
 
+  // Stream one pipeline stage to /api/chat. Returns the assistant text, or null on
+  // failure — so callers can decide whether to chain into the next stage.
+  const streamStage = async (stage: Stage, seeded: any[]): Promise<string | null> => {
+    // Seed history first so the stage-change effect renders these messages instead of
+    // the target stage's stale (often empty) history while the response streams in.
+    setHistory(stage, seeded)
+    setStage(stage)
+    setMessages(seeded)
+    setIsLoading(true)
+
+    const aiMessageId = (Date.now() + 1).toString()
+    // Surface failures instead of leaving an empty bubble. A bad API key or Base URL
+    // makes the upstream call fail, which the AI SDK returns as a 200 with an *empty*
+    // stream — so we also treat empty output as an error.
+    const showError = (text: string) => {
+      setIsLoading(false)
+      setMessages([...seeded, { id: aiMessageId, role: "assistant", content: `⚠️ ${text}` }])
+    }
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+        body: JSON.stringify({
+          messages: seeded,
+          provider,
+          model,
+          baseUrl,
+          mode,
+          stage,
+          roleplayHistory: history["roleplay"] || []
+        })
+      })
+
+      if (!response.ok) {
+        let detail = ""
+        try {
+          const data = await response.json()
+          detail = data.error || data.message || ""
+        } catch {
+          detail = (await response.text().catch(() => "")) || ""
+        }
+        showError(
+          `Request failed (${response.status}). ${detail || "Check your API key / Base URL / mode in Settings."}`
+        )
+        return null
+      }
+
+      const reader = response.body?.getReader()
+      if (!reader) {
+        showError("No response stream returned.")
+        return null
+      }
+
+      setIsLoading(false)
+
+      const decoder = new TextDecoder()
+      let aiContent = ""
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) {
+          break
+        }
+
+        aiContent += decoder.decode(value, { stream: true })
+        setMessages([...seeded, { id: aiMessageId, role: "assistant", content: aiContent }])
+      }
+
+      if (!aiContent.trim()) {
+        showError(
+          "Empty response from the model — likely a wrong API key or Base URL. Check Settings, or switch to Demo mode."
+        )
+        return null
+      }
+
+      setHistory(stage, [...seeded, { id: aiMessageId, role: "assistant", content: aiContent }])
+      return aiContent
+    } catch (err) {
+      console.error(err)
+      setIsLoading(false)
+      setMessages([
+        ...seeded,
+        {
+          id: aiMessageId,
+          role: "assistant",
+          content: `⚠️ ${err instanceof Error ? err.message : "Network error"}`
+        }
+      ])
+      return null
+    }
+  }
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    void (async () => {
-      if (!input.trim() && attachments.length === 0) {
-        setStage(determineNextStage(currentStage, ""))
-        return
-      }
+    // Drop submits fired while a request flow is still running (see busyRef).
+    if (busyRef.current) {
+      return
+    }
 
-      const nextStage = determineNextStage(currentStage, input)
-      if (nextStage !== currentStage) {
-        setStage(nextStage)
-        setInput("")
-        return
-      }
+    if (!input.trim() && attachments.length === 0) {
+      setStage(determineNextStage(currentStage, ""))
+      return
+    }
 
-      const userMessage = {
-        id: Date.now().toString(),
-        role: "user",
-        content: input,
-        ...(attachments.length > 0 && { experimental_attachments: attachments })
-      }
-      const newMessages = [...messages, userMessage]
-      setMessages(newMessages)
+    const nextStage = determineNextStage(currentStage, input)
+    if (nextStage !== currentStage) {
+      setStage(nextStage)
       setInput("")
-      setAttachments([])
-      setIsLoading(true)
+      return
+    }
 
+    const situation = input
+    const userMessage = {
+      id: Date.now().toString(),
+      role: "user",
+      content: input,
+      ...(attachments.length > 0 && { experimental_attachments: attachments })
+    }
+    // Auto-continue into Coach the first time the user describes a real situation in Analyzer,
+    // so they reach the strongest agent without re-typing. Gated on Coach still being empty (so
+    // it fires once and survives an opening "hi") and on a non-trivial message (so a bare
+    // greeting doesn't burn the handoff). ponytail: length>=6 heuristic skips greetings; swap for
+    // an explicit "Get advice" button if users want manual control.
+    const shouldHandoff =
+      currentStage === "analyzer" &&
+      (history["coach"]?.length ?? 0) === 0 &&
+      situation.trim().length >= 6
+    setInput("")
+    setAttachments([])
+
+    busyRef.current = true
+    void (async () => {
       try {
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-          body: JSON.stringify({
-            messages: newMessages,
-            provider,
-            model,
-            baseUrl,
-            mode,
-            stage: currentStage,
-            roleplayHistory: history["roleplay"] || []
-          })
-        })
+        const analyzerOut = await streamStage(currentStage, [...messages, userMessage])
 
-        const aiMessageId = (Date.now() + 1).toString()
-        // Surface failures instead of leaving an empty bubble. A bad API key or
-        // Base URL makes the upstream call fail, which the AI SDK returns as a
-        // 200 with an *empty* stream — so we also treat empty output as an error.
-        const showError = (text: string) => {
-          setIsLoading(false)
-          setMessages([
-            ...newMessages,
-            { id: aiMessageId, role: "assistant", content: `⚠️ ${text}` }
-          ])
+        if (shouldHandoff && analyzerOut) {
+          const coachSeed = [
+            {
+              id: (Date.now() + 2).toString(),
+              role: "user",
+              content: `${situation}\n\n[Structured by Analyzer]\n${analyzerOut}`
+            }
+          ]
+          await streamStage("coach", coachSeed)
         }
-
-        if (!response.ok) {
-          let detail = ""
-          try {
-            const data = await response.json()
-            detail = data.error || data.message || ""
-          } catch {
-            detail = (await response.text().catch(() => "")) || ""
-          }
-          showError(
-            `Request failed (${response.status}). ${detail || "Check your API key / Base URL / mode in Settings."}`
-          )
-          return
-        }
-
-        const reader = response.body?.getReader()
-        if (!reader) {
-          showError("No response stream returned.")
-          return
-        }
-
-        setIsLoading(false)
-
-        const decoder = new TextDecoder()
-        let aiContent = ""
-
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) {
-            break
-          }
-
-          aiContent += decoder.decode(value, { stream: true })
-          setMessages([...newMessages, { id: aiMessageId, role: "assistant", content: aiContent }])
-        }
-
-        if (!aiContent.trim()) {
-          showError(
-            "Empty response from the model — likely a wrong API key or Base URL. Check Settings, or switch to Demo mode."
-          )
-          return
-        }
-
-        setHistory(currentStage, [
-          ...newMessages,
-          { id: aiMessageId, role: "assistant", content: aiContent }
-        ])
-      } catch (err) {
-        console.error(err)
-        setIsLoading(false)
-        setMessages([
-          ...newMessages,
-          {
-            id: (Date.now() + 1).toString(),
-            role: "assistant",
-            content: `⚠️ ${err instanceof Error ? err.message : "Network error"}`
-          }
-        ])
+      } finally {
+        busyRef.current = false
       }
     })()
   }
