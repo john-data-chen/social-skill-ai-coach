@@ -7,7 +7,7 @@
 
 > 繁體中文版說明請見 [README-cht.md](./README-cht.md)。
 
-A multi-agent web app that helps people **practice and improve real social interactions** in a safe space. You describe a situation, get concrete advice grounded in a structured social-skills curriculum, rehearse it in a roleplay, and receive a structured reflection — a full coaching loop, on demand.
+A multi-agent web app that helps people **practice and improve real social interactions** in a safe space. You describe a situation, get concrete advice grounded in a structured social-skills curriculum, rehearse it in a role-play, and receive a structured reflection — a full coaching loop, on demand.
 
 > **Live demo:** deployed on Vercel — [https://social-skill-ai-coach.vercel.app](https://social-skill-ai-coach.vercel.app).
 
@@ -23,11 +23,11 @@ Social skills are learnable, but they are hard to _practice_: real conversations
 
 For people with high-functioning autism or Asperger's, social skills are learned mainly through **practice** — yet structured practice is scarce and expensive:
 
-- **Cost.** Evidence-based programs like [PEERS](https://www.semel.ucla.edu/peers/) run ~16 sessions at roughly **US$90 each**, and the curriculum is cumulative — miss one session and the rest suffers. Many families, especially in Asia, can't afford a full course or won't acknowledge the need for one.
-- **No feedback in the moment.** Even after completing a program, no coach stands beside you in a real conversation to say what you did right or wrong. Reactions are unpredictable, and a single jarring moment can blank your mind.
-- **The cost of starting late.** Once social habits set in, exclusion and bullying often follow into adulthood — and few adults will go back to "learn alongside children."
+- **Cost.** Evidence-based programs like [PEERS](https://www.semel.ucla.edu/peers/) fees range between $2,800 to $3,600 for a full 14–16 week course, and the curriculum is cumulative — miss one session and the rest suffers. Many families, especially in Asia, can't afford a full course or parents may be unwilling to acknowledge their child's need to attend classes due to pride or other factors.
+- **No feedback in the moment.** Even after completing the course, in real-world social situations, there will never be a coach standing beside you, telling you what you did right and wrong. You also can't tell others beforehand that you have neurotic diversity; (especially in Asia) most people probably don't know what that means and will simply see you as a weirdo, and they won't have the patience to tolerate your differences like a coach would. How others will react when you make a mistake is unpredictable. They won't tell you what you did wrong; they'll just gradually distance themselves from you, or even ridicule you. Furthermore, a sudden interruption in a social situation (like noise) can cause your mind to go blank, making it impossible to recall any of the techniques from the course.
+- **The cost of starting late.** Once social habits set in, exclusion and bullying often follow into adulthood — and very few adults are willing to admit they lack social skills and go back to take social classes with other students who are much younger.
 
-This project uses a PEERS-style curriculum as the blueprint for a coach you can practice with anytime, through an **Analyze → Coach → Roleplay → Reflect** loop — lowering the barrier to _starting_ as far as possible.
+This project uses a PEERS-style curriculum as the blueprint for a coach you can practice with anytime, through an **Analyze → Coach → Role-Play → Reflect** loop — lowering the barrier to _starting_ as far as possible.
 
 ## 🤖 Why agents?
 
@@ -37,8 +37,8 @@ A single chatbot would blur four very different jobs. Coaching is naturally a **
 | :---- | :------------- | :--------------------------------------------------------------------------------------------------------- |
 | 1     | **Analyzer**   | Structures the situation (who/what/where, channel, scenario type, goal) without giving advice yet.         |
 | 2     | **Coach**      | Gives concrete, situation-specific advice — grounded only in the curriculum slices selected for this case. |
-| 3     | **Roleplay**   | Plays the other person so you can practice, reacting realistically to your social-skill level.             |
-| 4     | **Reflection** | Reviews the roleplay transcript against the rubric and returns a structured, per-dimension evaluation.     |
+| 3     | **Role-Play**  | Plays the other person so you can practice, reacting realistically to your social-skill level.             |
+| 4     | **Reflection** | Reviews the role-play transcript against the rubric and returns a structured, per-dimension evaluation.    |
 
 The agents are coordinated by an **orchestrator** that performs retrieval-augmented grounding: for the Coach stage it LLM-selects the curriculum topics most relevant to the user's situation, then loads just those knowledge slices.
 
@@ -65,7 +65,7 @@ The agents are coordinated by an **orchestrator** that performs retrieval-augmen
 
 ## ✨ Features
 
-- **4-stage coaching loop** — Analyzer → Coach → Roleplay → Reflection.
+- **4-stage coaching loop** — Analyzer → Coach → Role-Play → Reflection.
 - **Agent Skill curriculum** — social-skills knowledge authored as a reusable Skill.
 - **MCP server (bring your own model)** — the four agents are exposed as MCP prompts + knowledge tools, so any MCP client can run the whole coach with its own model. Distributable as an npm stdio package (`social-skills-coach-mcp`).
 - **Retrieval-augmented coaching** — the Coach is grounded only in the slices relevant to your situation.
@@ -84,7 +84,7 @@ on the _connecting client's_ model — so the server needs no API key and runs n
 inference itself. That is how others can plug in a more capable model than the demo's
 (cheap) MiMo/DeepSeek.
 
-- **Prompts** (run on your model): `analyze_situation` · `coach` · `roleplay` · `reflect`
+- **Prompts** (run on your model): `analyze_situation` · `coach` · `role-play` · `reflect`
 - **Tools** (knowledge grounding): `list_social_topics` · `get_social_knowledge({ topics })`
 
 ### Option 1 — npm package over stdio (recommended for local clients)
