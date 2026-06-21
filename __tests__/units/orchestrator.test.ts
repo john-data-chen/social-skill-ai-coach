@@ -1,5 +1,6 @@
-import { describe, it, expect, vi } from "vitest"
 import { generateObject } from "ai"
+import { describe, it, expect, vi } from "vitest"
+
 import { TOPICS } from "@/lib/knowledge"
 import { FALLBACK_TOPICS, groundingFor, selectKnowledgeTopics } from "@/lib/orchestrator"
 

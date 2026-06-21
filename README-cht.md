@@ -4,6 +4,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_social-skill-ai-coach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
 [![CI](https://github.com/john-data-chen/social-skill-ai-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/social-skill-ai-coach/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![NPM Version](https://img.shields.io/npm/v/social-skills-coach-mcp.svg)](https://www.npmjs.com/package/social-skills-coach-mcp)
 
 > For the English version, see [README.md](./README.md).
 
@@ -103,8 +104,8 @@ agent 以 MCP **prompts** 形式開放——它們在**連線方 client 的模�
 
 ### 方式一 — npm 套件（stdio，本機 client 推薦）
 
-發佈為 [`social-skills-coach-mcp`](./packages/social-skills-coach-mcp)。加進 Claude Desktop
-的 `claude_desktop_config.json`：
+發佈為 npm 套件 [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)。加進 Antigravity
+的 `mcp.json`：
 
 ```json
 {

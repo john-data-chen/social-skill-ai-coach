@@ -1,2 +1,8 @@
 #!/bin/sh
+# Load fnm to ensure pnpm is in PATH
+if command -v fnm >/dev/null 2>&1; then
+  eval "$(fnm env)"
+  fnm use
+fi
+
 pnpm lint-staged

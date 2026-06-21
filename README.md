@@ -4,6 +4,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_social-skill-ai-coach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
 [![CI](https://github.com/john-data-chen/social-skill-ai-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/social-skill-ai-coach/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![NPM Version](https://img.shields.io/npm/v/social-skills-coach-mcp.svg)](https://www.npmjs.com/package/social-skills-coach-mcp)
 
 > 繁體中文版說明請見 [README-cht.md](./README-cht.md)。
 
@@ -105,8 +106,8 @@ inference itself. That is how others can plug in a more capable model than the d
 
 ### Option 1 — npm package over stdio (recommended for local clients)
 
-Published as [`social-skills-coach-mcp`](./packages/social-skills-coach-mcp). Add it to
-Claude Desktop's `claude_desktop_config.json`:
+Published as npm package [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp). Add it to
+Antigravity's `mcp.json`:
 
 ```json
 {
