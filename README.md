@@ -212,6 +212,12 @@ The app is deployed on Vercel and needs no special configuration:
 
 ---
 
+## 📋 Future development
+
+- Support more AI providers such as Anthropic, OpenAI, Google Gemini, etc.
+
+---
+
 ## 📄 License
 
 [MIT](https://opensource.org/licenses/MIT)

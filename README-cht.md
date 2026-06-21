@@ -208,9 +208,11 @@ pnpm build        # 正式建置（typecheck + Next build）
 
 ---
 
-## 未來發展
+## 📋 未來發展
 
 - 支援更多的 AI 供應商如 Anthropic, OpenAI, Google Gemini 等等
+
+---
 
 ## 📄 授權
 
