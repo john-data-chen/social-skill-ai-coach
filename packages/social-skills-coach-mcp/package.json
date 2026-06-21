@@ -1,6 +1,6 @@
 {
   "name": "social-skills-coach-mcp",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "MCP server for a social-skills coaching curriculum — knowledge tools + analyze/coach/roleplay/reflect prompts. Bring your own model.",
   "keywords": [
     "agent",
@@ -11,6 +11,11 @@
   ],
   "license": "MIT",
   "author": "jianan.chen",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/john-data-chen/social-skill-ai-coach.git",
+    "directory": "packages/social-skills-coach-mcp"
+  },
   "bin": {
     "social-skills-coach-mcp": "dist/index.js"
   },
@@ -33,12 +38,12 @@
     "typecheck": "tsgo --noEmit"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.26.0",
+    "@modelcontextprotocol/sdk": "1.29.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",
-    "tsup": "^8.3.0"
+    "tsup": "^8.5.1"
   },
   "engines": {
     "node": ">=24"

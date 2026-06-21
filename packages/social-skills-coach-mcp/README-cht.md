@@ -1,15 +1,17 @@
 # social-skills-coach-mcp
 
+[![npm version](https://img.shields.io/npm/v/social-skills-coach-mcp.svg?logo=npm)](https://www.npmjs.com/package/social-skills-coach-mcp)
+[![Node](https://img.shields.io/node/v/social-skills-coach-mcp.svg)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> For English, see [README.md](./README.md).
+> For English, see [README.md](https://github.com/john-data-chen/social-skill-ai-coach/blob/main/packages/social-skills-coach-mcp/README.md).
 
 一個 [MCP](https://modelcontextprotocol.io) 伺服器,將 PEERS 式的社交技巧課程轉成完整的
 教練循環 —— **分析 → 教練 → 角色扮演 → 復盤** —— 讓**任何 MCP client 都能用自己的模型執行**。
 
 它是 [Social Skills AI Coach](https://github.com/john-data-chen/social-skill-ai-coach)
-專案的獨立、可發布形式:描述一個情境,獲得以課程為依據的具體建議,透過角色扮演演練,
-再得到結構化的復盤回饋。
+專案的獨立、可發布形式（試試 **[線上 Demo](https://social-skill-ai-coach.vercel.app)**）:
+描述一個情境,獲得以課程為依據的具體建議,透過角色扮演演練,再得到結構化的復盤回饋。
 
 ## 為何「自帶模型」(BYO model)
 
