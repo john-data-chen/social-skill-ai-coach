@@ -21,7 +21,7 @@ A multi-agent web app that helps people **practice and improve real social inter
 
 ## 🧩 The problem
 
-Social skills are learnable, but they are hard to _practice_: real conversations are high-stakes, one-shot, and rarely come with honest feedback. People who most want to improve have the fewest low-risk reps. This project turns an 8-lesson social-skills curriculum into an on-demand coach you can rehearse with as many times as you like.
+Social skills can be learned, but they are difficult to "practice": real conversations are high-risk, opportunities are one-off, and few people will give you honest feedback. Those who most want to improve often lack low-risk practice opportunities. This project transforms basic social skills courses into a coach who can repeatedly practice with you at any time.
 
 ## 💡 Why this matters
 
@@ -72,11 +72,12 @@ The agents are coordinated by an **orchestrator** that performs retrieval-augmen
 - **4-stage coaching loop** — Analyzer → Coach → Role-Play → Reflection.
 - **Agent Skill curriculum** — social-skills knowledge authored as a reusable Skill.
 - **MCP server (bring your own model)** — the four agents are exposed as MCP prompts + knowledge tools, so any MCP client can run the whole coach with its own model. Distributable as an npm stdio package (`social-skills-coach-mcp`).
-- **Retrieval-augmented coaching** — the Coach is grounded only in the slices relevant to your situation.
-- **BYOK (Bring Your Own Key)** — use your own API key directly from the browser session.
-- **Multi-model** — switch between Xiaomi MiMo and DeepSeek (OpenAI-compatible).
-- **Attachments** — upload images and text files (`.md`, `.txt`, `.csv`) for the AI to analyze.
-- **Dark / Light theme.**
+- **Retrieval-Enhanced Coaching**—The Coach provides practical suggestions based only on relevant snippets of your situation.
+- **BYOK (Bring Your Own Key)**—Use your own API key directly within your browser session. There's no database, no data storage, and it's ready to use anytime, anywhere. It's cleared when you close the tab, privacy is the first priority.
+- **Multi-Model**—Switch between Xiaomi MiMo and DeepSeek.
+- **Attachments**—Upload images and text files (.md, .txt, .csv) for AI analysis.
+- **Optimized for Mobile Operation**—After taking PEERS courses, some users still encounter issues such as the inability of a personal coach to provide feedback, or anxiety due to neurological diversity, leading to mental blanks and the inability to readily access notes in social situations. With an internet connection and access to the demo webpage, AI is your best partner, available anytime, anywhere.
+- **Dark/Light Themes**—Important for people with light sensitivity, significantly reducing eye strain.
 
 ---
 
