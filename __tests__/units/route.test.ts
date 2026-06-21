@@ -81,7 +81,9 @@ describe("POST /api/chat", () => {
   it("uses BYOK key from Authorization header", async () => {
     const mockFn = vi.fn().mockReturnValue("stream")
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => mockFn)
 
@@ -101,7 +103,9 @@ describe("POST /api/chat", () => {
 
   it("passes BYOK baseUrl through to getProvider", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -127,7 +131,9 @@ describe("POST /api/chat", () => {
   it("uses MIMO_API_BASE_URL env in demo mode", async () => {
     process.env.MIMO_API_BASE_URL = "https://token-plan-cn.xiaomimimo.com/v1"
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -150,7 +156,9 @@ describe("POST /api/chat", () => {
   it("uses env key in demo mode for mimo", async () => {
     process.env.MIMO_API_BASE_URL = "test"
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -168,7 +176,9 @@ describe("POST /api/chat", () => {
 
   it("uses env key in demo mode for deepseek", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -267,7 +277,9 @@ describe("POST /api/chat", () => {
 
   it("uses analyzerPrompt for analyzer stage", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     const modelFn = vi.fn()
     mockGetProvider.mockReturnValue(() => modelFn)
@@ -290,7 +302,9 @@ describe("POST /api/chat", () => {
 
   it("uses coachPrompt for coach stage", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -312,7 +326,9 @@ describe("POST /api/chat", () => {
 
   it("uses roleplayPrompt for roleplay stage", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -334,7 +350,9 @@ describe("POST /api/chat", () => {
 
   it("uses reflectionPrompt for reflection stage in switch", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -357,7 +375,9 @@ describe("POST /api/chat", () => {
 
   it("handles messages with image attachments", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -389,7 +409,9 @@ describe("POST /api/chat", () => {
 
   it("handles messages with text file attachments", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -426,7 +448,9 @@ describe("POST /api/chat", () => {
 
   it("handles messages with markdown file attachments", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -461,7 +485,9 @@ describe("POST /api/chat", () => {
 
   it("handles messages with csv file attachments", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -490,7 +516,9 @@ describe("POST /api/chat", () => {
 
   it("handles messages with pdf/doc attachments", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -525,7 +553,9 @@ describe("POST /api/chat", () => {
 
   it("handles messages with attachment without comma prefix", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -554,7 +584,9 @@ describe("POST /api/chat", () => {
 
   it("handles messages with empty attachments array", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -575,7 +607,9 @@ describe("POST /api/chat", () => {
 
   it("handles messages without experimental_attachments", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -617,7 +651,9 @@ describe("POST /api/chat", () => {
 
   it("handles undefined stage with empty systemPrompt", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -662,7 +698,9 @@ describe("POST /api/chat", () => {
 
   it("handles messages with image attachment without comma in url", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -691,7 +729,9 @@ describe("POST /api/chat", () => {
 
   it("handles attachment with unknown content type hitting else branch", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -726,7 +766,9 @@ describe("POST /api/chat", () => {
 
   it("handles attachment with .md extension", async () => {
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) }) }
+      textStream: {
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -785,15 +827,24 @@ describe("POST /api/chat", () => {
   })
   it("falls back to deepseek if mimo throws 401 on read in demo mode", async () => {
     process.env.MIMO_API_BASE_URL = "test"
-    mockStreamText.mockReturnValueOnce({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockRejectedValue(new Error("401 Unauthorized")) }) }
-    }).mockReturnValueOnce({
-      textStream: { getReader: vi.fn().mockReturnValue({ 
-        read: vi.fn()
-          .mockResolvedValueOnce({ done: false, value: "fallback-success" })
-          .mockResolvedValueOnce({ done: true }) 
-      }) }
-    })
+    mockStreamText
+      .mockReturnValueOnce({
+        textStream: {
+          getReader: vi
+            .fn()
+            .mockReturnValue({ read: vi.fn().mockRejectedValue(new Error("401 Unauthorized")) })
+        }
+      })
+      .mockReturnValueOnce({
+        textStream: {
+          getReader: vi.fn().mockReturnValue({
+            read: vi
+              .fn()
+              .mockResolvedValueOnce({ done: false, value: "fallback-success" })
+              .mockResolvedValueOnce({ done: true })
+          })
+        }
+      })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest({
@@ -815,7 +866,11 @@ describe("POST /api/chat", () => {
     process.env.MIMO_API_BASE_URL = "test"
     delete process.env.DEEPSEEK_API_KEY
     mockStreamText.mockReturnValue({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockRejectedValue(new Error("401 Unauthorized")) }) }
+      textStream: {
+        getReader: vi
+          .fn()
+          .mockReturnValue({ read: vi.fn().mockRejectedValue(new Error("401 Unauthorized")) })
+      }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -834,16 +889,15 @@ describe("POST /api/chat", () => {
 
   it("falls back to deepseek if generateObject throws 401 in mimo demo mode", async () => {
     process.env.MIMO_API_BASE_URL = "test"
-    mockGenerateObject.mockRejectedValueOnce(new Error("401 Unauthorized"))
-      .mockResolvedValueOnce({
-        object: {
-          overallStatus: "pass",
-          strengths: ["a"],
-          areasForImprovement: ["b"],
-          feedback: "fallback-reflection",
-          dimensions: [{ name: "tone", status: "good", note: "good tone" }]
-        }
-      })
+    mockGenerateObject.mockRejectedValueOnce(new Error("401 Unauthorized")).mockResolvedValueOnce({
+      object: {
+        overallStatus: "pass",
+        strengths: ["a"],
+        areasForImprovement: ["b"],
+        feedback: "fallback-reflection",
+        dimensions: [{ name: "tone", status: "good", note: "good tone" }]
+      }
+    })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest({
@@ -880,11 +934,21 @@ describe("POST /api/chat", () => {
 
   it("returns 500 if deepseek fallback fails on read", async () => {
     process.env.MIMO_API_BASE_URL = "test"
-    mockStreamText.mockReturnValueOnce({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockRejectedValue(new Error("401 Unauthorized")) }) }
-    }).mockReturnValueOnce({
-      textStream: { getReader: vi.fn().mockReturnValue({ read: vi.fn().mockRejectedValue(new Error("Fallback error")) }) }
-    })
+    mockStreamText
+      .mockReturnValueOnce({
+        textStream: {
+          getReader: vi
+            .fn()
+            .mockReturnValue({ read: vi.fn().mockRejectedValue(new Error("401 Unauthorized")) })
+        }
+      })
+      .mockReturnValueOnce({
+        textStream: {
+          getReader: vi
+            .fn()
+            .mockReturnValue({ read: vi.fn().mockRejectedValue(new Error("Fallback error")) })
+        }
+      })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest({
