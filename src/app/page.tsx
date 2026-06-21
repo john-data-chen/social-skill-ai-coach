@@ -24,11 +24,10 @@ const STAGE_LABELS: Record<Stage, string> = {
 }
 
 export default function Home() {
-  const { provider, model, apiKey, baseUrl, mode, currentStage, setStage, history, setHistory } =
+  const { provider, model, apiKey, baseUrl, mode, currentStage, setStage, messages, setMessages } =
     useAppStore()
 
   const [input, setInput] = useState("")
-  const [messages, setMessages] = useState<any[]>(history[currentStage] || [])
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -36,11 +35,8 @@ export default function Home() {
   // `isLoading` state drives the disabled UI, but a state read inside a rapid second Enter can
   // be stale, so this ref blocks overlapping requests race-free.
   const busyRef = useRef(false)
-
-  // Restore history when stage changes
-  useEffect(() => {
-    setMessages(history[currentStage] || [])
-  }, [currentStage, history])
+  // Fires the Analyzer->Coach auto-handoff at most once (so it survives an opening "hi").
+  const autoHandoffRef = useRef(false)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -84,9 +80,7 @@ export default function Home() {
   // Stream one pipeline stage to /api/chat. Returns the assistant text, or null on
   // failure — so callers can decide whether to chain into the next stage.
   const streamStage = async (stage: Stage, seeded: any[]): Promise<string | null> => {
-    // Seed history first so the stage-change effect renders these messages instead of
-    // the target stage's stale (often empty) history while the response streams in.
-    setHistory(stage, seeded)
+    // One shared conversation across all stages — switch the active agent and show the thread.
     setStage(stage)
     setMessages(seeded)
 
@@ -108,8 +102,7 @@ export default function Home() {
           model,
           baseUrl,
           mode,
-          stage,
-          roleplayHistory: history["roleplay"] || []
+          stage
         })
       })
 
@@ -153,7 +146,7 @@ export default function Home() {
         return null
       }
 
-      setHistory(stage, [...seeded, { id: aiMessageId, role: "assistant", content: aiContent }])
+      setMessages([...seeded, { id: aiMessageId, role: "assistant", content: aiContent }])
       return aiContent
     } catch (err) {
       console.error(err)
@@ -202,7 +195,7 @@ export default function Home() {
       setIsLoading(true)
       void (async () => {
         try {
-          await streamStage(command.stage, [...(history[command.stage] || []), commandMessage])
+          await streamStage(command.stage, [...messages, commandMessage])
         } finally {
           busyRef.current = false
           setIsLoading(false)
@@ -218,15 +211,11 @@ export default function Home() {
       content: input,
       ...(attachments.length > 0 && { experimental_attachments: attachments })
     }
-    // Auto-continue into Coach the first time the user describes a real situation in Analyzer,
-    // so they reach the strongest agent without re-typing. Gated on Coach still being empty (so
-    // it fires once and survives an opening "hi") and on a non-trivial message (so a bare
-    // greeting doesn't burn the handoff). ponytail: length>=6 heuristic skips greetings; swap for
-    // an explicit "Get advice" button if users want manual control.
+    // Auto-continue into Coach the first time the user describes a real situation in Analyzer, so
+    // they reach the strongest agent without re-typing. Fires at most once (autoHandoffRef) and
+    // only on a non-trivial message, so a bare opening "hi" doesn't burn it.
     const shouldHandoff =
-      currentStage === "analyzer" &&
-      (history["coach"]?.length ?? 0) === 0 &&
-      situation.trim().length >= 6
+      currentStage === "analyzer" && !autoHandoffRef.current && situation.trim().length >= 6
     setInput("")
     setAttachments([])
 
@@ -238,15 +227,11 @@ export default function Home() {
       try {
         const analyzerOut = await streamStage(currentStage, [...messages, userMessage])
 
+        // The Coach runs on the full shared thread (the situation + the Analyzer's structured
+        // output are already in it), so there's nothing to re-seed — just switch the agent.
         if (shouldHandoff && analyzerOut) {
-          const coachSeed = [
-            {
-              id: (Date.now() + 2).toString(),
-              role: "user",
-              content: `${situation}\n\n[Structured by Analyzer]\n${analyzerOut}`
-            }
-          ]
-          await streamStage("coach", coachSeed)
+          autoHandoffRef.current = true
+          await streamStage("coach", useAppStore.getState().messages)
         }
       } finally {
         busyRef.current = false

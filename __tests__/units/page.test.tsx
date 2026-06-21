@@ -38,12 +38,7 @@ describe("Page", () => {
       apiKey: "",
       mode: "byok",
       currentStage: "analyzer",
-      history: {
-        analyzer: [],
-        coach: [],
-        roleplay: [],
-        reflection: []
-      }
+      messages: []
     })
     global.fetch = vi.fn(async () =>
       Promise.resolve({
@@ -204,22 +199,17 @@ describe("Page", () => {
 
   it("renders existing history messages with non-image attachments", () => {
     useAppStore.setState({
-      history: {
-        analyzer: [
-          {
-            id: "1",
-            role: "user",
-            content: "Hello",
-            experimental_attachments: [
-              { name: "doc.txt", contentType: "text/plain", url: "data:text/plain;base64,ZGVm" }
-            ]
-          },
-          { id: "2", role: "assistant", content: "Hi there" }
-        ],
-        coach: [],
-        roleplay: [],
-        reflection: []
-      }
+      messages: [
+        {
+          id: "1",
+          role: "user",
+          content: "Hello",
+          experimental_attachments: [
+            { name: "doc.txt", contentType: "text/plain", url: "data:text/plain;base64,ZGVm" }
+          ]
+        },
+        { id: "2", role: "assistant", content: "Hi there" }
+      ]
     })
 
     render(<Page />)
@@ -230,21 +220,16 @@ describe("Page", () => {
 
   it("renders existing history messages with image attachments", () => {
     useAppStore.setState({
-      history: {
-        analyzer: [
-          {
-            id: "1",
-            role: "user",
-            content: "Check this",
-            experimental_attachments: [
-              { name: "photo.png", contentType: "image/png", url: "data:image/png;base64,abc" }
-            ]
-          }
-        ],
-        coach: [],
-        roleplay: [],
-        reflection: []
-      }
+      messages: [
+        {
+          id: "1",
+          role: "user",
+          content: "Check this",
+          experimental_attachments: [
+            { name: "photo.png", contentType: "image/png", url: "data:image/png;base64,abc" }
+          ]
+        }
+      ]
     })
 
     render(<Page />)

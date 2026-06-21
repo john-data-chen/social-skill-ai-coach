@@ -25,22 +25,17 @@ export interface AppState {
 
   // App state (Transient)
   currentStage: Stage
-  history: Record<Stage, Message[]>
+  // One shared conversation across all stages. Switching stage only changes which agent responds
+  // next, so context (and attachments) is never lost when moving between stages.
+  messages: Message[]
 
   // Actions
   setConfig: (
     config: Partial<Pick<AppState, "provider" | "model" | "apiKey" | "baseUrl" | "mode">>
   ) => void
   setStage: (stage: Stage) => void
-  setHistory: (stage: Stage, messages: Message[]) => void
-  clearHistory: () => void
-}
-
-const initialHistory: Record<Stage, Message[]> = {
-  analyzer: [],
-  coach: [],
-  roleplay: [],
-  reflection: []
+  setMessages: (messages: Message[]) => void
+  clearMessages: () => void
 }
 
 export const useAppStore = create<AppState>()(
@@ -52,18 +47,12 @@ export const useAppStore = create<AppState>()(
       baseUrl: "",
       mode: "demo",
       currentStage: "analyzer",
-      history: initialHistory,
+      messages: [],
 
       setConfig: (config) => set((state) => ({ ...state, ...config })),
       setStage: (stage) => set({ currentStage: stage }),
-      setHistory: (stage, messages) =>
-        set((state) => ({
-          history: {
-            ...state.history,
-            [stage]: messages
-          }
-        })),
-      clearHistory: () => set({ history: initialHistory })
+      setMessages: (messages) => set({ messages }),
+      clearMessages: () => set({ messages: [] })
     }),
     {
       name: "social-coach-storage",
