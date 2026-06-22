@@ -277,7 +277,7 @@ export default function Home() {
             setStage(val)
           }}
         >
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 !h-auto gap-2 p-1">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-2 p-1">
             <TabsTrigger
               value="analyzer"
               className="whitespace-normal sm:whitespace-nowrap py-1.5 sm:py-0.5"
@@ -407,36 +407,36 @@ export default function Home() {
                   ))}
                 </div>
               )}
-              <form onSubmit={onSubmit} className="flex gap-2">
-                <input
-                  type="file"
-                  multiple
-                  className="hidden"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                  accept="image/*,text/*,.pdf,.doc,.docx"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  onClick={() => {
-                    setShowCommandsInfo(true)
-                  }}
-                  className="shrink-0"
-                  title="Show Commands"
-                >
-                  <Info size={18} />
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="shrink-0"
-                >
-                  <Paperclip size={18} />
-                </Button>
+              <form onSubmit={onSubmit} className="flex flex-col gap-3">
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setShowCommandsInfo(true)
+                    }}
+                    className="flex-1"
+                    title="Show Commands"
+                  >
+                    <Info size={18} className="mr-2" /> Help
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex-1"
+                  >
+                    <Paperclip size={18} className="mr-2" /> attachment
+                  </Button>
+                  <input
+                    type="file"
+                    multiple
+                    className="hidden"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    accept="image/*,text/*,.pdf,.doc,.docx"
+                  />
+                </div>
                 <TextareaAutosize
                   value={input}
                   onChange={handleInputChange}
@@ -449,14 +449,14 @@ export default function Home() {
                       onSubmit({ preventDefault: () => {} } as React.FormEvent<HTMLFormElement>)
                     }
                   }}
-                  minRows={1}
-                  maxRows={3}
+                  minRows={2}
+                  maxRows={5}
                   placeholder={
                     currentStage === "reflection" ? "Review me... (Enter to send)" : "Enter to send"
                   }
-                  className="flex-1 resize-none rounded-lg border border-input bg-white px-2.5 py-2 text-base outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-gray-950"
+                  className="w-full resize-none rounded-lg border border-input bg-white px-3 py-2 text-base outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-gray-950"
                 />
-                <Button type="submit" disabled={isLoading}>
+                <Button type="submit" className="w-full h-11 text-base" disabled={isLoading}>
                   {isLoading ? "Thinking..." : "Send"}
                 </Button>
               </form>
@@ -464,7 +464,6 @@ export default function Home() {
           </CardContent>
         </Card>
       </main>
-
       <Dialog open={showCommandsInfo} onOpenChange={setShowCommandsInfo}>
         <DialogContent>
           <DialogHeader>
@@ -491,7 +490,7 @@ export default function Home() {
               <p className="text-muted-foreground ml-2">Review your practice.</p>
             </div>
             <p className="text-xs text-muted-foreground mt-4 italic">
-              Example: "/coach how should I reply?"
+              Example: &ldquo;/coach how should I reply?&rdquo;
             </p>
           </div>
         </DialogContent>
