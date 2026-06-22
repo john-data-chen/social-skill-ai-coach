@@ -132,7 +132,7 @@ Write all text in the same language the user used.
 
         // Pull a JSON object out of possibly fenced / prose-wrapped model output.
         const extractJsonObject = (text: string) => {
-          const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i)
+          const fenced = text.match(/```(?:json)?([\s\S]*?)```/i)
           const body = fenced?.[1] ?? text
           const start = body.indexOf("{")
           const end = body.lastIndexOf("}")
