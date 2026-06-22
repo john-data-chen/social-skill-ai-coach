@@ -94,7 +94,11 @@ export async function POST(req: Request) {
     let selectedModel = aiProvider(model) as any
 
     if (stage === "reflection") {
-      const transcript = (roleplayHistory || [])
+      // The roleplay turns now live in the shared `messages` thread; fall back to it when the
+      // client doesn't pass a separate roleplayHistory.
+      const transcriptSource =
+        roleplayHistory && roleplayHistory.length > 0 ? roleplayHistory : messages
+      const transcript = transcriptSource
         .map((m: any) => `${m.role === "user" ? "User" : "Roleplay Partner"}: ${m.content}`)
         .join("\n")
 

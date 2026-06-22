@@ -38,12 +38,7 @@ describe("Page", () => {
       apiKey: "",
       mode: "byok",
       currentStage: "analyzer",
-      history: {
-        analyzer: [],
-        coach: [],
-        roleplay: [],
-        reflection: []
-      }
+      messages: []
     })
     global.fetch = vi.fn(async () =>
       Promise.resolve({
@@ -76,7 +71,7 @@ describe("Page", () => {
 
   it("submits a message", async () => {
     render(<Page />)
-    const input = screen.getByPlaceholderText(/Type your message/i)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
     fireEvent.change(input, { target: { value: "test input" } })
     fireEvent.submit(input.closest("form")!)
 
@@ -88,25 +83,37 @@ describe("Page", () => {
 
   it("jumps stage when typing jump command", () => {
     render(<Page />)
-    const input = screen.getByPlaceholderText(/Type your message/i)
-    fireEvent.change(input, { target: { value: "give me advice" } })
+    const input = screen.getByPlaceholderText(/Enter to send/i)
+    fireEvent.change(input, { target: { value: "/coach" } })
     fireEvent.submit(input.closest("form")!)
 
     expect(useAppStore.getState().currentStage).toBe("coach")
   })
 
-  it("advances stage on empty submit", () => {
+  it("a command with leftover text jumps AND hands the text to the destination agent", async () => {
     render(<Page />)
-    const input = screen.getByPlaceholderText(/Type your message/i)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
+    fireEvent.change(input, { target: { value: "跟我做個角色模擬 /roleplay" } })
+    fireEvent.submit(input.closest("form")!)
+
+    expect(useAppStore.getState().currentStage).toBe("roleplay")
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalled()
+    })
+  })
+
+  it("empty submit does nothing (no accidental stage advance)", () => {
+    render(<Page />)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
     fireEvent.change(input, { target: { value: "" } })
     fireEvent.submit(input.closest("form")!)
 
-    expect(useAppStore.getState().currentStage).toBe("coach")
+    expect(useAppStore.getState().currentStage).toBe("analyzer")
   })
 
   it("switches tabs", () => {
     render(<Page />)
-    const roleplayTab = screen.getByText("3. Roleplay")
+    const roleplayTab = screen.getByText("3. Role-Play")
     fireEvent.click(roleplayTab)
     expect(useAppStore.getState().currentStage).toBe("roleplay")
   })
@@ -116,7 +123,7 @@ describe("Page", () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {})
 
     render(<Page />)
-    const input = screen.getByPlaceholderText(/Type your message/i)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
     fireEvent.change(input, { target: { value: "test error" } })
     fireEvent.submit(input.closest("form")!)
 
@@ -131,7 +138,7 @@ describe("Page", () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {})
 
     render(<Page />)
-    const input = screen.getByPlaceholderText(/Type your message/i)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
     fireEvent.change(input, { target: { value: "test not ok" } })
     fireEvent.submit(input.closest("form")!)
 
@@ -148,7 +155,7 @@ describe("Page", () => {
     })
 
     render(<Page />)
-    const input = screen.getByPlaceholderText(/Type your message/i)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
     fireEvent.change(input, { target: { value: "test no reader" } })
     fireEvent.submit(input.closest("form")!)
 
@@ -192,22 +199,17 @@ describe("Page", () => {
 
   it("renders existing history messages with non-image attachments", () => {
     useAppStore.setState({
-      history: {
-        analyzer: [
-          {
-            id: "1",
-            role: "user",
-            content: "Hello",
-            experimental_attachments: [
-              { name: "doc.txt", contentType: "text/plain", url: "data:text/plain;base64,ZGVm" }
-            ]
-          },
-          { id: "2", role: "assistant", content: "Hi there" }
-        ],
-        coach: [],
-        roleplay: [],
-        reflection: []
-      }
+      messages: [
+        {
+          id: "1",
+          role: "user",
+          content: "Hello",
+          experimental_attachments: [
+            { name: "doc.txt", contentType: "text/plain", url: "data:text/plain;base64,ZGVm" }
+          ]
+        },
+        { id: "2", role: "assistant", content: "Hi there" }
+      ]
     })
 
     render(<Page />)
@@ -218,21 +220,16 @@ describe("Page", () => {
 
   it("renders existing history messages with image attachments", () => {
     useAppStore.setState({
-      history: {
-        analyzer: [
-          {
-            id: "1",
-            role: "user",
-            content: "Check this",
-            experimental_attachments: [
-              { name: "photo.png", contentType: "image/png", url: "data:image/png;base64,abc" }
-            ]
-          }
-        ],
-        coach: [],
-        roleplay: [],
-        reflection: []
-      }
+      messages: [
+        {
+          id: "1",
+          role: "user",
+          content: "Check this",
+          experimental_attachments: [
+            { name: "photo.png", contentType: "image/png", url: "data:image/png;base64,abc" }
+          ]
+        }
+      ]
     })
 
     render(<Page />)
@@ -254,7 +251,7 @@ describe("Page", () => {
       expect(screen.getByAltText("img.png")).toBeDefined()
     })
 
-    const input = screen.getByPlaceholderText(/Type your message/i)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
     fireEvent.change(input, { target: { value: "with attachment" } })
     fireEvent.submit(input.closest("form")!)
 
@@ -278,7 +275,12 @@ describe("Page", () => {
     const form = document.querySelector("form")!
     fireEvent.submit(form)
 
-    expect(useAppStore.getState().currentStage).toBe("coach")
+    // Empty text + attachment SENDS the file (fetch called) and stays put — it must NOT
+    // bounce to the next stage and drop the attachment.
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalled()
+    })
+    expect(useAppStore.getState().currentStage).toBe("analyzer")
   })
 
   it("shows no messages placeholder", () => {
@@ -288,7 +290,7 @@ describe("Page", () => {
 
   it("renders assistant message styled as assistant bubble", async () => {
     render(<Page />)
-    const input = screen.getByPlaceholderText(/Type your message/i)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
     fireEvent.change(input, { target: { value: "test" } })
     fireEvent.submit(input.closest("form")!)
 
@@ -338,5 +340,256 @@ describe("Page", () => {
     fireEvent.change(fileInput)
 
     expect(screen.queryByText("test.txt")).toBeNull()
+  })
+
+  it("opens commands info dialog on Help button click", () => {
+    render(<Page />)
+    const helpBtn = screen.getByText("Help").closest("button")!
+    fireEvent.click(helpBtn)
+
+    expect(screen.getByText("Quick Commands")).toBeDefined()
+  })
+
+  it("submits on Enter key press", async () => {
+    render(<Page />)
+    const textarea = screen.getByPlaceholderText(/Enter to send/i)
+    fireEvent.change(textarea, { target: { value: "hello via enter" } })
+    fireEvent.keyDown(textarea, { key: "Enter", shiftKey: false })
+
+    await waitFor(() => {
+      expect(screen.getByText("hello via enter")).toBeDefined()
+    })
+  })
+
+  it("does not submit on Shift+Enter", () => {
+    render(<Page />)
+    const textarea = screen.getByPlaceholderText(/Enter to send/i)
+    fireEvent.change(textarea, { target: { value: "shift enter" } })
+    fireEvent.keyDown(textarea, { key: "Enter", shiftKey: true })
+
+    expect(global.fetch).not.toHaveBeenCalled()
+  })
+
+  it("does not submit on Enter during IME composition", () => {
+    render(<Page />)
+    const textarea = screen.getByPlaceholderText(/Enter to send/i)
+    fireEvent.change(textarea, { target: { value: "IME text" } })
+
+    const event = new KeyboardEvent("keydown", {
+      key: "Enter",
+      shiftKey: false,
+      bubbles: true,
+      cancelable: true
+    })
+    Object.defineProperty(event, "isComposing", { value: true })
+    textarea.dispatchEvent(event)
+
+    expect(global.fetch).not.toHaveBeenCalled()
+  })
+
+  it("submits with attachments via Enter key", async () => {
+    render(<Page />)
+
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
+    const file = new File(["data"], "pic.png", { type: "image/png" })
+    Object.defineProperty(fileInput, "files", { value: [file] })
+    fireEvent.change(fileInput)
+
+    await waitFor(() => {
+      expect(screen.getByAltText("pic.png")).toBeDefined()
+    })
+
+    const textarea = screen.getByPlaceholderText(/Enter to send/i)
+    fireEvent.change(textarea, { target: { value: "with pic" } })
+    fireEvent.keyDown(textarea, { key: "Enter", shiftKey: false })
+
+    await waitFor(() => {
+      expect(screen.getByText("with pic")).toBeDefined()
+    })
+  })
+
+  it("shows reflection placeholder in reflection stage", () => {
+    useAppStore.setState({ currentStage: "reflection" })
+    render(<Page />)
+    expect(screen.getByPlaceholderText(/Review me/i)).toBeDefined()
+  })
+
+  it("displays stage-specific card descriptions", () => {
+    const stages = ["analyzer", "coach", "roleplay", "reflection"] as const
+    const descriptions = [
+      /Describe your social situation/,
+      /Get concrete advice/,
+      /Practice the conversation/,
+      /Review your practice/
+    ]
+
+    stages.forEach((stage, i) => {
+      useAppStore.setState({ currentStage: stage })
+      render(<Page />)
+      expect(screen.getByText(descriptions[i]!)).toBeDefined()
+      cleanup()
+    })
+  })
+
+  it("shows error on empty stream response", async () => {
+    ;(global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      body: {
+        getReader: () => ({
+          read: async () => Promise.resolve({ done: true })
+        })
+      }
+    })
+
+    render(<Page />)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
+    fireEvent.change(input, { target: { value: "test empty" } })
+    fireEvent.submit(input.closest("form")!)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Empty response/)).toBeDefined()
+    })
+  })
+
+  it("shows error message for failed request", async () => {
+    ;(global.fetch as any).mockResolvedValueOnce({
+      ok: false,
+      status: 403,
+      json: async () => ({ error: "Forbidden" }),
+      text: async () => ""
+    })
+
+    render(<Page />)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
+    fireEvent.change(input, { target: { value: "test forbidden" } })
+    fireEvent.submit(input.closest("form")!)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Request failed \(403\)/)).toBeDefined()
+    })
+  })
+
+  it("drops duplicate submits while loading", async () => {
+    let resolveFetch: (v: any) => void
+    ;(global.fetch as any).mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          resolveFetch = resolve
+        })
+    )
+
+    render(<Page />)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
+
+    fireEvent.change(input, { target: { value: "first" } })
+    fireEvent.submit(input.closest("form")!)
+
+    await waitFor(() => {
+      expect(screen.getByText("first")).toBeDefined()
+    })
+
+    fireEvent.change(input, { target: { value: "second" } })
+    fireEvent.submit(input.closest("form")!)
+
+    expect(global.fetch).toHaveBeenCalledTimes(1)
+
+    resolveFetch!({
+      ok: true,
+      body: {
+        getReader: () => ({
+          read: async () => Promise.resolve({ done: true })
+        })
+      }
+    })
+  })
+
+  it("handles fetch error that is not an Error instance", async () => {
+    ;(global.fetch as any).mockRejectedValueOnce("string error")
+
+    render(<Page />)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
+    fireEvent.change(input, { target: { value: "test non-error" } })
+    fireEvent.submit(input.closest("form")!)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Network error/)).toBeDefined()
+    })
+  })
+
+  it("handles error response with non-JSON body", async () => {
+    ;(global.fetch as any).mockResolvedValueOnce({
+      ok: false,
+      status: 502,
+      json: async () => {
+        throw new Error("not json")
+      },
+      text: async () => "Bad Gateway"
+    })
+
+    render(<Page />)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
+    fireEvent.change(input, { target: { value: "test 502" } })
+    fireEvent.submit(input.closest("form")!)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Request failed \(502\)/)).toBeDefined()
+    })
+  })
+
+  it("handles error response with empty body", async () => {
+    ;(global.fetch as any).mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      json: async () => {
+        throw new Error("no json")
+      },
+      text: async () => ""
+    })
+
+    render(<Page />)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
+    fireEvent.change(input, { target: { value: "test 500" } })
+    fireEvent.submit(input.closest("form")!)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Request failed \(500\)/)).toBeDefined()
+    })
+  })
+
+  it("shows error detail from response message field", async () => {
+    ;(global.fetch as any).mockResolvedValueOnce({
+      ok: false,
+      status: 422,
+      json: async () => ({ message: "Invalid model" }),
+      text: async () => ""
+    })
+
+    render(<Page />)
+    const input = screen.getByPlaceholderText(/Enter to send/i)
+    fireEvent.change(input, { target: { value: "test 422" } })
+    fireEvent.submit(input.closest("form")!)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Invalid model/)).toBeDefined()
+    })
+  })
+
+  it("jumps stage with attachments via slash command", async () => {
+    render(<Page />)
+
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
+    const file = new File(["data"], "doc.pdf", { type: "application/pdf" })
+    Object.defineProperty(fileInput, "files", { value: [file] })
+    fireEvent.change(fileInput)
+
+    await waitFor(() => {
+      expect(screen.getByText("doc.pdf")).toBeDefined()
+    })
+
+    const input = screen.getByPlaceholderText(/Enter to send/i)
+    fireEvent.change(input, { target: { value: "/coach check this" } })
+    fireEvent.submit(input.closest("form")!)
+
+    expect(useAppStore.getState().currentStage).toBe("coach")
   })
 })

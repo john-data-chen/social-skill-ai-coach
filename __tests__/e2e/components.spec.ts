@@ -5,6 +5,9 @@ test.describe("UI Components E2E", () => {
     page.on("console", (msg) => console.log("BROWSER LOG:", msg.text()))
     page.on("pageerror", (err) => console.error("BROWSER ERROR:", err))
 
+    await page.addInitScript(() => {
+      window.localStorage.setItem("hasSeenCommands", "true");
+    })
     // Go to the home page
     await page.goto("/")
     // Wait for Next.js hydration to fully complete
@@ -37,7 +40,7 @@ test.describe("UI Components E2E", () => {
   test("tabs can be switched", async ({ page }) => {
     const analyzerTab = page.getByText("1. Analyzer", { exact: true })
     const coachTab = page.getByText("2. Coach", { exact: true })
-    const roleplayTab = page.getByText("3. Roleplay", { exact: true })
+    const roleplayTab = page.getByText("3. Role-Play", { exact: true })
     const reflectionTab = page.getByText("4. Reflection", { exact: true })
 
     await expect(analyzerTab).toBeVisible()
@@ -58,7 +61,7 @@ test.describe("UI Components E2E", () => {
   })
 
   test("input field takes text", async ({ page }) => {
-    const input = page.getByPlaceholder(/Type your message/i)
+    const input = page.getByPlaceholder(/Enter to send/i)
     await expect(input).toBeVisible()
 
     await input.fill("Hello World")

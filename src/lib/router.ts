@@ -1,69 +1,55 @@
 import type { Stage } from "./store"
 
 /**
- * Deterministic stage router.
+ * Stage navigation — explicit commands only.
  *
- * Instead of relying on a fragile LLM for pipeline state transitions, we use
- * explicit user intents (e.g. "let's roleplay", "give me feedback") to advance
- * through the four stages (Analyzer -> Coach -> Roleplay -> Reflection). This
- * keeps the UX predictable and allows the UI to sync perfectly with the active stage.
+ * Navigate by clicking a tab or typing a slash command anywhere in the message:
+ * /analyzer (or /analyze), /coach, /roleplay (or /role-play), /reflect (or /reflection).
+ * Detected even mid- or end-of-sentence, e.g. "let's practice /roleplay". We never advance on
+ * empty input or guess from prose — both navigated by accident with no undo.
  */
-
-export function advancePipeline(stage: Stage): Stage {
-  switch (stage) {
-    case "analyzer":
-      return "coach"
-    case "coach":
-      return "roleplay"
-    case "roleplay":
-      return "reflection"
-    case "reflection":
-      return "analyzer"
-    default:
-      return "analyzer"
-  }
+const STAGE_COMMANDS: Record<string, Stage> = {
+  "/analyzer": "analyzer",
+  "/analyze": "analyzer",
+  "/coach": "coach",
+  "/roleplay": "roleplay",
+  "/role-play": "roleplay",
+  "/reflect": "reflection",
+  "/reflection": "reflection"
 }
 
-export function determineNextStage(currentStage: Stage, userInput: string): Stage {
-  // Empty intent -> strictly next stage in pipeline
-  if (!userInput || userInput.trim() === "") {
-    return advancePipeline(currentStage)
+// Whole-token match of any command (longest alternative first so "/role-play" beats "/roleplay",
+// "/reflection" beats "/reflect", etc.); the trailing lookahead stops "/coaching" or "/analyzer"
+// from matching the shorter "/coach" / "/analyze".
+const COMMAND_PATTERN = `(?:${Object.keys(STAGE_COMMANDS)
+  .sort((a, b) => b.length - a.length)
+  .join("|")})(?![\\w-])`
+
+export interface StageCommand {
+  /** Destination stage. */
+  stage: Stage
+  /**
+   * The message with all command tokens removed (whitespace collapsed, trimmed). Empty when the
+   * message was only the command — then the jump is pure navigation.
+   */
+  rest: string
+}
+
+/**
+ * Parse a stage slash command from anywhere in the input. Returns the destination stage plus the
+ * leftover message (so callers can hand it straight to the destination agent), or null when no
+ * command is present. If several commands appear, the earliest in the text decides the stage.
+ */
+export function parseStageCommand(userInput: string): StageCommand | null {
+  const matches = userInput.match(new RegExp(COMMAND_PATTERN, "gi"))
+  const first = matches?.[0]
+  if (!first) {
+    return null
   }
-
-  const input = userInput.trim().toLowerCase()
-
-  // Strong intent to jump to Roleplay
-  if (
-    input.startsWith("let's roleplay") ||
-    input.startsWith("i want to practice") ||
-    input === "roleplay" ||
-    input.includes("skip to roleplay") ||
-    input.includes("practice directly")
-  ) {
-    return "roleplay"
+  const stage = STAGE_COMMANDS[first.toLowerCase()]
+  if (!stage) {
+    return null
   }
-
-  // Strong intent to jump to Reflection
-  if (
-    input.startsWith("review me") ||
-    input.startsWith("give me feedback") ||
-    input === "reflect" ||
-    input.includes("skip to review") ||
-    input.includes("evaluate me")
-  ) {
-    return "reflection"
-  }
-
-  // Strong intent to jump to Coach
-  if (input.startsWith("give me advice") || input.includes("skip to coach") || input === "coach") {
-    return "coach"
-  }
-
-  // Strong intent to jump to Analyzer
-  if (input.includes("start over") || input.includes("new situation") || input === "analyze") {
-    return "analyzer"
-  }
-
-  // Default: remain in the current stage to continue the conversation
-  return currentStage
+  const rest = userInput.replace(new RegExp(COMMAND_PATTERN, "gi"), " ").replace(/\s+/g, " ").trim()
+  return { stage, rest }
 }

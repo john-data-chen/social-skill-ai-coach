@@ -10,12 +10,7 @@ describe("store", () => {
       apiKey: "",
       mode: "byok",
       currentStage: "analyzer",
-      history: {
-        analyzer: [],
-        coach: [],
-        roleplay: [],
-        reflection: []
-      }
+      messages: []
     })
   })
 
@@ -29,16 +24,15 @@ describe("store", () => {
     expect(useAppStore.getState().currentStage).toBe("roleplay")
   })
 
-  it("should setHistory", () => {
+  it("should setMessages", () => {
     const messages = [{ id: "1", role: "user", content: "hello" }]
-    useAppStore.getState().setHistory("coach", messages)
-    expect(useAppStore.getState().history.coach).toEqual(messages)
+    useAppStore.getState().setMessages(messages)
+    expect(useAppStore.getState().messages).toEqual(messages)
   })
 
-  it("should clearHistory", () => {
-    const messages = [{ id: "1", role: "user", content: "hello" }]
-    useAppStore.getState().setHistory("coach", messages)
-    useAppStore.getState().clearHistory()
-    expect(useAppStore.getState().history.coach).toEqual([])
+  it("should clearMessages", () => {
+    useAppStore.getState().setMessages([{ id: "1", role: "user", content: "hello" }])
+    useAppStore.getState().clearMessages()
+    expect(useAppStore.getState().messages).toEqual([])
   })
 })

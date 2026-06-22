@@ -963,4 +963,142 @@ describe("POST /api/chat", () => {
     const json = await res.json()
     expect(json.error).toContain("Fallback error")
   })
+
+  it("returns 500 on non-auth stream read error in byok mode", async () => {
+    mockStreamText.mockReturnValue({
+      textStream: {
+        getReader: vi
+          .fn()
+          .mockReturnValue({ read: vi.fn().mockRejectedValue(new Error("Network timeout")) })
+      }
+    })
+    mockGetProvider.mockReturnValue(() => vi.fn())
+
+    const req = makeRequest(
+      {
+        messages: [{ role: "user", content: "hi" }],
+        provider: "mimo",
+        model: "m1",
+        mode: "byok",
+        stage: "analyzer"
+      },
+      { Authorization: "Bearer k" }
+    )
+    const res = await POST(req)
+    expect(res.status).toBe(500)
+    const json = await res.json()
+    expect(json.error).toBe("Network timeout")
+  })
+
+  it("returns 500 on non-auth stream read error for deepseek provider", async () => {
+    mockStreamText.mockReturnValue({
+      textStream: {
+        getReader: vi
+          .fn()
+          .mockReturnValue({ read: vi.fn().mockRejectedValue(new Error("Connection reset")) })
+      }
+    })
+    mockGetProvider.mockReturnValue(() => vi.fn())
+
+    const req = makeRequest(
+      {
+        messages: [{ role: "user", content: "hi" }],
+        provider: "deepseek",
+        model: "m1",
+        mode: "byok",
+        stage: "analyzer"
+      },
+      { Authorization: "Bearer k" }
+    )
+    const res = await POST(req)
+    expect(res.status).toBe(500)
+    const json = await res.json()
+    expect(json.error).toBe("Connection reset")
+  })
+
+  it("handles empty first chunk (done immediately)", async () => {
+    mockStreamText.mockReturnValue({
+      textStream: {
+        getReader: vi
+          .fn()
+          .mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+      }
+    })
+    mockGetProvider.mockReturnValue(() => vi.fn())
+
+    const req = makeRequest(
+      {
+        messages: [{ role: "user", content: "hi" }],
+        provider: "mimo",
+        model: "m1",
+        mode: "byok",
+        stage: "analyzer"
+      },
+      { Authorization: "Bearer k" }
+    )
+    const res = await POST(req)
+    expect(res.status).toBe(200)
+    const text = await res.text()
+    expect(text).toBe("")
+  })
+
+  it("returns 500 on non-auth reflection error in byok mode", async () => {
+    mockGenerateObject.mockRejectedValue(new Error("structured output not supported"))
+    mockGetProvider.mockReturnValue(() => vi.fn())
+
+    const req = makeRequest(
+      {
+        messages: [{ role: "user", content: "evaluate me" }],
+        provider: "mimo",
+        model: "m1",
+        mode: "byok",
+        stage: "reflection"
+      },
+      { Authorization: "Bearer test-key" }
+    )
+    const res = await POST(req)
+    expect(res.status).toBe(500)
+    const json = await res.json()
+    expect(json.error).toContain("structured output not supported")
+  })
+
+  it("returns 500 on non-auth reflection error for deepseek in demo mode", async () => {
+    mockGenerateObject.mockRejectedValue(new Error("quota exceeded"))
+    mockGetProvider.mockReturnValue(() => vi.fn())
+
+    const req = makeRequest(
+      {
+        messages: [{ role: "user", content: "evaluate" }],
+        provider: "deepseek",
+        model: "m1",
+        mode: "demo",
+        stage: "reflection"
+      },
+      { Authorization: "Bearer k" }
+    )
+    const res = await POST(req)
+    expect(res.status).toBe(500)
+    const json = await res.json()
+    expect(json.error).toContain("quota exceeded")
+  })
+
+  it("returns 500 on auth-like reflection error in byok mode", async () => {
+    mockGenerateObject.mockRejectedValue(new Error("401 Unauthorized"))
+    mockGetProvider.mockReturnValue(() => vi.fn())
+
+    const req = makeRequest(
+      {
+        messages: [{ role: "user", content: "evaluate" }],
+        provider: "mimo",
+        model: "m1",
+        mode: "byok",
+        stage: "reflection"
+      },
+      { Authorization: "Bearer test-key" }
+    )
+    const res = await POST(req)
+    expect(res.status).toBe(500)
+    const json = await res.json()
+    expect(json.error).toContain("401 Unauthorized")
+  })
 })

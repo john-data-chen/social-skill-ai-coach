@@ -1,51 +1,50 @@
 import { describe, it, expect } from "vitest"
 
-import { advancePipeline, determineNextStage } from "../../src/lib/router"
+import { parseStageCommand } from "../../src/lib/router"
 
-describe("router", () => {
-  it("advancePipeline", () => {
-    expect(advancePipeline("analyzer")).toBe("coach")
-    expect(advancePipeline("coach")).toBe("roleplay")
-    expect(advancePipeline("roleplay")).toBe("reflection")
-    expect(advancePipeline("reflection")).toBe("analyzer")
-    expect(advancePipeline("unknown" as any)).toBe("analyzer")
+describe("router / parseStageCommand", () => {
+  it("bare slash commands resolve to their stage with empty rest", () => {
+    expect(parseStageCommand("/coach")).toEqual({ stage: "coach", rest: "" })
+    expect(parseStageCommand("/roleplay")).toEqual({ stage: "roleplay", rest: "" })
+    expect(parseStageCommand("/reflect")).toEqual({ stage: "reflection", rest: "" })
+    expect(parseStageCommand("/reflection")).toEqual({ stage: "reflection", rest: "" })
+    expect(parseStageCommand("/analyzer")).toEqual({ stage: "analyzer", rest: "" })
+    expect(parseStageCommand("/analyze")).toEqual({ stage: "analyzer", rest: "" })
   })
 
-  it("determineNextStage - empty input advances pipeline", () => {
-    expect(determineNextStage("analyzer", "")).toBe("coach")
-    expect(determineNextStage("analyzer", "   ")).toBe("coach")
+  it("/role-play is an alias for the roleplay stage", () => {
+    expect(parseStageCommand("/role-play")).toEqual({ stage: "roleplay", rest: "" })
   })
 
-  it("determineNextStage - jump to roleplay", () => {
-    expect(determineNextStage("analyzer", "let's roleplay")).toBe("roleplay")
-    expect(determineNextStage("analyzer", "i want to practice")).toBe("roleplay")
-    expect(determineNextStage("analyzer", "roleplay")).toBe("roleplay")
-    expect(determineNextStage("analyzer", "can we skip to roleplay please")).toBe("roleplay")
-    expect(determineNextStage("analyzer", "i will practice directly")).toBe("roleplay")
+  it("detects a command anywhere and returns the leftover message", () => {
+    expect(parseStageCommand("跟我做個角色模擬 /roleplay")).toEqual({
+      stage: "roleplay",
+      rest: "跟我做個角色模擬"
+    })
+    expect(parseStageCommand("let's practice /role-play now")).toEqual({
+      stage: "roleplay",
+      rest: "let's practice now"
+    })
+    expect(parseStageCommand("ok /coach please")).toEqual({ stage: "coach", rest: "ok please" })
   })
 
-  it("determineNextStage - jump to reflection", () => {
-    expect(determineNextStage("roleplay", "review me")).toBe("reflection")
-    expect(determineNextStage("roleplay", "give me feedback")).toBe("reflection")
-    expect(determineNextStage("roleplay", "reflect")).toBe("reflection")
-    expect(determineNextStage("roleplay", "skip to review")).toBe("reflection")
-    expect(determineNextStage("roleplay", "evaluate me")).toBe("reflection")
+  it("is case- and whitespace-insensitive", () => {
+    expect(parseStageCommand("  /Coach  ")).toEqual({ stage: "coach", rest: "" })
   })
 
-  it("determineNextStage - jump to coach", () => {
-    expect(determineNextStage("analyzer", "give me advice")).toBe("coach")
-    expect(determineNextStage("analyzer", "skip to coach")).toBe("coach")
-    expect(determineNextStage("analyzer", "coach")).toBe("coach")
+  it("only matches whole tokens", () => {
+    expect(parseStageCommand("/coaching tips")).toBeNull()
+    expect(parseStageCommand("/role-played it")).toBeNull()
   })
 
-  it("determineNextStage - jump to analyzer", () => {
-    expect(determineNextStage("reflection", "start over")).toBe("analyzer")
-    expect(determineNextStage("reflection", "new situation")).toBe("analyzer")
-    expect(determineNextStage("reflection", "analyze")).toBe("analyzer")
+  it("when several commands appear, the earliest decides the stage", () => {
+    expect(parseStageCommand("/coach then /roleplay")?.stage).toBe("coach")
   })
 
-  it("determineNextStage - stay in current stage", () => {
-    expect(determineNextStage("analyzer", "hello world")).toBe("analyzer")
-    expect(determineNextStage("coach", "how do i say hi?")).toBe("coach")
+  it("returns null for empty or ordinary text", () => {
+    expect(parseStageCommand("")).toBeNull()
+    expect(parseStageCommand("   ")).toBeNull()
+    // used to silently navigate via natural-language guessing — now ignored
+    expect(parseStageCommand("i want to practice asking her out")).toBeNull()
   })
 })

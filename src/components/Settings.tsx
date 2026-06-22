@@ -42,6 +42,7 @@ export function Settings() {
   const store = useAppStore()
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState<Partial<AppState>>({})
+  const [errors, setErrors] = useState<{ apiKey?: string; baseUrl?: string }>({})
 
   const handleOpenChange = (isOpen: boolean) => {
     if (isOpen) {
@@ -57,11 +58,25 @@ export function Settings() {
         apiKey: store.apiKey,
         baseUrl: store.baseUrl
       })
+      setErrors({})
     }
     setOpen(isOpen)
   }
 
   const handleConfirm = () => {
+    if (draft.mode === "byok") {
+      const newErrors: { apiKey?: string; baseUrl?: string } = {}
+      if (!draft.apiKey?.trim()) {
+        newErrors.apiKey = "API Key is required"
+      }
+      if (draft.provider === "mimo" && !draft.baseUrl?.trim()) {
+        newErrors.baseUrl = "Base URL is required"
+      }
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors)
+        return
+      }
+    }
     store.setConfig(draft)
     setOpen(false)
   }
@@ -93,6 +108,7 @@ export function Settings() {
               value={draft.mode}
               onValueChange={(val) => {
                 setDraft((prev) => ({ ...prev, mode: val as any }))
+                setErrors({})
               }}
             >
               <SelectTrigger className="col-span-3 w-full">
@@ -162,16 +178,21 @@ export function Settings() {
               <Label htmlFor="apiKey" className="text-right">
                 API Key
               </Label>
-              <Input
-                id="apiKey"
-                type="password"
-                value={draft.apiKey || ""}
-                onChange={(e) => {
-                  setDraft((prev) => ({ ...prev, apiKey: e.target.value }))
-                }}
-                className="col-span-3"
-                placeholder="sk-..."
-              />
+              <div className="col-span-3">
+                <Input
+                  id="apiKey"
+                  type="password"
+                  value={draft.apiKey || ""}
+                  onChange={(e) => {
+                    setDraft((prev) => ({ ...prev, apiKey: e.target.value }))
+                    if (errors.apiKey) {setErrors((prev) => { const { apiKey, ...rest } = prev; return rest; })}
+                  }}
+                  placeholder="sk-..."
+                />
+                {errors.apiKey && (
+                  <p className="text-sm text-destructive mt-1">{errors.apiKey}</p>
+                )}
+              </div>
             </div>
           )}
 
@@ -180,15 +201,20 @@ export function Settings() {
               <Label htmlFor="baseUrl" className="text-right">
                 Base URL
               </Label>
-              <Input
-                id="baseUrl"
-                value={draft.baseUrl || ""}
-                onChange={(e) => {
-                  setDraft((prev) => ({ ...prev, baseUrl: e.target.value }))
-                }}
-                className="col-span-3"
-                placeholder="Mimo token plan only — e.g. https://token-plan-cn.xiaomimimo.com/v1"
-              />
+              <div className="col-span-3">
+                <Input
+                  id="baseUrl"
+                  value={draft.baseUrl || ""}
+                  onChange={(e) => {
+                    setDraft((prev) => ({ ...prev, baseUrl: e.target.value }))
+                    if (errors.baseUrl) {setErrors((prev) => { const { baseUrl, ...rest } = prev; return rest; })}
+                  }}
+                  placeholder="Mimo token plan only — e.g. https://token-plan-cn.xiaomimimo.com/v1"
+                />
+                {errors.baseUrl && (
+                  <p className="text-sm text-destructive mt-1">{errors.baseUrl}</p>
+                )}
+              </div>
             </div>
           )}
         </div>
