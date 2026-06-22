@@ -1,6 +1,6 @@
 "use client"
 
-import { Paperclip, X } from "lucide-react"
+import { Paperclip, X, Info } from "lucide-react"
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import ReactMarkdown from "react-markdown"
@@ -10,6 +10,13 @@ import { Settings } from "@/components/Settings"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle
+} from "@/components/ui/dialog"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { parseStageCommand } from "@/lib/router"
 import { useAppStore, type Attachment, type Stage } from "@/lib/store"
@@ -30,6 +37,14 @@ export default function Home() {
   const [input, setInput] = useState("")
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [showCommandsInfo, setShowCommandsInfo] = useState(false)
+
+  useEffect(() => {
+    if (!localStorage.getItem("hasSeenCommands")) {
+      setShowCommandsInfo(true)
+      localStorage.setItem("hasSeenCommands", "true")
+    }
+  }, [])
   const fileInputRef = useRef<HTMLInputElement>(null)
   // Synchronous re-entry guard for the whole send flow (incl. the Analyzer->Coach handoff).
   // `isLoading` state drives the disabled UI, but a state read inside a rapid second Enter can
@@ -242,12 +257,14 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col p-8 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <header className="flex justify-between items-center mb-6">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Social Skills Coach</h1>
-          <p className="text-gray-500">Practice and improve your social interactions</p>
+          <h1 className="text-3xl sm:text-4xl font-bold">Social Skills Coach</h1>
+          <p className="text-gray-500 text-sm sm:text-base mt-1">
+            Practice and improve your social interactions
+          </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full sm:w-auto justify-end">
           <ThemeToggle />
           <Settings />
         </div>
@@ -260,11 +277,31 @@ export default function Home() {
             setStage(val)
           }}
         >
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="analyzer">1. Analyzer</TabsTrigger>
-            <TabsTrigger value="coach">2. Coach</TabsTrigger>
-            <TabsTrigger value="roleplay">3. Role-Play</TabsTrigger>
-            <TabsTrigger value="reflection">4. Reflection</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 !h-auto gap-2 p-1">
+            <TabsTrigger
+              value="analyzer"
+              className="whitespace-normal sm:whitespace-nowrap py-1.5 sm:py-0.5"
+            >
+              1. Analyzer
+            </TabsTrigger>
+            <TabsTrigger
+              value="coach"
+              className="whitespace-normal sm:whitespace-nowrap py-1.5 sm:py-0.5"
+            >
+              2. Coach
+            </TabsTrigger>
+            <TabsTrigger
+              value="roleplay"
+              className="whitespace-normal sm:whitespace-nowrap py-1.5 sm:py-0.5"
+            >
+              3. Role-Play
+            </TabsTrigger>
+            <TabsTrigger
+              value="reflection"
+              className="whitespace-normal sm:whitespace-nowrap py-1.5 sm:py-0.5"
+            >
+              4. Reflection
+            </TabsTrigger>
           </TabsList>
         </Tabs>
 
@@ -383,6 +420,18 @@ export default function Home() {
                   type="button"
                   variant="outline"
                   size="icon"
+                  onClick={() => {
+                    setShowCommandsInfo(true)
+                  }}
+                  className="shrink-0"
+                  title="Show Commands"
+                >
+                  <Info size={18} />
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
                   onClick={() => fileInputRef.current?.click()}
                   className="shrink-0"
                 >
@@ -403,9 +452,7 @@ export default function Home() {
                   minRows={1}
                   maxRows={3}
                   placeholder={
-                    currentStage === "reflection"
-                      ? "Type 'Review me' to start reflection · Enter to send"
-                      : "Type your message · Enter to send · /coach /role-play /reflect to switch"
+                    currentStage === "reflection" ? "Review me... (Enter to send)" : "Enter to send"
                   }
                   className="flex-1 resize-none rounded-lg border border-input bg-white px-2.5 py-2 text-base outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-gray-950"
                 />
@@ -417,6 +464,38 @@ export default function Home() {
           </CardContent>
         </Card>
       </main>
+
+      <Dialog open={showCommandsInfo} onOpenChange={setShowCommandsInfo}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Quick Commands</DialogTitle>
+            <DialogDescription>
+              Use these slash commands anywhere in your message to jump to a specific stage:
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 text-sm mt-4">
+            <div className="flex flex-col gap-2">
+              <code className="bg-muted px-2 py-1 rounded w-fit">/analyzer [message]</code>
+              <p className="text-muted-foreground ml-2">Describe the situation.</p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <code className="bg-muted px-2 py-1 rounded w-fit">/coach [message]</code>
+              <p className="text-muted-foreground ml-2">Ask for advice.</p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <code className="bg-muted px-2 py-1 rounded w-fit">/role-play [message]</code>
+              <p className="text-muted-foreground ml-2">Practice the conversation.</p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <code className="bg-muted px-2 py-1 rounded w-fit">/reflection [message]</code>
+              <p className="text-muted-foreground ml-2">Review your practice.</p>
+            </div>
+            <p className="text-xs text-muted-foreground mt-4 italic">
+              Example: "/coach how should I reply?"
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
