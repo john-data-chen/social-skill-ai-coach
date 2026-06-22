@@ -32,7 +32,9 @@ applies — do not select everything.
 Available topics:
 ${Object.entries(TOPICS)
   .map(([key, desc]) => `- ${key}: ${desc}`)
-  .join("\n")}`
+  .join("\n")}
+
+Return your selection as a JSON object.`
 
 /**
  * FALLBACK_TOPICS:
