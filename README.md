@@ -274,17 +274,38 @@ Use it one of two ways:
 
 ## 🚀 Deployment (Vercel)
 
-This repo is a public template — deploy your own instance in one click. It runs immediately in **BYOK** mode (open **Settings**, paste your own MiMo or DeepSeek key); no server keys, no login, no paywall.
+This repo is a public template — deploy your own instance in one click. It runs immediately in **BYOK** mode (open **Settings**, paste your own MiMo or DeepSeek key — see [Get an API key (BYOK)](#byok)); no login, no paywall.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/john-data-chen/social-skill-ai-coach)
-&nbsp;
-[![Use this template](https://img.shields.io/badge/GitHub-Use%20this%20template-238636?logo=github)](https://github.com/john-data-chen/social-skill-ai-coach/generate)
 
-1. Click **Deploy with Vercel** (a free Vercel account is required; sign in with GitHub in one click). Vercel clones the repo into your account and builds it — no configuration needed.
-2. Open the deployment URL, go to **Settings**, paste your MiMo or DeepSeek key ([how to get one](#byok)), and start.
+### 1. Deploy
+
+Click **Deploy with Vercel** (a free Vercel account is required; sign in with GitHub in one click). Vercel clones the repo into your account, then asks you to create the Git repository — keep the defaults and click **Create**.
 
 <p align="center">
-  <img src="./public/images/deploy-vercel.png" alt="Vercel one-click clone — importing the Social Skills AI Coach template" width="520" />
+  <img src="./public/images/deploy-1.png" alt="Vercel New Project — cloning the Social Skills AI Coach repo from GitHub" width="520" />
+</p>
+
+When the build finishes, open the deployment URL. It already works in BYOK mode: open **Settings**, paste your key, and start.
+
+### 2. Optional — enable Demo (Server Key) mode
+
+Want the deployed site to work without each visitor pasting a key? Add a server key. In your project, open **Environment Variables**:
+
+<p align="center">
+  <img src="./public/images/deploy-2.png" alt="Vercel project sidebar — Environment Variables" width="520" />
+</p>
+
+Click **Add Environment Variable**:
+
+<p align="center">
+  <img src="./public/images/deploy-3.png" alt="Environment Variables page — Add Environment Variable button" width="520" />
+</p>
+
+Add the keys from the [BYOK table](#byok) (one of MiMo / DeepSeek), turn on **Sensitive**, and **Save** — then redeploy.
+
+<p align="center">
+  <img src="./public/images/deploy-4.png" alt="Add Environment Variable — MIMO_API_KEY and MIMO_API_BASE_URL with Sensitive enabled" width="520" />
 </p>
 
 > **Never commit API keys or passwords.** Use environment variables.

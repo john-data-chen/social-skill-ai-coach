@@ -274,17 +274,38 @@ pnpm build        # 正式建置（typecheck + Next build）
 
 ## 🚀 部署（Vercel）
 
-本 repo 是 public template —— 一鍵部署你自己的實例，立刻以 **BYOK** 模式使用（打開 **設定**，貼上你自己的 MiMo 或 DeepSeek key）；免 server 金鑰、免登入、免付費。
+本 repo 是 public template —— 一鍵部署你自己的實例，立刻以 **BYOK** 模式使用（打開 **設定**，貼上你自己的 MiMo 或 DeepSeek key——見 [取得 API 金鑰（BYOK）](#byok)）；免登入、免付費。
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/john-data-chen/social-skill-ai-coach)
-&nbsp;
-[![Use this template](https://img.shields.io/badge/GitHub-Use%20this%20template-238636?logo=github)](https://github.com/john-data-chen/social-skill-ai-coach/generate)
 
-1. 點 **Deploy with Vercel**（需要一個免費 Vercel 帳號，可用 GitHub 一鍵登入）。Vercel 會把 repo 複製到你的帳號並自動建置，無需任何設定。
-2. 打開部署網址，進入 **設定**，貼上你的 MiMo 或 DeepSeek key（[如何取得](#byok)），即可開始。
+### 1. 部署
+
+點 **Deploy with Vercel**（需要一個免費 Vercel 帳號，可用 GitHub 一鍵登入）。Vercel 會把 repo 複製到你的帳號，接著請你建立 Git repository——保持預設、按 **Create** 即可。
 
 <p align="center">
-  <img src="./public/images/deploy-vercel.png" alt="Vercel 一鍵 clone —— 匯入 Social Skills AI Coach 範本" width="520" />
+  <img src="./public/images/deploy-1.png" alt="Vercel New Project —— 從 GitHub clone Social Skills AI Coach repo" width="520" />
+</p>
+
+建置完成後打開部署網址，即可直接以 BYOK 模式使用：打開 **設定** 貼上你的 key 即可開始。
+
+### 2. 選用 —— 啟用 Demo（Server Key）模式
+
+想讓部署後的網站免去每位訪客自行貼 key？加上 server 金鑰即可。在你的專案打開 **Environment Variables**:
+
+<p align="center">
+  <img src="./public/images/deploy-2.png" alt="Vercel 專案側欄 —— Environment Variables" width="520" />
+</p>
+
+點 **Add Environment Variable**:
+
+<p align="center">
+  <img src="./public/images/deploy-3.png" alt="Environment Variables 頁 —— Add Environment Variable 按鈕" width="520" />
+</p>
+
+加入 [BYOK 表格](#byok) 中的金鑰（MiMo / DeepSeek 擇一），打開 **Sensitive**，按 **Save**——再重新部署。
+
+<p align="center">
+  <img src="./public/images/deploy-4.png" alt="Add Environment Variable —— 填入 MIMO_API_KEY 與 MIMO_API_BASE_URL 並開啟 Sensitive" width="520" />
 </p>
 
 > **切勿提交 API key 或密碼。** 請使用環境變數。
