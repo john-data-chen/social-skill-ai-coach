@@ -4,6 +4,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { useAppStore } from "@/lib/store"
 
 vi.mock("@/components/ui/select", () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { createContext, useContext } = require("react") as typeof import("react")
+  const SelectCtx = createContext<string | undefined>(undefined)
+
   function MockSelect({
     value,
     onValueChange,
@@ -14,24 +18,30 @@ vi.mock("@/components/ui/select", () => {
     children: React.ReactNode
   }) {
     return (
-      <select
-        data-testid="mock-select"
-        value={value}
-        onChange={(e) => onValueChange(e.target.value)}
-      >
-        {children}
-      </select>
+      <SelectCtx.Provider value={value}>
+        <select
+          data-testid="mock-select"
+          value={value}
+          onChange={(e) => onValueChange(e.target.value)}
+        >
+          {children}
+        </select>
+      </SelectCtx.Provider>
     )
   }
   function MockSelectItem({ value, children }: { value: string; children: React.ReactNode }) {
     return <option value={value}>{children}</option>
   }
+  function MockSelectValue({ children }: any) {
+    const val = useContext(SelectCtx)
+    return typeof children === "function" ? children(val) : val ?? null
+  }
   return {
     Select: MockSelect,
     SelectContent: ({ children }: any) => <>{children}</>,
     SelectItem: MockSelectItem,
-    SelectTrigger: () => null,
-    SelectValue: () => null
+    SelectTrigger: ({ children }: any) => <>{children}</>,
+    SelectValue: MockSelectValue
   }
 })
 
@@ -140,5 +150,54 @@ describe("Settings", () => {
     fireEvent.click(screen.getByText("Settings"))
 
     expect(screen.queryByPlaceholderText("sk-...")).toBeNull()
+  })
+
+  it("updates base URL input", () => {
+    useAppStore.setState({ mode: "byok", provider: "mimo", baseUrl: "" })
+    render(<Settings />)
+    fireEvent.click(screen.getByText("Settings"))
+
+    const baseUrlInput = screen.getByPlaceholderText(/token-plan/i)
+    fireEvent.change(baseUrlInput, { target: { value: "https://custom.example.com/v1" } })
+
+    fireEvent.click(screen.getByText("Confirm"))
+    expect(useAppStore.getState().baseUrl).toBe("https://custom.example.com/v1")
+  })
+
+  it("hides base URL field for deepseek provider", () => {
+    useAppStore.setState({ mode: "byok", provider: "deepseek" })
+    render(<Settings />)
+    fireEvent.click(screen.getByText("Settings"))
+
+    expect(screen.queryByPlaceholderText(/token-plan/i)).toBeNull()
+  })
+
+  it("hides base URL field in demo mode", () => {
+    useAppStore.setState({ mode: "demo", provider: "mimo" })
+    render(<Settings />)
+    fireEvent.click(screen.getByText("Settings"))
+
+    expect(screen.queryByPlaceholderText(/token-plan/i)).toBeNull()
+  })
+
+  it("normalizes model to first allowed when switching provider", () => {
+    useAppStore.setState({ provider: "mimo", model: "mimo-v2.5", mode: "byok" })
+    render(<Settings />)
+    fireEvent.click(screen.getByText("Settings"))
+
+    const selects = screen.getAllByTestId("mock-select")
+    fireEvent.change(selects[1]!, { target: { value: "deepseek" } })
+    fireEvent.click(screen.getByText("Confirm"))
+
+    expect(useAppStore.getState().model).toBe("deepseek-v4-pro")
+  })
+
+  it("falls back to mimo models for unknown provider", () => {
+    useAppStore.setState({ provider: "unknown" as any, model: "mimo-v2.5-pro", mode: "byok" })
+    render(<Settings />)
+    fireEvent.click(screen.getByText("Settings"))
+
+    fireEvent.click(screen.getByText("Confirm"))
+    expect(useAppStore.getState().model).toBe("mimo-v2.5-pro")
   })
 })
