@@ -13,8 +13,9 @@
 
 > ⚠️ 為 [Kaggle AI Agents Capstone](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project)（組別 **Agents for Good**）開發的概念性 MVP,僅供評審與研究。**無法取代具執照的心理師或治療師。** 完整免責聲明見文末。
 
-Demo GIF is in progress.
-![Social Skills AI Coach — 教練循環示範](./public/screenshots/demo.gif)
+<p align="center">
+  <img src="./public/images/cover.png" alt="社交技巧 AI 教練 —— 你口袋裡的社交教練" width="360" />
+</p>
 
 ---
 
@@ -43,13 +44,62 @@ Demo GIF is in progress.
 | 3    | **Role-Play（角色扮演）** | 扮演對方讓你練習,並依你的社交表現給出真實反應。                         |
 | 4    | **Reflection（復盤）**    | 依評分準則檢視角色扮演逐字稿,回傳結構化、逐面向的評估。                 |
 
+<p align="center">
+  <img src="./public/images/analyzer.png" alt="Analyzer 把模糊情境整理成清楚結構" width="320" />
+  <br />
+  <em>第一階段 —— Analyzer 把模糊、焦慮的情境整理成清楚結構。</em>
+</p>
+
 **Orchestrator（協調器）** 執行檢索增強式的知識落地（RAG）:在 Coach 階段,先由 LLM 挑出與使用者情境最相關的課程主題,再只載入那些知識片段——讓建議嚴格綁定課程,而非幻覺。
+
+**用 slash 指令操作。** 對話中隨時跳到任一階段 —— `/analyzer`、`/coach`、`/role-play`、`/reflection`:
+
+<p align="center">
+  <img src="./public/images/commands.png" alt="Quick Commands —— 用 slash 指令在各階段間切換" width="320" />
+</p>
+
+---
+
+## 🎬 完整一次練習
+
+沿用上面同一個例子——尊重地想認識班上同學——從 Analyzer 接著走 **Coach → Role-Play → Reflect**:
+
+**Coach（建議）**——具體、以課程為依據的建議,還附上你可以照唸的開場白。
+
+<p align="center">
+  <img src="./public/images/coach.png" alt="Coach 階段 —— 以課程為依據的具體開場白" width="320" />
+</p>
+
+**Role-Play（角色扮演）**——AI 全程入戲扮演對方,讓你演練真實的一來一往。<sub>(點任一回合可放大)</sub>
+
+<table>
+  <tr>
+    <td align="center"><a href="./public/images/role-play-1.png"><img src="./public/images/role-play-1.png" width="150" alt="角色扮演 1" /></a></td>
+    <td align="center"><a href="./public/images/role-play-2.png"><img src="./public/images/role-play-2.png" width="150" alt="角色扮演 2" /></a></td>
+    <td align="center"><a href="./public/images/role-play-3.png"><img src="./public/images/role-play-3.png" width="150" alt="角色扮演 3" /></a></td>
+    <td align="center"><a href="./public/images/role-play-4.png"><img src="./public/images/role-play-4.png" width="150" alt="角色扮演 4" /></a></td>
+    <td align="center"><a href="./public/images/role-play-5.png"><img src="./public/images/role-play-5.png" width="150" alt="角色扮演 5" /></a></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>設定場景</strong></td>
+    <td align="center"><strong>你的開場白</strong></td>
+    <td align="center"><strong>她的回應</strong></td>
+    <td align="center"><strong>延續對話</strong></td>
+    <td align="center"><strong>低壓力邀約</strong></td>
+  </tr>
+</table>
+
+**Reflect（復盤）**——逐面向的結構化評分,告訴你表現如何。
+
+<p align="center">
+  <img src="./public/images/reflect.png" alt="Reflection 階段 —— 逐面向評分" width="320" />
+</p>
 
 ---
 
 ## 🏗️ 架構
 
-![Architecture Diagram](./public/architecture.svg)
+![Architecture Diagram](./public/images/architecture.png)
 
 **核心概念:** 課程只撰寫一次、做成 **Agent Skill**,並以兩種方式被消費——對內由教練代理直接 in-process 使用（求速度）,對外則透過 **Model Context Protocol（MCP）** 開放給任何 MCP client（求重用與互通）。唯一真實來源,不會漂移。
 
@@ -82,6 +132,10 @@ Demo GIF is in progress.
 ## 🔒 安全性
 
 安全性在每一個信任邊界都有落實——瀏覽器、API、以及 MCP 伺服器:
+
+<p align="center">
+  <img src="./public/images/settings-byok.png" alt="BYOK 設定 —— API key 只存在這個分頁的 session 記憶體" width="320" />
+</p>
 
 - **BYOK,永不留存。** API key 以每次請求的 `Authorization: Bearer` header 傳送,僅在記憶體中使用;不寫入 log、也不寫入資料庫。
 - **僅限 session 的儲存。** 瀏覽器把 key 與聊天紀錄存在 `sessionStorage`（而非 `localStorage`）,關閉分頁即自動清除。
@@ -159,8 +213,7 @@ curl -s -X POST http://localhost:3000/api/mcp \
 │       ├── ai.ts                     # 供應商初始化（MiMo / DeepSeek）
 │       └── store.ts                  # Zustand 狀態（歷史、設定）
 ├── public/
-│   ├── architecture.svg         # 系統架構圖
-│   └── screenshots/             # README／媒體素材圖片
+│   └── images/                  # 架構 PNG、封面、截圖（README／媒體素材）
 ├── next.config.mjs              # outputFileTracingIncludes 把 skill md 打包進 Vercel
 └── env.example                  # 環境變數範本
 ```

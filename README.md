@@ -13,8 +13,9 @@
 
 > ⚠️ Conceptual MVP for the [Kaggle AI Agents Capstone](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) (track: **Agents for Good**), for review and research only. **It cannot replace a licensed psychologist or therapist.** Full disclaimer at the bottom.
 
-Demo GIF is in progress.
-![Social Skills AI Coach — coaching loop demo](./public/screenshots/demo.gif)
+<p align="center">
+  <img src="./public/images/cover.png" alt="Social Skills AI Coach — a pocket social coach" width="360" />
+</p>
 
 ---
 
@@ -43,13 +44,62 @@ A single chatbot would blur four very different jobs. Coaching is naturally a **
 | 3     | **Role-Play**  | Plays the other person so you can practice, reacting realistically to your social-skill level.             |
 | 4     | **Reflection** | Reviews the role-play transcript against a rubric and returns a structured, per-dimension evaluation.      |
 
+<p align="center">
+  <img src="./public/images/analyzer.png" alt="The Analyzer turning a vague situation into a clear structure" width="320" />
+  <br />
+  <em>Stage 1 — the Analyzer turns a vague, anxious situation into a clear structure.</em>
+</p>
+
 The **orchestrator** performs retrieval-augmented grounding: for the Coach stage it LLM-selects the curriculum topics most relevant to your situation, then loads just those knowledge slices — so advice stays strictly curriculum-bound instead of hallucinated.
+
+**Drive it with slash commands.** Jump to any stage mid-conversation — `/analyzer`, `/coach`, `/role-play`, `/reflection`:
+
+<p align="center">
+  <img src="./public/images/commands.png" alt="Quick Commands — slash commands to jump between stages" width="320" />
+</p>
+
+---
+
+## 🎬 A full session
+
+Continuing the same example — respectfully befriending a classmate — from the Analyzer above through **Coach → Role-Play → Reflect**:
+
+**Coach** — concrete, curriculum-grounded advice with openers you can actually say.
+
+<p align="center">
+  <img src="./public/images/coach.png" alt="Coach stage — concrete openers grounded in the curriculum" width="320" />
+</p>
+
+**Role-Play** — the AI stays in character as the other person so you can rehearse the real back-and-forth. <sub>(click any turn to enlarge)</sub>
+
+<table>
+  <tr>
+    <td align="center"><a href="./public/images/role-play-1.png"><img src="./public/images/role-play-1.png" width="150" alt="Role-play turn 1" /></a></td>
+    <td align="center"><a href="./public/images/role-play-2.png"><img src="./public/images/role-play-2.png" width="150" alt="Role-play turn 2" /></a></td>
+    <td align="center"><a href="./public/images/role-play-3.png"><img src="./public/images/role-play-3.png" width="150" alt="Role-play turn 3" /></a></td>
+    <td align="center"><a href="./public/images/role-play-4.png"><img src="./public/images/role-play-4.png" width="150" alt="Role-play turn 4" /></a></td>
+    <td align="center"><a href="./public/images/role-play-5.png"><img src="./public/images/role-play-5.png" width="150" alt="Role-play turn 5" /></a></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>The scene</strong></td>
+    <td align="center"><strong>Your opener</strong></td>
+    <td align="center"><strong>She responds</strong></td>
+    <td align="center"><strong>Keep it going</strong></td>
+    <td align="center"><strong>Low-pressure invite</strong></td>
+  </tr>
+</table>
+
+**Reflect** — a structured, per-dimension rubric evaluation of how you did.
+
+<p align="center">
+  <img src="./public/images/reflect.png" alt="Reflection stage — per-dimension rubric evaluation" width="320" />
+</p>
 
 ---
 
 ## 🏗️ Architecture
 
-![Architecture Diagram](./public/architecture.svg)
+![Architecture Diagram](./public/images/architecture.png)
 
 **Key idea:** the curriculum is authored once as an **Agent Skill** and consumed two ways — internally by the coaching agents (in-process, for speed) and externally by any MCP client over the **Model Context Protocol** (for reuse and interoperability). One source of truth, no drift.
 
@@ -82,6 +132,10 @@ The **orchestrator** performs retrieval-augmented grounding: for the Coach stage
 ## 🔒 Security
 
 Enforced at every trust boundary — the browser, the API, and the MCP server:
+
+<p align="center">
+  <img src="./public/images/settings-byok.png" alt="BYOK settings — your API key lives only in this tab's session memory" width="320" />
+</p>
 
 - **BYOK, never persisted.** Your API key is sent per request via the `Authorization: Bearer` header and used only in memory — never logged, never written to a database.
 - **Session-only storage.** The browser keeps the key + chat history in `sessionStorage` (not `localStorage`), so they're wiped when the tab closes.
@@ -159,8 +213,7 @@ Both forms share one core (`registerSocialSkillsMcp`) and one curriculum source 
 │       ├── ai.ts                     # Provider init (MiMo / DeepSeek)
 │       └── store.ts                  # Zustand state (history, config)
 ├── public/
-│   ├── architecture.svg         # System architecture diagram
-│   └── screenshots/             # README / Media Gallery images
+│   └── images/                  # Architecture PNG, cover, screenshots (README / Media Gallery)
 ├── next.config.mjs              # outputFileTracingIncludes ships the skill md to Vercel
 └── env.example                  # Template for environment variables
 ```

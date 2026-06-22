@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const mockStreamText = vi.fn()
-const mockGenerateObject = vi.fn()
+const mockGenerateText = vi.fn()
 
 vi.mock("ai", () => ({
   streamText: (...args: any[]) => mockStreamText(...args),
-  generateObject: (...args: any[]) => mockGenerateObject(...args)
+  generateText: (...args: any[]) => mockGenerateText(...args)
 }))
 
 vi.mock("../../src/lib/agents", () => ({
@@ -13,7 +13,7 @@ vi.mock("../../src/lib/agents", () => ({
   buildCoachPrompt: (k: string) => "COACH_SYS::" + k,
   roleplayPrompt: "Roleplay Partner prompt",
   reflectionPrompt: "Reflection Agent prompt",
-  reflectionSchema: { parse: vi.fn() }
+  reflectionSchema: { safeParse: (v: any) => ({ success: true, data: v }) }
 }))
 
 vi.mock("../../src/lib/orchestrator", () => ({
@@ -193,14 +193,14 @@ describe("POST /api/chat", () => {
     expect(mockGetProvider).toHaveBeenCalledWith("deepseek", "env-deepseek-key", undefined)
   })
 
-  it("handles reflection stage with generateObject", async () => {
-    mockGenerateObject.mockResolvedValue({
-      object: {
+  it("handles reflection stage with generateText", async () => {
+    mockGenerateText.mockResolvedValue({
+      text: JSON.stringify({
         overallStatus: "pass",
         strengths: ["Good greeting"],
         areasForImprovement: ["Eye contact"],
         feedback: "Well done overall."
-      }
+      })
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -228,7 +228,7 @@ describe("POST /api/chat", () => {
   })
 
   it("handles reflection stage failure", async () => {
-    mockGenerateObject.mockRejectedValue(new Error("model unsupported"))
+    mockGenerateText.mockRejectedValue(new Error("model unsupported"))
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
@@ -249,13 +249,13 @@ describe("POST /api/chat", () => {
   })
 
   it("handles reflection with no roleplayHistory", async () => {
-    mockGenerateObject.mockResolvedValue({
-      object: {
-        overallStatus: "fail",
+    mockGenerateText.mockResolvedValue({
+      text: JSON.stringify({
+        overallStatus: "needs_practice",
         strengths: [],
         areasForImprovement: ["Practice more"],
         feedback: "Try again."
-      }
+      })
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -367,10 +367,9 @@ describe("POST /api/chat", () => {
       { Authorization: "Bearer k" }
     )
     await POST(req)
-    // reflection stage hits the early return with generateObject, not streamText
-    // But let's verify the switch path — it won't reach streamText for reflection
-    // So this test actually goes through generateObject path
-    expect(mockGenerateObject).toHaveBeenCalled()
+    // reflection stage uses generateText (not streamText): openai-compatible models can't do
+    // schema-enforced structured output, so we parse the JSON out of plain text ourselves.
+    expect(mockGenerateText).toHaveBeenCalled()
   })
 
   it("handles messages with image attachments", async () => {
@@ -672,13 +671,13 @@ describe("POST /api/chat", () => {
   })
 
   it("handles reflection with undefined roleplayHistory", async () => {
-    mockGenerateObject.mockResolvedValue({
-      object: {
+    mockGenerateText.mockResolvedValue({
+      text: JSON.stringify({
         overallStatus: "pass",
         strengths: ["a"],
         areasForImprovement: ["b"],
         feedback: "c"
-      }
+      })
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -801,13 +800,13 @@ describe("POST /api/chat", () => {
   })
 
   it("handles reflection with empty messages array", async () => {
-    mockGenerateObject.mockResolvedValue({
-      object: {
+    mockGenerateText.mockResolvedValue({
+      text: JSON.stringify({
         overallStatus: "pass",
         strengths: [],
         areasForImprovement: [],
         feedback: "ok"
-      }
+      })
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -889,14 +888,14 @@ describe("POST /api/chat", () => {
 
   it("falls back to deepseek if generateObject throws 401 in mimo demo mode", async () => {
     process.env.MIMO_API_BASE_URL = "test"
-    mockGenerateObject.mockRejectedValueOnce(new Error("401 Unauthorized")).mockResolvedValueOnce({
-      object: {
+    mockGenerateText.mockRejectedValueOnce(new Error("401 Unauthorized")).mockResolvedValueOnce({
+      text: JSON.stringify({
         overallStatus: "pass",
         strengths: ["a"],
         areasForImprovement: ["b"],
         feedback: "fallback-reflection",
         dimensions: [{ name: "tone", status: "good", note: "good tone" }]
-      }
+      })
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
 
@@ -916,7 +915,7 @@ describe("POST /api/chat", () => {
   it("returns 401 if generateObject throws 401 and no deepseek key available", async () => {
     process.env.MIMO_API_BASE_URL = "test"
     delete process.env.DEEPSEEK_API_KEY
-    mockGenerateObject.mockRejectedValueOnce(new Error("401 Unauthorized"))
+    mockGenerateText.mockRejectedValueOnce(new Error("401 Unauthorized"))
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest({
@@ -1043,7 +1042,7 @@ describe("POST /api/chat", () => {
   })
 
   it("returns 500 on non-auth reflection error in byok mode", async () => {
-    mockGenerateObject.mockRejectedValue(new Error("structured output not supported"))
+    mockGenerateText.mockRejectedValue(new Error("structured output not supported"))
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
@@ -1063,7 +1062,7 @@ describe("POST /api/chat", () => {
   })
 
   it("returns 500 on non-auth reflection error for deepseek in demo mode", async () => {
-    mockGenerateObject.mockRejectedValue(new Error("quota exceeded"))
+    mockGenerateText.mockRejectedValue(new Error("quota exceeded"))
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(
@@ -1083,7 +1082,7 @@ describe("POST /api/chat", () => {
   })
 
   it("returns 500 on auth-like reflection error in byok mode", async () => {
-    mockGenerateObject.mockRejectedValue(new Error("401 Unauthorized"))
+    mockGenerateText.mockRejectedValue(new Error("401 Unauthorized"))
     mockGetProvider.mockReturnValue(() => vi.fn())
 
     const req = makeRequest(

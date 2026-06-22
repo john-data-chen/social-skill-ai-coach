@@ -1,4 +1,4 @@
-import { streamText, generateObject } from "ai"
+import { streamText, generateText } from "ai"
 import { z } from "zod"
 
 import {
@@ -104,49 +104,96 @@ export async function POST(req: Request) {
 
       const lastContent = messages[messages.length - 1]?.content
       const userRequest = typeof lastContent === "string" ? lastContent : ""
+      // MiMo / DeepSeek are openai-compatible and don't support schema-enforced structured
+      // outputs, so we ask for JSON explicitly (exact shape) and parse + validate it ourselves.
       const promptText = `
 Roleplay Transcript:
 ${transcript}
 
 User's request:
 ${userRequest}
+
+Respond with ONLY a JSON object (no markdown fences, no extra prose) of this exact shape:
+{
+  "overallStatus": "pass" | "needs_practice",
+  "dimensions": [{ "name": "<rubric dimension>", "status": "good" | "ok" | "needs_work", "note": "<short note>" }],
+  "strengths": ["<strength>"],
+  "areasForImprovement": ["<area>"],
+  "feedback": "<concise paragraph>"
+}
+Write all text in the same language the user used.
       `
 
       try {
-        let result
+        const isAuthError = (e: any) =>
+          e?.message?.includes("401") ||
+          e?.message?.includes("403") ||
+          e?.message?.toLowerCase().includes("unauthorized")
+
+        // Pull a JSON object out of possibly fenced / prose-wrapped model output.
+        const extractJsonObject = (text: string) => {
+          const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i)
+          const body = fenced?.[1] ?? text
+          const start = body.indexOf("{")
+          const end = body.lastIndexOf("}")
+          if (start === -1 || end <= start) {
+            throw new Error("No JSON object in model output")
+          }
+          return JSON.parse(body.slice(start, end + 1))
+        }
+
+        // MiMo / DeepSeek are openai-compatible and DON'T support schema-enforced structured
+        // outputs, so generateObject can't constrain them (it just errors). Generate plain text,
+        // then extract + validate the JSON ourselves. Weaker models are inconsistent, so retry a
+        // few times; don't waste retries on auth failures (a bad key won't get better).
+        const generateReflection = async (m: any, attempts: number) => {
+          let lastErr: any
+          for (let attempt = 1; attempt <= attempts; attempt++) {
+            try {
+              const { text } = await generateText({
+                model: m,
+                system: reflectionPrompt,
+                prompt: promptText
+              })
+              const validated = reflectionSchema.safeParse(extractJsonObject(text))
+              if (validated.success) {
+                return validated.data
+              }
+              lastErr = new Error("Reflection output did not match schema")
+            } catch (err: any) {
+              if (isAuthError(err)) {
+                throw err
+              }
+              lastErr = err
+            }
+          }
+          throw lastErr
+        }
+
+        let obj
         try {
-          result = await generateObject({
-            model: selectedModel,
-            schema: reflectionSchema,
-            system: reflectionPrompt,
-            prompt: promptText
-          })
+          obj = await generateReflection(selectedModel, 3)
         } catch (err: any) {
-          const isAuthError =
-            err.message?.includes("401") ||
-            err.message?.includes("403") ||
-            err.message?.toLowerCase().includes("unauthorized")
-          if (!(provider === "mimo" && mode === "demo" && isAuthError)) {
+          // Fall back to DeepSeek for the demo MiMo key — whether it expired (auth) or just kept
+          // producing unparseable / schema-invalid output after retries.
+          if (!(provider === "mimo" && mode === "demo")) {
             throw err
           }
           if (!process.env.DEEPSEEK_API_KEY) {
-            return new Response(
-              JSON.stringify({
-                error: "Xiaomi MiMo API Key expired and no DEEPSEEK_API_KEY fallback is available."
-              }),
-              { status: 401 }
-            )
+            if (isAuthError(err)) {
+              return new Response(
+                JSON.stringify({
+                  error:
+                    "Xiaomi MiMo API Key expired and no DEEPSEEK_API_KEY fallback is available."
+                }),
+                { status: 401 }
+              )
+            }
+            throw err
           }
           const deepseekProvider = getProvider("deepseek", process.env.DEEPSEEK_API_KEY)
-          result = await generateObject({
-            model: deepseekProvider("deepseek-chat") as any,
-            schema: reflectionSchema,
-            system: reflectionPrompt,
-            prompt: promptText
-          })
+          obj = await generateReflection(deepseekProvider("deepseek-chat") as any, 2)
         }
-
-        const obj = result.object
         const dimensionsSection =
           obj.dimensions && obj.dimensions.length
             ? `\n**Dimensions:**\n${obj.dimensions
