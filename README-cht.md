@@ -228,7 +228,7 @@ Next.js（App Router）· React · TypeScript（strict）· TailwindCSS · Verce
 
 此專案是為了 [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) 所開發的概念性產品（最小可行性產品）,參加組別為 **Agents for Good**,僅供評審與有興趣者研究。專案所有功能（包含但不限於 Demo、AI agent、Skill、MCP）皆**無法取代受過專業訓練且擁有合格證照的心理師或助人工作者**,且**無法提供任何醫療與諮商行為**。
 
-示範網站目前使用 [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) 運作（用最低成本實現最小可行性產品）,可以直接使用,**在 Kaggle 審核過後月費就會失效**。您可以去 [DeepSeek](https://platform.deepseek.com/) 充值取得您自己的 Key（BYOK）,最低只需約 2 美金。
+示範網站目前使用 [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) 運作（用最低成本實現最小可行性產品）,可以直接使用,**在 Kaggle 審核過後月費就會失效**。您可以自行訂閱 MiMo token Plan (最低 6 美金 / 月 ) 或去 [DeepSeek](https://platform.deepseek.com/) 充值取得您自己的 Key（BYOK）,最低僅需 2 美金。
 
 請始終記住:**您是在跟 AI 對話。** 應避免在對話中提及真實姓名、電話、地址等個人資訊,必要時用化名。AI 可能會出錯與幻覺——所有建議僅供參考。
 

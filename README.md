@@ -228,7 +228,7 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 
 This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating team is **Agents for Good**, and it is for review and research by interested parties only. All functions (including but not limited to the Demo, AI agents, Skill, and MCP) **cannot replace professionally trained and licensed psychologists or helping professionals**, and cannot provide any medical treatment or consultation.
 
-The demo website currently runs on a [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) (a minimum-viable product at the lowest cost) and can be used directly. **The token plan will be deactivated after Kaggle review.** You can top up at [DeepSeek](https://platform.deepseek.com/) to get your own key (BYOK) for a minimum of about $2.
+The demo website currently operates using the [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) (a minimum viable product with minimal cost), and is ready to use. **The token plan will be expired after Kaggle review.** You can subscribe your own MiMo token plan (starting from $6/month) or deposit funds at [DeepSeek](https://platform.deepseek.com/) to obtain your own key (BYOK), starting from just $2.
 
 Please always remember: **you are talking to an AI.** Avoid mentioning personal information such as your real name, phone number, or address; use a pseudonym if needed. AI can make mistakes and hallucinate — all suggestions are for reference only.
 
