@@ -254,13 +254,59 @@ pnpm build        # production build (typecheck + Next build)
 
 ---
 
+<a id="byok"></a>
+
+## 🔑 Get an API key (BYOK)
+
+This app is **BYOK** (bring your own key): you supply one API key, used only in your browser session — never stored server-side. Pick **one** provider:
+
+| Provider        | Get a key                                                                  | Cost            | Env vars                                                                                                |
+| :-------------- | :------------------------------------------------------------------------- | :-------------- | :----------------------------------------------------------------------------------------------------- |
+| **Xiaomi MiMo** | Subscribe a [MiMo token plan](https://platform.xiaomimimo.com/token-plan)  | from **$6/mo**  | `MIMO_API_KEY` + `MIMO_API_BASE_URL` (match your plan, e.g. `https://token-plan-cn.xiaomimimo.com/v1`) |
+| **DeepSeek**    | Top up at [DeepSeek](https://platform.deepseek.com/)                       | from **$2**     | `DEEPSEEK_API_KEY`                                                                                      |
+
+Use it one of two ways:
+
+- **In the app (BYOK):** open **Settings** and paste the key — it lives only in this tab's session, nothing to configure server-side.
+- **Server / Demo mode:** put the key(s) in environment variables (`env.example`); see **Deployment (Vercel)** below.
+
+---
+
 ## 🚀 Deployment (Vercel)
 
-The app deploys to Vercel with no special configuration:
+This repo is a public template — deploy your own instance in one click. It runs immediately in **BYOK** mode (open **Settings**, paste your own MiMo or DeepSeek key — see [Get an API key (BYOK)](#byok)); no login, no paywall.
 
-1. Import the GitHub repo into Vercel.
-2. (Optional) set `MIMO_API_KEY` + `MIMO_API_BASE_URL` / `DEEPSEEK_API_KEY` in the project's Environment Variables to enable Demo mode in production. BYOK works without any server keys.
-3. Deploy. The `outputFileTracingIncludes` setting in `next.config.mjs` bundles the Agent Skill markdown into the serverless functions, so both `/api/chat` and `/api/mcp` can read the curriculum at runtime.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/john-data-chen/social-skill-ai-coach)
+
+### 1. Deploy
+
+Click **Deploy with Vercel** (a free Vercel account is required; sign in with GitHub in one click). Vercel clones the repo into your account, then asks you to create the Git repository — keep the defaults and click **Create**.
+
+<p align="center">
+  <img src="./public/images/deploy-1.png" alt="Vercel New Project — cloning the Social Skills AI Coach repo from GitHub" width="520" />
+</p>
+
+When the build finishes, open the deployment URL. It already works in BYOK mode: open **Settings**, paste your key, and start.
+
+### 2. Optional — enable Demo (Server Key) mode
+
+Want the deployed site to work without each visitor pasting a key? Add a server key. In your project, open **Environment Variables**:
+
+<p align="center">
+  <img src="./public/images/deploy-2.png" alt="Vercel project sidebar — Environment Variables" width="520" />
+</p>
+
+Click **Add Environment Variable**:
+
+<p align="center">
+  <img src="./public/images/deploy-3.png" alt="Environment Variables page — Add Environment Variable button" width="520" />
+</p>
+
+Add the keys from the [BYOK table](#byok) (one of MiMo / DeepSeek), turn on **Sensitive**, and **Save** — then redeploy.
+
+<p align="center">
+  <img src="./public/images/deploy-4.png" alt="Add Environment Variable — MIMO_API_KEY and MIMO_API_BASE_URL with Sensitive enabled" width="520" />
+</p>
 
 > **Never commit API keys or passwords.** Use environment variables.
 
@@ -282,7 +328,7 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 
 This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating team is **Agents for Good**, and it is for review and research by interested parties only. All functions (including but not limited to the Demo, AI agents, Skill, and MCP) **cannot replace professionally trained and licensed psychologists or helping professionals**, and cannot provide any medical treatment or consultation.
 
-The demo website currently operates using the [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) (a minimum viable product with minimal cost), and is ready to use. **The token plan will be expired after Kaggle review.** You can subscribe your own MiMo token plan (starting from $6/month) or deposit funds at [DeepSeek](https://platform.deepseek.com/) to obtain your own key (BYOK), starting from just $2.
+The demo website runs on the [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) to keep costs minimal, and is ready to use. **The token plan will expire after Kaggle review.** To keep using the app, bring your own key — see [Get an API key (BYOK)](#byok).
 
 Please always remember: **you are talking to an AI.** Avoid mentioning personal information such as your real name, phone number, or address; use a pseudonym if needed. AI can make mistakes and hallucinate — all suggestions are for reference only.
 
