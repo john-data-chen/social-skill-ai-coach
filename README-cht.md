@@ -142,6 +142,7 @@
 - **信任邊界以 zod 驗證。** 每個 `/api/chat` 與 MCP 請求都用 zod 解析;格式錯誤的 JSON 或結構在進入任何模型前就被擋下（`400`）,缺少金鑰則直接 gating（`401`）。
 - **不洩漏內部資訊。** 錯誤只在 server 端記錄;client 只拿到通用訊息（`Internal Server Error`）,絕不回傳 stack trace 或機密。
 - **無狀態設計。** 沒有資料庫、沒有 server 端使用者資料。
+- **SonarQube 程式碼品質已驗證。** 所有評級：A（安全性、可靠性、可維護性）。
 
 ---
 

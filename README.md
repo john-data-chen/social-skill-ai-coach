@@ -142,6 +142,7 @@ Enforced at every trust boundary — the browser, the API, and the MCP server:
 - **zod validation at the trust boundary.** Every `/api/chat` and MCP request is parsed with zod; malformed JSON or shapes are rejected (`400`) before reaching any model, and missing keys are gated (`401`).
 - **No internal leakage.** Errors are logged server-side only; clients get generic messages (`Internal Server Error`), never stack traces or secrets.
 - **Stateless by design.** No database, no server-side user data.
+- **SonarQube Code Quality Verified.** All Ratings: A (Security, Reliability, Maintainability).
 
 ---
 
