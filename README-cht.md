@@ -46,6 +46,12 @@
 
 **Orchestrator（協調器）** 執行檢索增強式的知識落地（RAG）:在 Coach 階段,先由 LLM 挑出與使用者情境最相關的課程主題,再只載入那些知識片段——讓建議嚴格綁定課程,而非幻覺。
 
+**用 slash 指令操作。** 對話中隨時跳到任一階段 —— `/analyzer`、`/coach`、`/role-play`、`/reflection`:
+
+<p align="center">
+  <img src="./public/images/commands.png" alt="Quick Commands —— 用 slash 指令在各階段間切換" width="320" />
+</p>
+
 ---
 
 ## 🏗️ 架構
@@ -160,8 +166,7 @@ curl -s -X POST http://localhost:3000/api/mcp \
 │       ├── ai.ts                     # 供應商初始化（MiMo / DeepSeek）
 │       └── store.ts                  # Zustand 狀態（歷史、設定）
 ├── public/
-│   ├── architecture.svg         # 系統架構圖（SVG 原始檔）
-│   └── images/                  # 封面 + 架構 PNG + 截圖（README／媒體素材）
+│   └── images/                  # 架構 PNG、封面、截圖（README／媒體素材）
 ├── next.config.mjs              # outputFileTracingIncludes 把 skill md 打包進 Vercel
 └── env.example                  # 環境變數範本
 ```

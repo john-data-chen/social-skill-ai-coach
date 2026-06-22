@@ -46,6 +46,12 @@ A single chatbot would blur four very different jobs. Coaching is naturally a **
 
 The **orchestrator** performs retrieval-augmented grounding: for the Coach stage it LLM-selects the curriculum topics most relevant to your situation, then loads just those knowledge slices — so advice stays strictly curriculum-bound instead of hallucinated.
 
+**Drive it with slash commands.** Jump to any stage mid-conversation — `/analyzer`, `/coach`, `/role-play`, `/reflection`:
+
+<p align="center">
+  <img src="./public/images/commands.png" alt="Quick Commands — slash commands to jump between stages" width="320" />
+</p>
+
 ---
 
 ## 🏗️ Architecture
@@ -160,8 +166,7 @@ Both forms share one core (`registerSocialSkillsMcp`) and one curriculum source 
 │       ├── ai.ts                     # Provider init (MiMo / DeepSeek)
 │       └── store.ts                  # Zustand state (history, config)
 ├── public/
-│   ├── architecture.svg         # System architecture diagram (SVG source)
-│   └── images/                  # Cover + architecture PNG + screenshots (README / Media Gallery)
+│   └── images/                  # Architecture PNG, cover, screenshots (README / Media Gallery)
 ├── next.config.mjs              # outputFileTracingIncludes ships the skill md to Vercel
 └── env.example                  # Template for environment variables
 ```
