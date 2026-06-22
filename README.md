@@ -60,6 +60,43 @@ The **orchestrator** performs retrieval-augmented grounding: for the Coach stage
 
 ---
 
+## 🎬 A full session
+
+Continuing the same example — respectfully befriending a classmate — from the Analyzer above through **Coach → Role-Play → Reflect**:
+
+**Coach** — concrete, curriculum-grounded advice with openers you can actually say.
+
+<p align="center">
+  <img src="./public/images/coach.png" alt="Coach stage — concrete openers grounded in the curriculum" width="320" />
+</p>
+
+**Role-Play** — the AI stays in character as the other person so you can rehearse the real back-and-forth. <sub>(click any turn to enlarge)</sub>
+
+<table>
+  <tr>
+    <td align="center"><a href="./public/images/role-play-1.png"><img src="./public/images/role-play-1.png" width="150" alt="Role-play turn 1" /></a></td>
+    <td align="center"><a href="./public/images/role-play-2.png"><img src="./public/images/role-play-2.png" width="150" alt="Role-play turn 2" /></a></td>
+    <td align="center"><a href="./public/images/role-play-3.png"><img src="./public/images/role-play-3.png" width="150" alt="Role-play turn 3" /></a></td>
+    <td align="center"><a href="./public/images/role-play-4.png"><img src="./public/images/role-play-4.png" width="150" alt="Role-play turn 4" /></a></td>
+    <td align="center"><a href="./public/images/role-play-5.png"><img src="./public/images/role-play-5.png" width="150" alt="Role-play turn 5" /></a></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>The scene</strong></td>
+    <td align="center"><strong>Your opener</strong></td>
+    <td align="center"><strong>She responds</strong></td>
+    <td align="center"><strong>Keep it going</strong></td>
+    <td align="center"><strong>Low-pressure invite</strong></td>
+  </tr>
+</table>
+
+**Reflect** — a structured, per-dimension rubric evaluation of how you did.
+
+<p align="center">
+  <img src="./public/images/reflect.png" alt="Reflection stage — per-dimension rubric evaluation" width="320" />
+</p>
+
+---
+
 ## 🏗️ Architecture
 
 ![Architecture Diagram](./public/images/architecture.png)

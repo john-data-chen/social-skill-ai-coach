@@ -60,6 +60,43 @@
 
 ---
 
+## 🎬 完整一次練習
+
+沿用上面同一個例子——尊重地想認識班上同學——從 Analyzer 接著走 **Coach → Role-Play → Reflect**:
+
+**Coach（建議）**——具體、以課程為依據的建議,還附上你可以照唸的開場白。
+
+<p align="center">
+  <img src="./public/images/coach.png" alt="Coach 階段 —— 以課程為依據的具體開場白" width="320" />
+</p>
+
+**Role-Play（角色扮演）**——AI 全程入戲扮演對方,讓你演練真實的一來一往。<sub>(點任一回合可放大)</sub>
+
+<table>
+  <tr>
+    <td align="center"><a href="./public/images/role-play-1.png"><img src="./public/images/role-play-1.png" width="150" alt="角色扮演 1" /></a></td>
+    <td align="center"><a href="./public/images/role-play-2.png"><img src="./public/images/role-play-2.png" width="150" alt="角色扮演 2" /></a></td>
+    <td align="center"><a href="./public/images/role-play-3.png"><img src="./public/images/role-play-3.png" width="150" alt="角色扮演 3" /></a></td>
+    <td align="center"><a href="./public/images/role-play-4.png"><img src="./public/images/role-play-4.png" width="150" alt="角色扮演 4" /></a></td>
+    <td align="center"><a href="./public/images/role-play-5.png"><img src="./public/images/role-play-5.png" width="150" alt="角色扮演 5" /></a></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>設定場景</strong></td>
+    <td align="center"><strong>你的開場白</strong></td>
+    <td align="center"><strong>她的回應</strong></td>
+    <td align="center"><strong>延續對話</strong></td>
+    <td align="center"><strong>低壓力邀約</strong></td>
+  </tr>
+</table>
+
+**Reflect（復盤）**——逐面向的結構化評分,告訴你表現如何。
+
+<p align="center">
+  <img src="./public/images/reflect.png" alt="Reflection 階段 —— 逐面向評分" width="320" />
+</p>
+
+---
+
 ## 🏗️ 架構
 
 ![Architecture Diagram](./public/images/architecture.png)
