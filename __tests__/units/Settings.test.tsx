@@ -63,7 +63,7 @@ describe("Settings", () => {
   })
 
   it("auto-fixes invalid model when dialog opens", () => {
-    useAppStore.setState({ model: "invalid-model", provider: "deepseek", mode: "byok" })
+    useAppStore.setState({ model: "invalid-model", provider: "deepseek", mode: "byok", apiKey: "test-key" })
     render(<Settings />)
 
     // Draft normalization only happens on open
@@ -94,7 +94,7 @@ describe("Settings", () => {
   })
 
   it("updates store when confirmed", () => {
-    useAppStore.setState({ mode: "byok", apiKey: "initial-key" })
+    useAppStore.setState({ mode: "byok", apiKey: "initial-key", baseUrl: "https://test" })
     render(<Settings />)
 
     fireEvent.click(screen.getByText("Settings"))
@@ -107,7 +107,7 @@ describe("Settings", () => {
   })
 
   it("updates model using select", () => {
-    useAppStore.setState({ mode: "byok", provider: "mimo" })
+    useAppStore.setState({ mode: "byok", provider: "mimo", apiKey: "test-key", baseUrl: "https://test" })
     render(<Settings />)
 
     fireEvent.click(screen.getByText("Settings"))
@@ -133,6 +133,7 @@ describe("Settings", () => {
   })
 
   it("changes provider and resets model", () => {
+    useAppStore.setState({ apiKey: "test-key" })
     render(<Settings />)
     fireEvent.click(screen.getByText("Settings"))
 
@@ -153,7 +154,7 @@ describe("Settings", () => {
   })
 
   it("updates base URL input", () => {
-    useAppStore.setState({ mode: "byok", provider: "mimo", baseUrl: "" })
+    useAppStore.setState({ mode: "byok", provider: "mimo", baseUrl: "", apiKey: "test-key" })
     render(<Settings />)
     fireEvent.click(screen.getByText("Settings"))
 
@@ -181,7 +182,7 @@ describe("Settings", () => {
   })
 
   it("normalizes model to first allowed when switching provider", () => {
-    useAppStore.setState({ provider: "mimo", model: "mimo-v2.5", mode: "byok" })
+    useAppStore.setState({ provider: "mimo", model: "mimo-v2.5", mode: "byok", apiKey: "test-key" })
     render(<Settings />)
     fireEvent.click(screen.getByText("Settings"))
 
@@ -193,7 +194,7 @@ describe("Settings", () => {
   })
 
   it("falls back to mimo models for unknown provider", () => {
-    useAppStore.setState({ provider: "unknown" as any, model: "mimo-v2.5-pro", mode: "byok" })
+    useAppStore.setState({ provider: "unknown" as any, model: "mimo-v2.5-pro", mode: "byok", apiKey: "test-key" })
     render(<Settings />)
     fireEvent.click(screen.getByText("Settings"))
 
