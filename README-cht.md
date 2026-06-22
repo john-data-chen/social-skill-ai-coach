@@ -44,6 +44,12 @@
 | 3    | **Role-Play（角色扮演）** | 扮演對方讓你練習,並依你的社交表現給出真實反應。                         |
 | 4    | **Reflection（復盤）**    | 依評分準則檢視角色扮演逐字稿,回傳結構化、逐面向的評估。                 |
 
+<p align="center">
+  <img src="./public/images/analyzer.png" alt="Analyzer 把模糊情境整理成清楚結構" width="320" />
+  <br />
+  <em>第一階段 —— Analyzer 把模糊、焦慮的情境整理成清楚結構。</em>
+</p>
+
 **Orchestrator（協調器）** 執行檢索增強式的知識落地（RAG）:在 Coach 階段,先由 LLM 挑出與使用者情境最相關的課程主題,再只載入那些知識片段——讓建議嚴格綁定課程,而非幻覺。
 
 **用 slash 指令操作。** 對話中隨時跳到任一階段 —— `/analyzer`、`/coach`、`/role-play`、`/reflection`:
@@ -89,6 +95,10 @@
 ## 🔒 安全性
 
 安全性在每一個信任邊界都有落實——瀏覽器、API、以及 MCP 伺服器:
+
+<p align="center">
+  <img src="./public/images/settings-byok.png" alt="BYOK 設定 —— API key 只存在這個分頁的 session 記憶體" width="320" />
+</p>
 
 - **BYOK,永不留存。** API key 以每次請求的 `Authorization: Bearer` header 傳送,僅在記憶體中使用;不寫入 log、也不寫入資料庫。
 - **僅限 session 的儲存。** 瀏覽器把 key 與聊天紀錄存在 `sessionStorage`（而非 `localStorage`）,關閉分頁即自動清除。

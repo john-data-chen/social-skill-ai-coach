@@ -44,6 +44,12 @@ A single chatbot would blur four very different jobs. Coaching is naturally a **
 | 3     | **Role-Play**  | Plays the other person so you can practice, reacting realistically to your social-skill level.             |
 | 4     | **Reflection** | Reviews the role-play transcript against a rubric and returns a structured, per-dimension evaluation.      |
 
+<p align="center">
+  <img src="./public/images/analyzer.png" alt="The Analyzer turning a vague situation into a clear structure" width="320" />
+  <br />
+  <em>Stage 1 — the Analyzer turns a vague, anxious situation into a clear structure.</em>
+</p>
+
 The **orchestrator** performs retrieval-augmented grounding: for the Coach stage it LLM-selects the curriculum topics most relevant to your situation, then loads just those knowledge slices — so advice stays strictly curriculum-bound instead of hallucinated.
 
 **Drive it with slash commands.** Jump to any stage mid-conversation — `/analyzer`, `/coach`, `/role-play`, `/reflection`:
@@ -89,6 +95,10 @@ The **orchestrator** performs retrieval-augmented grounding: for the Coach stage
 ## 🔒 Security
 
 Enforced at every trust boundary — the browser, the API, and the MCP server:
+
+<p align="center">
+  <img src="./public/images/settings-byok.png" alt="BYOK settings — your API key lives only in this tab's session memory" width="320" />
+</p>
 
 - **BYOK, never persisted.** Your API key is sent per request via the `Authorization: Bearer` header and used only in memory — never logged, never written to a database.
 - **Session-only storage.** The browser keeps the key + chat history in `sessionStorage` (not `localStorage`), so they're wiped when the tab closes.
