@@ -254,13 +254,38 @@ pnpm build        # 正式建置（typecheck + Next build）
 
 ---
 
+<a id="byok"></a>
+
+## 🔑 取得 API 金鑰（BYOK）
+
+本應用採 **BYOK**（自帶金鑰）：你提供一把 API key，只在瀏覽器 session 中使用，永不存到 server 端。下列**擇一**:
+
+| 供應商          | 取得金鑰                                                          | 費用              | 環境變數                                                                                              |
+| :-------------- | :--------------------------------------------------------------- | :---------------- | :--------------------------------------------------------------------------------------------------- |
+| **Xiaomi MiMo** | 訂閱 [MiMo token plan](https://platform.xiaomimimo.com/token-plan) | 最低 **6 美金/月** | `MIMO_API_KEY` + `MIMO_API_BASE_URL`（依你的方案調整，例如 `https://token-plan-cn.xiaomimimo.com/v1`） |
+| **DeepSeek**    | 到 [DeepSeek](https://platform.deepseek.com/) 充值               | 最低 **2 美金**   | `DEEPSEEK_API_KEY`                                                                                   |
+
+兩種用法擇一:
+
+- **在 app 內（BYOK）：** 打開 **設定** 貼上金鑰——只存在這個分頁的 session，無需任何 server 設定。
+- **Server / Demo 模式：** 把金鑰放進環境變數（`env.example`）；見下方 **部署（Vercel）**。
+
+---
+
 ## 🚀 部署（Vercel）
 
-本應用已部署於 Vercel,且無需特別設定:
+本 repo 是 public template —— 一鍵部署你自己的實例，立刻以 **BYOK** 模式使用（打開 **設定**，貼上你自己的 MiMo 或 DeepSeek key）；免 server 金鑰、免登入、免付費。
 
-1. 把 GitHub repo 匯入 Vercel。
-2. （可選）在專案的 Environment Variables 設定 `MIMO_API_KEY` / `DEEPSEEK_API_KEY` 以在正式環境啟用 Demo 模式。BYOK 不需任何 server 金鑰即可運作。
-3. 部署。`next.config.mjs` 裡的 `outputFileTracingIncludes` 會把 Agent Skill 的 markdown 打包進 serverless functions,因此 `/api/chat` 與 `/api/mcp` 都能在 runtime 讀到課程。
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/john-data-chen/social-skill-ai-coach)
+&nbsp;
+[![Use this template](https://img.shields.io/badge/GitHub-Use%20this%20template-238636?logo=github)](https://github.com/john-data-chen/social-skill-ai-coach/generate)
+
+1. 點 **Deploy with Vercel**（需要一個免費 Vercel 帳號，可用 GitHub 一鍵登入）。Vercel 會把 repo 複製到你的帳號並自動建置，無需任何設定。
+2. 打開部署網址，進入 **設定**，貼上你的 MiMo 或 DeepSeek key（[如何取得](#byok)），即可開始。
+
+<p align="center">
+  <img src="./public/images/deploy-vercel.png" alt="Vercel 一鍵 clone —— 匯入 Social Skills AI Coach 範本" width="520" />
+</p>
 
 > **切勿提交 API key 或密碼。** 請使用環境變數。
 
@@ -282,7 +307,7 @@ Next.js（App Router）· React · TypeScript（strict）· TailwindCSS · Verce
 
 此專案是為了 [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) 所開發的概念性產品（最小可行性產品）,參加組別為 **Agents for Good**,僅供評審與有興趣者研究。專案所有功能（包含但不限於 Demo、AI agent、Skill、MCP）皆**無法取代受過專業訓練且擁有合格證照的心理師或助人工作者**,且**無法提供任何醫療與諮商行為**。
 
-示範網站目前使用 [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) 運作（用最低成本實現最小可行性產品）,可以直接使用,**在 Kaggle 審核過後月費就會失效**。您可以自行訂閱 MiMo token Plan (最低 6 美金 / 月 ) 或去 [DeepSeek](https://platform.deepseek.com/) 充值取得您自己的 Key（BYOK）,最低僅需 2 美金。
+示範網站使用 [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) 以最低成本運作,可以直接使用,**在 Kaggle 審核過後月費就會失效**。要繼續使用請自備金鑰——見 [取得 API 金鑰（BYOK）](#byok)。
 
 請始終記住:**您是在跟 AI 對話。** 應避免在對話中提及真實姓名、電話、地址等個人資訊,必要時用化名。AI 可能會出錯與幻覺——所有建議僅供參考。
 
