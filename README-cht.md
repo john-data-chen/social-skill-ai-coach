@@ -13,8 +13,9 @@
 
 > ⚠️ 為 [Kaggle AI Agents Capstone](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project)（組別 **Agents for Good**）開發的概念性 MVP,僅供評審與研究。**無法取代具執照的心理師或治療師。** 完整免責聲明見文末。
 
-Demo GIF is in progress.
-![Social Skills AI Coach — 教練循環示範](./public/screenshots/demo.gif)
+<p align="center">
+  <img src="./public/images/cover.png" alt="社交技巧 AI 教練 —— 你口袋裡的社交教練" width="360" />
+</p>
 
 ---
 
@@ -49,7 +50,7 @@ Demo GIF is in progress.
 
 ## 🏗️ 架構
 
-![Architecture Diagram](./public/architecture.svg)
+![Architecture Diagram](./public/images/architecture.png)
 
 **核心概念:** 課程只撰寫一次、做成 **Agent Skill**,並以兩種方式被消費——對內由教練代理直接 in-process 使用（求速度）,對外則透過 **Model Context Protocol（MCP）** 開放給任何 MCP client（求重用與互通）。唯一真實來源,不會漂移。
 
@@ -159,8 +160,8 @@ curl -s -X POST http://localhost:3000/api/mcp \
 │       ├── ai.ts                     # 供應商初始化（MiMo / DeepSeek）
 │       └── store.ts                  # Zustand 狀態（歷史、設定）
 ├── public/
-│   ├── architecture.svg         # 系統架構圖
-│   └── screenshots/             # README／媒體素材圖片
+│   ├── architecture.svg         # 系統架構圖（SVG 原始檔）
+│   └── images/                  # 封面 + 架構 PNG + 截圖（README／媒體素材）
 ├── next.config.mjs              # outputFileTracingIncludes 把 skill md 打包進 Vercel
 └── env.example                  # 環境變數範本
 ```

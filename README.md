@@ -13,8 +13,9 @@
 
 > ⚠️ Conceptual MVP for the [Kaggle AI Agents Capstone](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) (track: **Agents for Good**), for review and research only. **It cannot replace a licensed psychologist or therapist.** Full disclaimer at the bottom.
 
-Demo GIF is in progress.
-![Social Skills AI Coach — coaching loop demo](./public/screenshots/demo.gif)
+<p align="center">
+  <img src="./public/images/cover.png" alt="Social Skills AI Coach — a pocket social coach" width="360" />
+</p>
 
 ---
 
@@ -49,7 +50,7 @@ The **orchestrator** performs retrieval-augmented grounding: for the Coach stage
 
 ## 🏗️ Architecture
 
-![Architecture Diagram](./public/architecture.svg)
+![Architecture Diagram](./public/images/architecture.png)
 
 **Key idea:** the curriculum is authored once as an **Agent Skill** and consumed two ways — internally by the coaching agents (in-process, for speed) and externally by any MCP client over the **Model Context Protocol** (for reuse and interoperability). One source of truth, no drift.
 
@@ -159,8 +160,8 @@ Both forms share one core (`registerSocialSkillsMcp`) and one curriculum source 
 │       ├── ai.ts                     # Provider init (MiMo / DeepSeek)
 │       └── store.ts                  # Zustand state (history, config)
 ├── public/
-│   ├── architecture.svg         # System architecture diagram
-│   └── screenshots/             # README / Media Gallery images
+│   ├── architecture.svg         # System architecture diagram (SVG source)
+│   └── images/                  # Cover + architecture PNG + screenshots (README / Media Gallery)
 ├── next.config.mjs              # outputFileTracingIncludes ships the skill md to Vercel
 └── env.example                  # Template for environment variables
 ```
