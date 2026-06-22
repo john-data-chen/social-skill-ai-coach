@@ -187,7 +187,7 @@ export default function Home() {
       const commandMessage = {
         id: Date.now().toString(),
         role: "user",
-        content: command.rest,
+        content: input.trim(),
         ...(attachments.length > 0 && { experimental_attachments: attachments })
       }
       setAttachments([])
