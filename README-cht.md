@@ -103,7 +103,7 @@
 
 ![Architecture Diagram](./public/images/architecture.png)
 
-**核心概念:** 課程只撰寫一次、做成 **Agent Skill**，並以三種方式被消費——對內由教練代理直接 in-process 使用（求速度），對外透過 **Model Context Protocol（MCP）** 開放給任何 MCP client（求重用與互通），以及作為 drop-in skill 放進任何相容 `SKILL.md` 的 agent CLI（Antigravity CLI、Claude Code）。唯一真實來源，不會漂移。
+**核心概念:** 課程只撰寫一次、做成 **Agent Skill**，並以三種方式被消費——對內由教練代理直接 in-process 使用（求速度），作為 drop-in skill 放進任何相容 `SKILL.md` 的 agent CLI（Antigravity CLI、Claude Code），以及對外透過 **Model Context Protocol（MCP）** 開放給任何 MCP client（求重用與互通）。唯一真實來源，不會漂移。
 
 ### 對應到課程概念
 

@@ -103,7 +103,7 @@ Continuing the same example — respectfully befriending a classmate — from th
 
 ![Architecture Diagram](./public/images/architecture.png)
 
-**Key idea:** the curriculum is authored once as an **Agent Skill** and consumed three ways — internally by the coaching agents (in-process, for speed), externally by any MCP client over the **Model Context Protocol** (for reuse and interoperability), and as a drop-in skill in any `SKILL.md`-compatible agent CLI (Antigravity CLI, Claude Code). One source of truth, no drift.
+**Key idea:** the curriculum is authored once as an **Agent Skill** and consumed three ways — internally by the coaching agents (in-process, for speed), as a drop-in skill in any `SKILL.md`-compatible agent CLI (Antigravity CLI, Claude Code), and externally by any MCP client over the **Model Context Protocol** (for reuse and interoperability). One source of truth, no drift.
 
 ### Course concepts demonstrated
 
