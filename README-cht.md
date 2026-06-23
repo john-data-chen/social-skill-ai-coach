@@ -9,12 +9,14 @@
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_social-skill-ai-coach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-🔗 **[線上 Demo](https://social-skill-ai-coach.vercel.app)** · 🎬 **影片導覽(製作中)** · 📦 **[npm: `social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇬🇧 **[English](./README.md)**
+🔗 **[線上 Demo](https://social-skill-ai-coach.vercel.app)** · 🎬 **[操作示範](#demo)** · 📦 **[npm: `social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇬🇧 **[English](./README.md)**
 
 > ⚠️ 為 [Kaggle AI Agents Capstone](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project)（組別 **Agents for Good**）開發的概念性 MVP,僅供評審與研究。**無法取代具執照的心理師或治療師。** 完整免責聲明見文末。
 
 <p align="center">
-  <img src="./public/images/cover.png" alt="社交技巧 AI 教練 —— 你口袋裡的社交教練" width="360" />
+  <a id="demo"></a>
+  <img src="./public/images/demo.webp" alt="手機上的四階段循環 —— 分析、建議、角色扮演、復盤" width="270" />
+  <br /><sub>手機實機操作的四階段循環 —— 分析 → 建議 → 角色扮演 → 復盤。</sub>
 </p>
 
 ---
