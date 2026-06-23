@@ -101,7 +101,7 @@ Continuing the same example — respectfully befriending a classmate — from th
 
 ![Architecture Diagram](./public/images/architecture.png)
 
-**Key idea:** the curriculum is authored once as an **Agent Skill** and consumed two ways — internally by the coaching agents (in-process, for speed) and externally by any MCP client over the **Model Context Protocol** (for reuse and interoperability). One source of truth, no drift.
+**Key idea:** the curriculum is authored once as an **Agent Skill** and consumed three ways — internally by the coaching agents (in-process, for speed), externally by any MCP client over the **Model Context Protocol** (for reuse and interoperability), and as a drop-in skill in any `SKILL.md`-compatible agent CLI (Antigravity CLI, Claude Code). One source of truth, no drift.
 
 ### Course concepts demonstrated
 
@@ -109,7 +109,7 @@ Continuing the same example — respectfully befriending a classmate — from th
 | :----------------------------- | :----------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Agent / Multi-agent system** | Code         | Four specialized agents in a staged pipeline with deterministic stage routing, plus an LLM orchestrator that does knowledge routing (RAG) to ground the Coach. |
 | **MCP Server**                 | Code         | `/api/mcp` exposes `list_social_topics` + `get_social_knowledge` (tools) and the four agents (prompts) over MCP for any external client.                       |
-| **Agent Skills**               | Code         | `skills/social-skills-coach/` packages the curriculum as a loadable Skill — the single source of truth for all knowledge.                                      |
+| **Agent Skills**               | Code         | `skills/social-skills-coach/` packages the curriculum as a loadable Skill — the single source of truth, recognized as-is by Antigravity CLI / Claude Code when dropped into their skills folder.                                      |
 | **Security features**          | Code         | BYOK (your API key stays in the browser session, never stored server-side) + zod validation of every request at the API trust boundary.                        |
 | **Deployability**              | Docs / Video | Deployed on Vercel; reproduce steps below.                                                                                                                     |
 | **Antigravity**                | Video        | Built with the Antigravity IDE + CLI; shown in the submission video.                                                                                           |
@@ -120,11 +120,11 @@ Continuing the same example — respectfully befriending a classmate — from th
 
 - **4-stage coaching loop** — Analyzer → Coach → Role-Play → Reflection.
 - **Curriculum-grounded advice** — the Coach answers only from curriculum slices retrieved for _your_ situation (RAG), not generic tips.
-- **Agent Skill curriculum** — social-skills knowledge authored once as a reusable Skill, the single source of truth.
+- **Agent Skill curriculum** — social-skills knowledge authored once as a reusable Skill, the single source of truth; drop it into any agent CLI's skills folder (`.agents/skills`, `.claude/skills`) and it's recognized automatically.
 - **MCP server (bring your own model)** — the four agents are exposed as MCP prompts + knowledge tools, so any MCP client can run the whole coach with its own model. Shipped as an npm stdio package, [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp).
 - **Multi-model** — switch between Xiaomi MiMo and DeepSeek; automatic failover when the demo key expires.
 - **Attachments** — upload images and text files (`.md`, `.txt`, `.csv`) for the AI to analyze.
-- **Mobile-first** — designed to reach for in the moment: with a connection and the demo page, the coach is in your pocket anytime.
+- **Mobile-first** — designed to reach for in the moment: with a connection and the demo page, the coach is in your pocket anytime. It has been tested on Pixel + Chrome / iPhone + Safari (market share 90+%) and still works smoothly even on older phones from four years ago.
 - **Dark / light themes** — reduces eye strain, important for light sensitivity.
 
 ---
@@ -143,6 +143,38 @@ Enforced at every trust boundary — the browser, the API, and the MCP server:
 - **No internal leakage.** Errors are logged server-side only; clients get generic messages (`Internal Server Error`), never stack traces or secrets.
 - **Stateless by design.** No database, no server-side user data.
 - **SonarQube Code Quality Verified.** All Ratings: A (Security, Reliability, Maintainability).
+
+---
+
+## 🧩 Use it as a portable Agent Skill (drop-in, no code)
+
+The curriculum is a standard **`SKILL.md` Agent Skill**, so it isn't locked to this app. Drop the `skills/social-skills-coach/` folder into any SKILL.md-compatible agent runtime and it's recognized automatically — same folder, no edits, no glue code.
+
+```bash
+cp -r skills/social-skills-coach .agents/skills/    # Antigravity CLI (workspace)
+cp -r skills/social-skills-coach ~/.claude/skills/  # shared with Claude
+```
+
+| Runtime                     | Picked up from                                                  |
+| :-------------------------- | :------------------------------------------------------------- |
+| Antigravity CLI — workspace | `.agents/skills/social-skills-coach/SKILL.md`                  |
+| Antigravity CLI — global    | `~/.gemini/antigravity-cli/skills/social-skills-coach/SKILL.md` |
+| Claude Code / shared        | `~/.claude/skills/social-skills-coach/SKILL.md`                |
+
+<table>
+  <tr>
+    <td align="center" width="50%"><a href="./public/images/skills-in-agy-cli.png"><img src="./public/images/skills-in-agy-cli.png" alt="Antigravity CLI listing social-skills-coach among its recognized workspace skills" /></a></td>
+    <td align="center" width="50%"><a href="./public/images/skills-in-claude-app.png"><img src="./public/images/skills-in-claude-app.png" alt="The Claude app showing social-skills-coach imported under Personal skills, with SKILL.md and references visible" /></a></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Antigravity CLI</strong> — dropped into the workspace skills folder</td>
+    <td align="center"><strong>Claude app</strong> — imported under Personal skills</td>
+  </tr>
+</table>
+
+<p align="center"><em>The same SKILL.md, recognized across runtimes — no wiring, no edits.</em></p>
+
+The third way the one curriculum is consumed (alongside in-process and MCP): authored once, reused anywhere.
 
 ---
 
@@ -326,7 +358,7 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 
 ## ⚠️ Disclaimer
 
-This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating team is **Agents for Good**, and it is for review and research by interested parties only. All functions (including but not limited to the Demo, AI agents, Skill, and MCP) **cannot replace professionally trained and licensed psychologists or helping professionals**, and cannot provide any medical treatment or consultation.
+This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating team is **Agents for Good**, and it is for review and research by interested parties only. All functions (including but not limited to the Demo, AI agents, Skill, and MCP) **cannot replace professionally trained and licensed psychologists or therapists**, and cannot provide any medical treatment or consultation.
 
 The demo website runs on the [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) to keep costs minimal, and is ready to use. **The token plan will expire after Kaggle review.** To keep using the app, bring your own key — see [Get an API key (BYOK)](#byok).
 

@@ -101,7 +101,7 @@
 
 ![Architecture Diagram](./public/images/architecture.png)
 
-**核心概念:** 課程只撰寫一次、做成 **Agent Skill**,並以兩種方式被消費——對內由教練代理直接 in-process 使用（求速度）,對外則透過 **Model Context Protocol（MCP）** 開放給任何 MCP client（求重用與互通）。唯一真實來源,不會漂移。
+**核心概念:** 課程只撰寫一次、做成 **Agent Skill**,並以三種方式被消費——對內由教練代理直接 in-process 使用（求速度）,對外透過 **Model Context Protocol（MCP）** 開放給任何 MCP client（求重用與互通）,以及作為 drop-in skill 放進任何相容 `SKILL.md` 的 agent CLI（Antigravity CLI、Claude Code）。唯一真實來源,不會漂移。
 
 ### 對應到課程概念
 
@@ -109,7 +109,7 @@
 | :-------------------- | :---------- | :----------------------------------------------------------------------------------------------------------- |
 | **Agent／多代理系統** | Code        | 四個專職代理組成階段式流水線,以確定性階段路由推進,另由 LLM orchestrator 做知識路由（RAG）為 Coach 落地。     |
 | **MCP Server**        | Code        | `/api/mcp` 以 MCP 形式對外開放 `list_social_topics` + `get_social_knowledge`（tools）與四個代理（prompts）。 |
-| **Agent Skills**      | Code        | `skills/social-skills-coach/` 把課程封裝成可載入的 Skill——所有知識的唯一來源。                               |
+| **Agent Skills**      | Code        | `skills/social-skills-coach/` 把課程封裝成可載入的 Skill——所有知識的唯一來源;放進 skills 目錄即被 Antigravity CLI／Claude Code 原樣識別。                               |
 | **安全性**            | Code        | BYOK（你的 API key 留在瀏覽器 session、不在 server 端儲存）+ 於 API 信任邊界用 zod 驗證每一個請求。          |
 | **可部署性**          | Docs／Video | 已部署於 Vercel;重現步驟見下文。                                                                             |
 | **Antigravity**       | Video       | 以 Antigravity IDE + CLI 開發,於投稿影片中展示。                                                             |
@@ -120,11 +120,11 @@
 
 - **四階段教練循環**——Analyzer → Coach → Role-Play → Reflection。
 - **課程落地的建議**——Coach 只依據為**你的**情境檢索出的課程片段（RAG）回答,而非通用建議。
-- **Agent Skill 課程**——社交知識撰寫成可重用的 Skill,唯一真實來源。
+- **Agent Skill 課程**——社交知識撰寫成可重用的 Skill,唯一真實來源;丟進任何 agent CLI 的 skills 目錄（`.agents/skills`、`.claude/skills`）即被自動識別。
 - **MCP 伺服器（自帶你的模型）**——四個 agent 以 MCP prompts + 知識 tools 形式開放,任何 MCP client 都能用自己的模型跑整套教練。發佈為 npm stdio 套件 [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)。
 - **多模型**——可在 Xiaomi MiMo 與 DeepSeek 間切換;demo key 失效時自動切換備援。
 - **附件**——上傳圖片與文字檔（`.md`、`.txt`、`.csv`）供 AI 分析。
-- **針對手機操作優化**——讓你在當下就能掏出來用:只要能聯網打開 Demo 網頁,教練隨時隨地在你口袋裡。
+- **針對手機操作優化**——讓你在當下就能掏出來用:只要能聯網打開 Demo 網頁,教練隨時隨地在你口袋裡。已在 Pixel + Chrome / iPhone + Safari (市占率 90+%) 上實機測試，即便是四年前的舊手機仍運作順暢。
 - **深色／淺色主題**——減少眼睛疲勞,對光敏感的人尤其重要。
 
 ---
@@ -143,6 +143,38 @@
 - **不洩漏內部資訊。** 錯誤只在 server 端記錄;client 只拿到通用訊息（`Internal Server Error`）,絕不回傳 stack trace 或機密。
 - **無狀態設計。** 沒有資料庫、沒有 server 端使用者資料。
 - **SonarQube 程式碼品質已驗證。** 所有評級：A（安全性、可靠性、可維護性）。
+
+---
+
+## 🧩 當成可攜 Agent Skill 用（drop-in,零程式碼）
+
+這份課程就是一個標準 **`SKILL.md` Agent Skill**,並不綁死在本 app。把 `skills/social-skills-coach/` 資料夾丟進任何相容 SKILL.md 的 agent runtime,就會被自動識別——同一個資料夾、不必改、不必接線。
+
+```bash
+cp -r skills/social-skills-coach .agents/skills/    # Antigravity CLI（workspace）
+cp -r skills/social-skills-coach ~/.claude/skills/  # 與 Claude 共用
+```
+
+| Runtime                     | 從這裡被識別                                                    |
+| :-------------------------- | :------------------------------------------------------------ |
+| Antigravity CLI — workspace | `.agents/skills/social-skills-coach/SKILL.md`                  |
+| Antigravity CLI — global    | `~/.gemini/antigravity-cli/skills/social-skills-coach/SKILL.md` |
+| Claude Code／shared         | `~/.claude/skills/social-skills-coach/SKILL.md`                |
+
+<table>
+  <tr>
+    <td align="center" width="50%"><a href="./public/images/skills-in-agy-cli.png"><img src="./public/images/skills-in-agy-cli.png" alt="Antigravity CLI 把 social-skills-coach 列在已識別的 workspace skills 中" /></a></td>
+    <td align="center" width="50%"><a href="./public/images/skills-in-claude-app.png"><img src="./public/images/skills-in-claude-app.png" alt="Claude app 在 Personal skills 下顯示已匯入的 social-skills-coach,可見 SKILL.md 與 references" /></a></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Antigravity CLI</strong> —— 丟進 workspace skills 目錄</td>
+    <td align="center"><strong>Claude app</strong> —— 從 Personal skills 匯入</td>
+  </tr>
+</table>
+
+<p align="center"><em>同一份 SKILL.md,跨 runtime 被識別——零接線、不必改。</em></p>
+
+這是同一份課程被消費的第三種方式（與 in-process、MCP 並列）:撰寫一次,到處重用。
 
 ---
 
@@ -326,7 +358,7 @@ Next.js（App Router）· React · TypeScript（strict）· TailwindCSS · Verce
 
 ## ⚠️ 免責聲明
 
-此專案是為了 [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) 所開發的概念性產品（最小可行性產品）,參加組別為 **Agents for Good**,僅供評審與有興趣者研究。專案所有功能（包含但不限於 Demo、AI agent、Skill、MCP）皆**無法取代受過專業訓練且擁有合格證照的心理師或助人工作者**,且**無法提供任何醫療與諮商行為**。
+此專案是為了 [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) 所開發的概念性產品（最小可行性產品）,參加組別為 **Agents for Good**,僅供評審與有興趣者研究。專案所有功能（包含但不限於 Demo、AI agent、Skill、MCP）皆**無法取代受過專業訓練且擁有合格證照的心理師或諮商師**,且**無法提供任何醫療與諮商行為**。
 
 示範網站使用 [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) 以最低成本運作,可以直接使用,**在 Kaggle 審核過後月費就會失效**。要繼續使用請自備金鑰——見 [取得 API 金鑰（BYOK）](#byok)。
 
