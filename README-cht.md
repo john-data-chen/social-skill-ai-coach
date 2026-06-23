@@ -180,9 +180,26 @@ cp -r skills/social-skills-coach ~/.claude/skills/  # 與 Claude 共用
 
 ## 🧰 當成 MCP 伺服器用（自帶你的模型）
 
-整套教練能力**同時也是一個獨立 MCP 伺服器**,任何人都能用**自己的模型**跑它。四個 agent 以 MCP **prompts** 形式開放——它們在**連線方 client 的模型**上執行——所以伺服器本身不需要任何 API key、也不跑任何推論。這就是別人能換上比 demo（便宜的）MiMo/DeepSeek 更強模型的方式。
+整套教練能力**同時也是一個獨立 MCP 伺服器**——可在**任何** MCP client、用**你選的任何模型**跑。四個 agent 以 MCP **prompts** 形式開放:它們在**連線方 client 的模型**上執行,所以伺服器本身不持有任何 API key、也不跑任何推論。換上比 demo（便宜的）MiMo/DeepSeek 更強的模型,或你的 client 現成就在跑的模型,都行。
 
-- **Prompts**（在你的模型上跑）:`analyze_situation` · `coach` · `roleplay` · `reflect`
+**一個 server,多個 client,多種模型。** 以下是它在兩個獨立 MCP client 中實際運作——同一個套件、不必改:
+
+<table>
+  <tr>
+    <td align="center" width="50%"><a href="./public/images/mcp-in-agy-cli.png"><img src="./public/images/mcp-in-agy-cli.png" alt="Antigravity CLI 把 social-skills-coach 列在 MCP servers 中,開放 list_social_topics 與 get_social_knowledge tools" /></a></td>
+    <td align="center" width="50%"><a href="./public/images/mcp-in-hermes-agent.png"><img src="./public/images/mcp-in-hermes-agent.png" alt="Nous Research 的 Hermes Agent 呼叫 social-skills-coach MCP 伺服器——列出它的 agent prompts 與課程主題" /></a></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Antigravity CLI</strong> —— 註冊為 MCP server（跑在 Gemini）</td>
+    <td align="center"><strong><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a></strong>（Nous Research）—— 同一個 server,200+ 模型任選</td>
+  </tr>
+</table>
+
+<p align="center"><em>一個 MCP 伺服器,任何 client、任何模型——不必改、不用為各 client 寫接線。</em></p>
+
+**它開放了什麼:**
+
+- **Prompts**（在**你的**模型上跑）:`analyze_situation` · `coach` · `roleplay` · `reflect`
 - **Tools**（知識 grounding）:`list_social_topics` · `get_social_knowledge({ topics })`
 
 ### 方式一 — npm 套件（stdio,本機 client 推薦）

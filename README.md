@@ -180,9 +180,26 @@ The third way the one curriculum is consumed (alongside in-process and MCP): aut
 
 ## 🧰 Use it as an MCP server (bring your own model)
 
-The whole coaching capability is **also a standalone MCP server**, so anyone can run it with their OWN model. The four agents are exposed as MCP **prompts** — they execute on the _connecting client's_ model — so the server needs no API key and runs no inference itself. That's how you can plug in a more capable model than the demo's (cheap) MiMo/DeepSeek.
+The whole coaching capability is **also a standalone MCP server** — so it runs in _any_ MCP client, on _any_ model you choose. The four agents are exposed as MCP **prompts**: they execute on the _connecting client's_ model, so the server holds no API key and runs no inference itself. Plug in a model more capable than the demo's (cheap) MiMo/DeepSeek — or whatever your client already runs.
 
-- **Prompts** (run on your model): `analyze_situation` · `coach` · `roleplay` · `reflect`
+**One server, many clients, many models.** Here it is live in two independent MCP clients — same package, no edits:
+
+<table>
+  <tr>
+    <td align="center" width="50%"><a href="./public/images/mcp-in-agy-cli.png"><img src="./public/images/mcp-in-agy-cli.png" alt="Antigravity CLI listing social-skills-coach among its MCP servers, exposing the list_social_topics and get_social_knowledge tools" /></a></td>
+    <td align="center" width="50%"><a href="./public/images/mcp-in-hermes-agent.png"><img src="./public/images/mcp-in-hermes-agent.png" alt="Hermes Agent by Nous Research calling the social-skills-coach MCP server — listing its agent prompts and curriculum topics" /></a></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Antigravity CLI</strong> — registered as an MCP server (runs on Gemini)</td>
+    <td align="center"><strong><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a></strong> (Nous Research) — same server, any of 200+ models</td>
+  </tr>
+</table>
+
+<p align="center"><em>One MCP server, any client, any model — no edits, no per-client glue.</em></p>
+
+**What it exposes:**
+
+- **Prompts** (run on _your_ model): `analyze_situation` · `coach` · `roleplay` · `reflect`
 - **Tools** (knowledge grounding): `list_social_topics` · `get_social_knowledge({ topics })`
 
 ### Option 1 — npm package over stdio (recommended for local clients)
