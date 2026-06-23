@@ -9,7 +9,7 @@
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_social-skill-ai-coach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-🔗 **[Live Demo](https://social-skill-ai-coach.vercel.app)** · 🎬 **[Demo](#demo)** · ▶️ **[Video](https://youtu.be/iw37u1Z-wMQ)** · 📦 **[npm: `social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇹🇼 **[繁體中文](./README-cht.md)**
+🔗 **[Live Demo](https://social-skill-ai-coach.vercel.app)** · 🎬 **[Demo](#demo)** · ▶️ **[Video](https://youtu.be/sTXtDH4aJDM)** · 📦 **[npm: `social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇹🇼 **[繁體中文](./README-cht.md)**
 
 > ⚠️ Conceptual MVP for the [Kaggle AI Agents Capstone](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) (track: **Agents for Good**), for review and research only. **It cannot replace a licensed psychologist or therapist.** Full disclaimer at the bottom.
 
