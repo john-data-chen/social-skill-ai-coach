@@ -9,12 +9,14 @@
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_social-skill-ai-coach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-🔗 **[線上 Demo](https://social-skill-ai-coach.vercel.app)** · 🎬 **影片導覽(製作中)** · 📦 **[npm: `social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇬🇧 **[English](./README.md)**
+🔗 **[線上 Demo](https://social-skill-ai-coach.vercel.app)** · 🎬 **[操作示範](#demo)** · 📦 **[npm: `social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇬🇧 **[English](./README.md)**
 
 > ⚠️ 為 [Kaggle AI Agents Capstone](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project)（組別 **Agents for Good**）開發的概念性 MVP,僅供評審與研究。**無法取代具執照的心理師或治療師。** 完整免責聲明見文末。
 
 <p align="center">
-  <img src="./public/images/cover.png" alt="社交技巧 AI 教練 —— 你口袋裡的社交教練" width="360" />
+  <a id="demo"></a>
+  <img src="./public/images/demo.webp" alt="手機上的四階段循環 —— 分析、建議、角色扮演、復盤" width="270" />
+  <br /><sub>手機實機操作的四階段循環 —— 分析 → 建議 → 角色扮演 → 復盤。</sub>
 </p>
 
 ---
@@ -101,7 +103,7 @@
 
 ![Architecture Diagram](./public/images/architecture.png)
 
-**核心概念:** 課程只撰寫一次、做成 **Agent Skill**,並以兩種方式被消費——對內由教練代理直接 in-process 使用（求速度）,對外則透過 **Model Context Protocol（MCP）** 開放給任何 MCP client（求重用與互通）。唯一真實來源,不會漂移。
+**核心概念:** 課程只撰寫一次、做成 **Agent Skill**,並以三種方式被消費——對內由教練代理直接 in-process 使用（求速度）,對外透過 **Model Context Protocol（MCP）** 開放給任何 MCP client（求重用與互通）,以及作為 drop-in skill 放進任何相容 `SKILL.md` 的 agent CLI（Antigravity CLI、Claude Code）。唯一真實來源,不會漂移。
 
 ### 對應到課程概念
 
@@ -109,7 +111,7 @@
 | :-------------------- | :---------- | :----------------------------------------------------------------------------------------------------------- |
 | **Agent／多代理系統** | Code        | 四個專職代理組成階段式流水線,以確定性階段路由推進,另由 LLM orchestrator 做知識路由（RAG）為 Coach 落地。     |
 | **MCP Server**        | Code        | `/api/mcp` 以 MCP 形式對外開放 `list_social_topics` + `get_social_knowledge`（tools）與四個代理（prompts）。 |
-| **Agent Skills**      | Code        | `skills/social-skills-coach/` 把課程封裝成可載入的 Skill——所有知識的唯一來源。                               |
+| **Agent Skills**      | Code        | `skills/social-skills-coach/` 把課程封裝成可載入的 Skill——所有知識的唯一來源;放進 skills 目錄即被 Antigravity CLI／Claude Code 原樣識別。                               |
 | **安全性**            | Code        | BYOK（你的 API key 留在瀏覽器 session、不在 server 端儲存）+ 於 API 信任邊界用 zod 驗證每一個請求。          |
 | **可部署性**          | Docs／Video | 已部署於 Vercel;重現步驟見下文。                                                                             |
 | **Antigravity**       | Video       | 以 Antigravity IDE + CLI 開發,於投稿影片中展示。                                                             |
@@ -120,11 +122,11 @@
 
 - **四階段教練循環**——Analyzer → Coach → Role-Play → Reflection。
 - **課程落地的建議**——Coach 只依據為**你的**情境檢索出的課程片段（RAG）回答,而非通用建議。
-- **Agent Skill 課程**——社交知識撰寫成可重用的 Skill,唯一真實來源。
+- **Agent Skill 課程**——社交知識撰寫成可重用的 Skill,唯一真實來源;丟進任何 agent CLI 的 skills 目錄（`.agents/skills`、`.claude/skills`）即被自動識別。
 - **MCP 伺服器（自帶你的模型）**——四個 agent 以 MCP prompts + 知識 tools 形式開放,任何 MCP client 都能用自己的模型跑整套教練。發佈為 npm stdio 套件 [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)。
 - **多模型**——可在 Xiaomi MiMo 與 DeepSeek 間切換;demo key 失效時自動切換備援。
 - **附件**——上傳圖片與文字檔（`.md`、`.txt`、`.csv`）供 AI 分析。
-- **針對手機操作優化**——讓你在當下就能掏出來用:只要能聯網打開 Demo 網頁,教練隨時隨地在你口袋裡。
+- **針對手機操作優化**——讓你在當下就能掏出來用:只要能聯網打開 Demo 網頁,教練隨時隨地在你口袋裡。已在 Pixel + Chrome / iPhone + Safari (市占率 90+%) 上實機測試，即便是四年前的舊手機仍運作順暢。
 - **深色／淺色主題**——減少眼睛疲勞,對光敏感的人尤其重要。
 
 ---
@@ -146,11 +148,60 @@
 
 ---
 
+## 🧩 當成可攜 Agent Skill 用（drop-in,零程式碼）
+
+這份課程就是一個標準 **`SKILL.md` Agent Skill**,並不綁死在本 app。把 `skills/social-skills-coach/` 資料夾丟進任何相容 SKILL.md 的 agent runtime,就會被自動識別——同一個資料夾、不必改、不必接線。
+
+```bash
+cp -r skills/social-skills-coach .agents/skills/    # Antigravity CLI（workspace）
+cp -r skills/social-skills-coach ~/.claude/skills/  # 與 Claude 共用
+```
+
+| Runtime                     | 從這裡被識別                                                    |
+| :-------------------------- | :------------------------------------------------------------ |
+| Antigravity CLI — workspace | `.agents/skills/social-skills-coach/SKILL.md`                  |
+| Antigravity CLI — global    | `~/.gemini/antigravity-cli/skills/social-skills-coach/SKILL.md` |
+| Claude Code／shared         | `~/.claude/skills/social-skills-coach/SKILL.md`                |
+
+<table>
+  <tr>
+    <td align="center" width="50%"><a href="./public/images/skills-in-agy-cli.png"><img src="./public/images/skills-in-agy-cli.png" alt="Antigravity CLI 把 social-skills-coach 列在已識別的 workspace skills 中" /></a></td>
+    <td align="center" width="50%"><a href="./public/images/skills-in-claude-app.png"><img src="./public/images/skills-in-claude-app.png" alt="Claude app 在 Personal skills 下顯示已匯入的 social-skills-coach,可見 SKILL.md 與 references" /></a></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Antigravity CLI</strong> —— 丟進 workspace skills 目錄</td>
+    <td align="center"><strong>Claude app</strong> —— 從 Personal skills 匯入</td>
+  </tr>
+</table>
+
+<p align="center"><em>同一份 SKILL.md,跨 runtime 被識別——零接線、不必改。</em></p>
+
+這是同一份課程被消費的第三種方式（與 in-process、MCP 並列）:撰寫一次,到處重用。
+
+---
+
 ## 🧰 當成 MCP 伺服器用（自帶你的模型）
 
-整套教練能力**同時也是一個獨立 MCP 伺服器**,任何人都能用**自己的模型**跑它。四個 agent 以 MCP **prompts** 形式開放——它們在**連線方 client 的模型**上執行——所以伺服器本身不需要任何 API key、也不跑任何推論。這就是別人能換上比 demo（便宜的）MiMo/DeepSeek 更強模型的方式。
+整套教練能力**同時也是一個獨立 MCP 伺服器**——可在**任何** MCP client、用**你選的任何模型**跑。四個 agent 以 MCP **prompts** 形式開放:它們在**連線方 client 的模型**上執行,所以伺服器本身不持有任何 API key、也不跑任何推論。換上比 demo（便宜的）MiMo/DeepSeek 更強的模型,或你的 client 現成就在跑的模型,都行。
 
-- **Prompts**（在你的模型上跑）:`analyze_situation` · `coach` · `roleplay` · `reflect`
+**一個 server,多個 client,多種模型。** 以下是它在兩個獨立 MCP client 中實際運作——同一個套件、不必改:
+
+<table>
+  <tr>
+    <td align="center" width="50%"><a href="./public/images/mcp-in-agy-cli.png"><img src="./public/images/mcp-in-agy-cli.png" alt="Antigravity CLI 把 social-skills-coach 列在 MCP servers 中,開放 list_social_topics 與 get_social_knowledge tools" /></a></td>
+    <td align="center" width="50%"><a href="./public/images/mcp-in-hermes-agent.png"><img src="./public/images/mcp-in-hermes-agent.png" alt="Nous Research 的 Hermes Agent 呼叫 social-skills-coach MCP 伺服器——列出它的 agent prompts 與課程主題" /></a></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Antigravity CLI</strong> —— 註冊為 MCP server（跑在 Gemini）</td>
+    <td align="center"><strong><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a></strong>（Nous Research）—— 同一個 server,200+ 模型任選</td>
+  </tr>
+</table>
+
+<p align="center"><em>一個 MCP 伺服器,任何 client、任何模型——不必改、不用為各 client 寫接線。</em></p>
+
+**它開放了什麼:**
+
+- **Prompts**（在**你的**模型上跑）:`analyze_situation` · `coach` · `roleplay` · `reflect`
 - **Tools**（知識 grounding）:`list_social_topics` · `get_social_knowledge({ topics })`
 
 ### 方式一 — npm 套件（stdio,本機 client 推薦）
@@ -326,7 +377,7 @@ Next.js（App Router）· React · TypeScript（strict）· TailwindCSS · Verce
 
 ## ⚠️ 免責聲明
 
-此專案是為了 [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) 所開發的概念性產品（最小可行性產品）,參加組別為 **Agents for Good**,僅供評審與有興趣者研究。專案所有功能（包含但不限於 Demo、AI agent、Skill、MCP）皆**無法取代受過專業訓練且擁有合格證照的心理師或助人工作者**,且**無法提供任何醫療與諮商行為**。
+此專案是為了 [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) 所開發的概念性產品（最小可行性產品）,參加組別為 **Agents for Good**,僅供評審與有興趣者研究。專案所有功能（包含但不限於 Demo、AI agent、Skill、MCP）皆**無法取代受過專業訓練且擁有合格證照的心理師或諮商師**,且**無法提供任何醫療與諮商行為**。
 
 示範網站使用 [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) 以最低成本運作,可以直接使用,**在 Kaggle 審核過後月費就會失效**。要繼續使用請自備金鑰——見 [取得 API 金鑰（BYOK）](#byok)。
 

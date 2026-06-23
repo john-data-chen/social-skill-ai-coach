@@ -9,12 +9,14 @@
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_social-skill-ai-coach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-🔗 **[Live Demo](https://social-skill-ai-coach.vercel.app)** · 🎬 **Video walkthrough (in progress)** · 📦 **[npm: `social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇹🇼 **[繁體中文](./README-cht.md)**
+🔗 **[Live Demo](https://social-skill-ai-coach.vercel.app)** · 🎬 **[Demo](#demo)** · 📦 **[npm: `social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇹🇼 **[繁體中文](./README-cht.md)**
 
 > ⚠️ Conceptual MVP for the [Kaggle AI Agents Capstone](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) (track: **Agents for Good**), for review and research only. **It cannot replace a licensed psychologist or therapist.** Full disclaimer at the bottom.
 
 <p align="center">
-  <img src="./public/images/cover.png" alt="Social Skills AI Coach — a pocket social coach" width="360" />
+  <a id="demo"></a>
+  <img src="./public/images/demo.webp" alt="The four-stage loop on a phone — Analyze, Coach, Role-Play, Reflect" width="270" />
+  <br /><sub>The four-stage loop on a real phone — Analyze → Coach → Role-Play → Reflect.</sub>
 </p>
 
 ---
@@ -101,7 +103,7 @@ Continuing the same example — respectfully befriending a classmate — from th
 
 ![Architecture Diagram](./public/images/architecture.png)
 
-**Key idea:** the curriculum is authored once as an **Agent Skill** and consumed two ways — internally by the coaching agents (in-process, for speed) and externally by any MCP client over the **Model Context Protocol** (for reuse and interoperability). One source of truth, no drift.
+**Key idea:** the curriculum is authored once as an **Agent Skill** and consumed three ways — internally by the coaching agents (in-process, for speed), externally by any MCP client over the **Model Context Protocol** (for reuse and interoperability), and as a drop-in skill in any `SKILL.md`-compatible agent CLI (Antigravity CLI, Claude Code). One source of truth, no drift.
 
 ### Course concepts demonstrated
 
@@ -109,7 +111,7 @@ Continuing the same example — respectfully befriending a classmate — from th
 | :----------------------------- | :----------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Agent / Multi-agent system** | Code         | Four specialized agents in a staged pipeline with deterministic stage routing, plus an LLM orchestrator that does knowledge routing (RAG) to ground the Coach. |
 | **MCP Server**                 | Code         | `/api/mcp` exposes `list_social_topics` + `get_social_knowledge` (tools) and the four agents (prompts) over MCP for any external client.                       |
-| **Agent Skills**               | Code         | `skills/social-skills-coach/` packages the curriculum as a loadable Skill — the single source of truth for all knowledge.                                      |
+| **Agent Skills**               | Code         | `skills/social-skills-coach/` packages the curriculum as a loadable Skill — the single source of truth, recognized as-is by Antigravity CLI / Claude Code when dropped into their skills folder.                                      |
 | **Security features**          | Code         | BYOK (your API key stays in the browser session, never stored server-side) + zod validation of every request at the API trust boundary.                        |
 | **Deployability**              | Docs / Video | Deployed on Vercel; reproduce steps below.                                                                                                                     |
 | **Antigravity**                | Video        | Built with the Antigravity IDE + CLI; shown in the submission video.                                                                                           |
@@ -120,11 +122,11 @@ Continuing the same example — respectfully befriending a classmate — from th
 
 - **4-stage coaching loop** — Analyzer → Coach → Role-Play → Reflection.
 - **Curriculum-grounded advice** — the Coach answers only from curriculum slices retrieved for _your_ situation (RAG), not generic tips.
-- **Agent Skill curriculum** — social-skills knowledge authored once as a reusable Skill, the single source of truth.
+- **Agent Skill curriculum** — social-skills knowledge authored once as a reusable Skill, the single source of truth; drop it into any agent CLI's skills folder (`.agents/skills`, `.claude/skills`) and it's recognized automatically.
 - **MCP server (bring your own model)** — the four agents are exposed as MCP prompts + knowledge tools, so any MCP client can run the whole coach with its own model. Shipped as an npm stdio package, [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp).
 - **Multi-model** — switch between Xiaomi MiMo and DeepSeek; automatic failover when the demo key expires.
 - **Attachments** — upload images and text files (`.md`, `.txt`, `.csv`) for the AI to analyze.
-- **Mobile-first** — designed to reach for in the moment: with a connection and the demo page, the coach is in your pocket anytime.
+- **Mobile-first** — designed to reach for in the moment: with a connection and the demo page, the coach is in your pocket anytime. It has been tested on Pixel + Chrome / iPhone + Safari (market share 90+%) and still works smoothly even on older phones from four years ago.
 - **Dark / light themes** — reduces eye strain, important for light sensitivity.
 
 ---
@@ -146,11 +148,60 @@ Enforced at every trust boundary — the browser, the API, and the MCP server:
 
 ---
 
+## 🧩 Use it as a portable Agent Skill (drop-in, no code)
+
+The curriculum is a standard **`SKILL.md` Agent Skill**, so it isn't locked to this app. Drop the `skills/social-skills-coach/` folder into any SKILL.md-compatible agent runtime and it's recognized automatically — same folder, no edits, no glue code.
+
+```bash
+cp -r skills/social-skills-coach .agents/skills/    # Antigravity CLI (workspace)
+cp -r skills/social-skills-coach ~/.claude/skills/  # shared with Claude
+```
+
+| Runtime                     | Picked up from                                                  |
+| :-------------------------- | :------------------------------------------------------------- |
+| Antigravity CLI — workspace | `.agents/skills/social-skills-coach/SKILL.md`                  |
+| Antigravity CLI — global    | `~/.gemini/antigravity-cli/skills/social-skills-coach/SKILL.md` |
+| Claude Code / shared        | `~/.claude/skills/social-skills-coach/SKILL.md`                |
+
+<table>
+  <tr>
+    <td align="center" width="50%"><a href="./public/images/skills-in-agy-cli.png"><img src="./public/images/skills-in-agy-cli.png" alt="Antigravity CLI listing social-skills-coach among its recognized workspace skills" /></a></td>
+    <td align="center" width="50%"><a href="./public/images/skills-in-claude-app.png"><img src="./public/images/skills-in-claude-app.png" alt="The Claude app showing social-skills-coach imported under Personal skills, with SKILL.md and references visible" /></a></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Antigravity CLI</strong> — dropped into the workspace skills folder</td>
+    <td align="center"><strong>Claude app</strong> — imported under Personal skills</td>
+  </tr>
+</table>
+
+<p align="center"><em>The same SKILL.md, recognized across runtimes — no wiring, no edits.</em></p>
+
+The third way the one curriculum is consumed (alongside in-process and MCP): authored once, reused anywhere.
+
+---
+
 ## 🧰 Use it as an MCP server (bring your own model)
 
-The whole coaching capability is **also a standalone MCP server**, so anyone can run it with their OWN model. The four agents are exposed as MCP **prompts** — they execute on the _connecting client's_ model — so the server needs no API key and runs no inference itself. That's how you can plug in a more capable model than the demo's (cheap) MiMo/DeepSeek.
+The whole coaching capability is **also a standalone MCP server** — so it runs in _any_ MCP client, on _any_ model you choose. The four agents are exposed as MCP **prompts**: they execute on the _connecting client's_ model, so the server holds no API key and runs no inference itself. Plug in a model more capable than the demo's (cheap) MiMo/DeepSeek — or whatever your client already runs.
 
-- **Prompts** (run on your model): `analyze_situation` · `coach` · `roleplay` · `reflect`
+**One server, many clients, many models.** Here it is live in two independent MCP clients — same package, no edits:
+
+<table>
+  <tr>
+    <td align="center" width="50%"><a href="./public/images/mcp-in-agy-cli.png"><img src="./public/images/mcp-in-agy-cli.png" alt="Antigravity CLI listing social-skills-coach among its MCP servers, exposing the list_social_topics and get_social_knowledge tools" /></a></td>
+    <td align="center" width="50%"><a href="./public/images/mcp-in-hermes-agent.png"><img src="./public/images/mcp-in-hermes-agent.png" alt="Hermes Agent by Nous Research calling the social-skills-coach MCP server — listing its agent prompts and curriculum topics" /></a></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Antigravity CLI</strong> — registered as an MCP server (runs on Gemini)</td>
+    <td align="center"><strong><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a></strong> (Nous Research) — same server, any of 200+ models</td>
+  </tr>
+</table>
+
+<p align="center"><em>One MCP server, any client, any model — no edits, no per-client glue.</em></p>
+
+**What it exposes:**
+
+- **Prompts** (run on _your_ model): `analyze_situation` · `coach` · `roleplay` · `reflect`
 - **Tools** (knowledge grounding): `list_social_topics` · `get_social_knowledge({ topics })`
 
 ### Option 1 — npm package over stdio (recommended for local clients)
@@ -326,7 +377,7 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 
 ## ⚠️ Disclaimer
 
-This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating team is **Agents for Good**, and it is for review and research by interested parties only. All functions (including but not limited to the Demo, AI agents, Skill, and MCP) **cannot replace professionally trained and licensed psychologists or helping professionals**, and cannot provide any medical treatment or consultation.
+This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating team is **Agents for Good**, and it is for review and research by interested parties only. All functions (including but not limited to the Demo, AI agents, Skill, and MCP) **cannot replace professionally trained and licensed psychologists or therapists**, and cannot provide any medical treatment or consultation.
 
 The demo website runs on the [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) to keep costs minimal, and is ready to use. **The token plan will expire after Kaggle review.** To keep using the app, bring your own key — see [Get an API key (BYOK)](#byok).
 
