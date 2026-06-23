@@ -150,7 +150,7 @@ Enforced at every trust boundary — the browser, the API, and the MCP server:
 
 ## 🧩 Use it as a portable Agent Skill (drop-in, no code)
 
-The curriculum is a standard **`SKILL.md` Agent Skill**, so it isn't locked to this app. Drop the `skills/social-skills-coach/` folder into any SKILL.md-compatible agent runtime and it's recognized automatically — same folder, no edits, no glue code.
+The curriculum is a standard **`SKILL.md` Agent Skill**, so it isn't locked to this app. Drop the `social-skills-coach` folder into any SKILL.md-compatible agent runtime and it's recognized automatically — same folder, no edits, no glue code.
 
 ```bash
 cp -r skills/social-skills-coach .agents/skills/    # Antigravity CLI (workspace)
@@ -176,13 +176,13 @@ cp -r skills/social-skills-coach ~/.claude/skills/  # shared with Claude
 
 <p align="center"><em>The same SKILL.md, recognized across runtimes — no wiring, no edits.</em></p>
 
-The third way the one curriculum is consumed (alongside in-process and MCP): authored once, reused anywhere.
+The second way the one curriculum is consumed (alongside in-process and MCP): authored once, reused anywhere.
 
 ---
 
 ## 🧰 Use it as an MCP server (bring your own model)
 
-The whole coaching capability is **also a standalone MCP server** — so it runs in _any_ MCP client, on _any_ model you choose. The four agents are exposed as MCP **prompts**: they execute on the _connecting client's_ model, so the server holds no API key and runs no inference itself. Plug in a model more capable than the demo's (cheap) MiMo/DeepSeek — or whatever your client already runs.
+The whole coaching capability is **also a standalone MCP server** — so it runs in _any_ MCP client, on _any_ model you choose. The four sub-agents are exposed as MCP **prompts**: they execute on the _connecting client's_ model, so the server holds no API key and runs no inference itself. Plug in a model more capable than the demo's MiMo/DeepSeek — or whatever your local already runs.
 
 **One server, many clients, many models.** Here it is live in two independent MCP clients — same package, no edits:
 
@@ -371,15 +371,15 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 
 ## 📋 Roadmap
 
-- More providers: Anthropic, OpenAI, Google Gemini.
+- Support more modles and providers: Anthropic, OpenAI, Google Gemini...etc
 
 ---
 
 ## ⚠️ Disclaimer
 
-This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating team is **Agents for Good**, and it is for review and research by interested parties only. All functions (including but not limited to the Demo, AI agents, Skill, and MCP) **cannot replace professionally trained and licensed psychologists or therapists**, and cannot provide any medical treatment or consultation.
+This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating track is **Agents for Good**, and it is for review and research by interested parties only. All functions (including but not limited to the Demo, AI agents, Skill, and MCP) **cannot replace professionally trained and licensed psychologists or therapists**, and cannot provide any medical treatment or consultation.
 
-The demo website runs on the [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) to keep costs minimal, and is ready to use. **The token plan will expire after Kaggle review.** To keep using the app, bring your own key — see [Get an API key (BYOK)](#byok).
+The demo website uses the [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) to operate with a minimum monthly token plan. It can be used directly. **The monthly token plan will be expired after Kaggle review, and no DeepSeek key has been prepared.**
 
 Please always remember: **you are talking to an AI.** Avoid mentioning personal information such as your real name, phone number, or address; use a pseudonym if needed. AI can make mistakes and hallucinate — all suggestions are for reference only.
 
