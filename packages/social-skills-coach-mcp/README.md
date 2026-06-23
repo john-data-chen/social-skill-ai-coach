@@ -12,7 +12,7 @@ curriculum into a full coaching loop — **Analyze → Coach → Role-Play → R
 
 It is the standalone, distributable form of the
 [Social Skills AI Coach](https://github.com/john-data-chen/social-skill-ai-coach) project
-(try the **[live demo](https://social-skill-ai-coach.vercel.app)** or **[video](https://youtu.be/iw37u1Z-wMQ)**): describe a situation,
+(try the **[live demo](https://social-skill-ai-coach.vercel.app)** or **[video](https://youtu.be/sTXtDH4aJDM)**): describe a situation,
 get concrete curriculum-grounded advice, rehearse it in a role-play, and receive a
 structured reflection.
 
