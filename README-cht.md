@@ -211,7 +211,7 @@ cp -r skills/social-skills-coach ~/.claude/skills/  # 與 Claude 共用
 ```json
 {
   "mcpServers": {
-    "social-skills-coach": { "command": "npx"， "args": ["-y"， "social-skills-coach-mcp"] }
+    "social-skills-coach": { "command": "npx", "args": ["-y", "social-skills-coach-mcp"] }
   }
 }
 ```
@@ -229,8 +229,8 @@ npx @modelcontextprotocol/inspector npx -y social-skills-coach-mcp
 ```bash
 curl -s -X POST http://localhost:3000/api/mcp \
   -H "Content-Type: application/json" \
-  -H "Accept: application/json， text/event-stream" \
-  -d '{"jsonrpc":"2.0"，"id":1，"method":"tools/call"，"params":{"name":"get_social_knowledge"，"arguments":{"topics":["opening"]}}}'
+  -H "Accept: application/json, text/event-stream" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_social_knowledge","arguments":{"topics":["opening"]}}}'
 ```
 
 兩種形式共用同一個 core（`registerSocialSkillsMcp`）與同一份課程來源（Agent Skill），不會漂移。

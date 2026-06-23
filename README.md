@@ -371,7 +371,7 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 
 ## 📋 Roadmap
 
-- Support more modles and providers: Anthropic, OpenAI, Google Gemini...etc
+- Support more models and providers: Anthropic, OpenAI, Google Gemini...etc
 
 ---
 
