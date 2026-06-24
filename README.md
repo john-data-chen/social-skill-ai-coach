@@ -127,7 +127,7 @@ Continuing the same example — respectfully befriending a classmate — from th
 - **MCP server (bring your own model)** — the four agents are exposed as MCP prompts + knowledge tools, so any MCP client can run the whole coach with its own model. Shipped as an npm stdio package, [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp).
 - **Multi-model** — switch between Xiaomi MiMo and DeepSeek; automatic failover when the demo key expires.
 - **Attachments** — upload images and text files (`.md`, `.txt`, `.csv`) for the AI to analyze.
-- **Mobile-first** — designed to reach for in the moment: with a connection and the demo page, the coach is in your pocket anytime. It has been tested on Pixel + Chrome / iPhone + Safari (market share 90+%) and still works smoothly even on older phones from four years ago.
+- **Mobile-first** — designed to reach for in the moment: with a connection and the demo page, the coach is in your pocket anytime. It has been tested on Pixel + Chrome / iPhone + Safari (both total market share 90+%) and still works smoothly even on older phones from four years ago.
 - **Dark / light themes** — reduces eye strain, important for light sensitivity.
 
 ---
