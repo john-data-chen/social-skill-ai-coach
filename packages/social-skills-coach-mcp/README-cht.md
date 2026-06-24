@@ -10,7 +10,7 @@
 
 它在沒有進行任何付費廣告下，發布後 3 天內就獲得了 600 多次下載，這表明對易於使用的社交技能工具的真正需求。
 
-它是 [Social Skills AI Coach](https://github.com/john-data-chen/social-skill-ai-coach) 專案的獨立、可發布套件（試試 **[線上 Demo](https://social-skill-ai-coach.vercel.app)**、或 **[影片](https://youtu.be/sTXtDH4aJDM)**）:
+它是 [Social Skills AI Coach](https://github.com/john-data-chen/social-skill-ai-coach) 專案的獨立、可發布套件（試試 **[線上 Demo](https://social-skill-ai-coach.vercel.app)**、或 **[影片](https://youtu.be/QsxvIu60pY8)**）:
 描述一個情境,獲得以課程為依據的具體建議,透過角色扮演演練,再得到結構化的復盤回饋。
 
 ## 為何「自帶模型」(BYO model)

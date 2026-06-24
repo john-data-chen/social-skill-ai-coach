@@ -10,7 +10,7 @@
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_social-skill-ai-coach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-🔗 **[線上 Demo](https://social-skill-ai-coach.vercel.app)** ·▶️ **[影片](https://youtu.be/sTXtDH4aJDM)** · 📦 **[npm: social-skills-coach-mcp](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇬🇧 **[English README](./README.md)**
+🔗 **[線上 Demo](https://social-skill-ai-coach.vercel.app)** ·▶️ **[影片](https://youtu.be/QsxvIu60pY8)** · 📦 **[npm: social-skills-coach-mcp](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇬🇧 **[English README](./README.md)**
 
 > ⚠️ 為 [Kaggle AI Agents Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project)（參加組別 **Agents for Good**）開發的概念性 MVP，僅供評審與研究。**無法取代具執照的心理師或治療師。** 完整免責聲明見文末。
 
