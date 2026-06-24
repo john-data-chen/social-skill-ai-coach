@@ -1,10 +1,10 @@
 # social-skills-coach-mcp
 
-[![npm version](https://img.shields.io/npm/v/social-skills-coach-mcp.svg?logo=npm)](https://www.npmjs.com/package/social-skills-coach-mcp)
+[![npm downloads](https://img.shields.io/npm/dm/social-skills-coach-mcp.svg)](https://www.npmjs.com/package/social-skills-coach-mcp)
 [![Node](https://img.shields.io/node/v/social-skills-coach-mcp.svg)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> 繁體中文版說明請見 [README-cht.md](https://github.com/john-data-chen/social-skill-ai-coach/blob/main/packages/social-skills-coach-mcp/README-cht.md)。
+> 中文說明請見 [README-cht.md](https://github.com/john-data-chen/social-skill-ai-coach/blob/main/packages/social-skills-coach-mcp/README-cht.md)。
 
 An [MCP](https://modelcontextprotocol.io) server that turns a PEERS-style social-skills
 curriculum into a full coaching loop — **Analyze → Coach → Role-Play → Reflect** — that
@@ -87,14 +87,9 @@ social-skills-coach-mcp               # runs the stdio server
 
 ## ⚠️ Disclaimer
 
-This is a conceptual minimum viable product built for the
-[Kaggle AI Agents Capstone](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project)
-(team **Agents for Good**), for review and research only. It **cannot replace a trained,
-licensed psychologist or helping professional** and provides no medical treatment or
-consultation.
+This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating track is **Agents for Good**, and it is for review and research by interested parties only. All functions **cannot replace professionally trained and licensed psychologists or therapists**, and cannot provide any medical treatment or consultation.
 
-You are talking to an AI: avoid sharing personal information (real name, phone, address).
-AI can make mistakes and hallucinate — all suggestions are for reference only.
+Please always remember: **you are talking to an AI.** Avoid mentioning personal information such as your real name, phone number, or address; use a pseudonym if needed. AI can make mistakes and hallucinate — all suggestions are for reference only.
 
 ## License
 
