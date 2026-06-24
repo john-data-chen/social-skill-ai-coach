@@ -124,7 +124,7 @@
 - **四階段教練循環**——Analyzer → Coach → Role-Play → Reflection。
 - **課程落地的建議**——Coach 只依據為**你的**情境檢索出的課程片段（RAG）回答，而非通用建議。
 - **Agent Skill 課程**——社交知識撰寫成可重用的 Skill，唯一真實來源;丟進任何 agent CLI 的 skills 目錄（`.agents/skills`、`.claude/skills`）即被自動識別。
-- **MCP 伺服器（自帶你的模型）**——四個 agent 以 MCP prompts + 知識 tools 形式開放，任何 MCP client 都能用自己的模型跑整套教練。發佈為 npm stdio 套件 [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)。
+- **MCP 伺服器（自帶你的模型）**——四個 agent 以 MCP prompts + 知識 tools 形式開放，任何 MCP client 都能用自己的模型跑整套教練。發佈為 npm stdio 套件 [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)。獨立 MCP 在沒有進行任何付費廣告下，發布後 3 天內就獲得了 600 多次下載，這表明對易於使用的社交技能工具的真正需求。
 - **多模型**——可在 Xiaomi MiMo 與 DeepSeek 間切換;demo key 失效時自動切換備援。
 - **附件**——上傳圖片與文字檔（`.md`、`.txt`、`.csv`）供 AI 分析。
 - **針對手機操作優化**——讓你在當下就能掏出來用:只要能聯網打開 Demo 網頁，教練隨時隨地在你口袋裡。已在 Pixel + Chrome / iPhone + Safari (兩者總和市占率 90+%) 上實機測試，即便是四年前的舊手機仍運作順暢。
