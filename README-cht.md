@@ -127,7 +127,7 @@
 - **MCP 伺服器（自帶你的模型）**——四個 agent 以 MCP prompts + 知識 tools 形式開放，任何 MCP client 都能用自己的模型跑整套教練。發佈為 npm stdio 套件 [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)。
 - **多模型**——可在 Xiaomi MiMo 與 DeepSeek 間切換;demo key 失效時自動切換備援。
 - **附件**——上傳圖片與文字檔（`.md`、`.txt`、`.csv`）供 AI 分析。
-- **針對手機操作優化**——讓你在當下就能掏出來用:只要能聯網打開 Demo 網頁，教練隨時隨地在你口袋裡。已在 Pixel + Chrome / iPhone + Safari (市占率 90+%) 上實機測試，即便是四年前的舊手機仍運作順暢。
+- **針對手機操作優化**——讓你在當下就能掏出來用:只要能聯網打開 Demo 網頁，教練隨時隨地在你口袋裡。已在 Pixel + Chrome / iPhone + Safari (兩者總和市占率 90+%) 上實機測試，即便是四年前的舊手機仍運作順暢。
 - **深色／淺色主題**——減少眼睛疲勞，對光敏感的人尤其重要。
 
 ---
