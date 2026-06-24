@@ -4,14 +4,15 @@
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-000?logo=vercel)](https://social-skill-ai-coach.vercel.app)
 [![NPM Version](https://img.shields.io/npm/v/social-skills-coach-mcp.svg?logo=npm)](https://www.npmjs.com/package/social-skills-coach-mcp)
+[![npm downloads](https://img.shields.io/npm/dm/social-skills-coach-mcp.svg)](https://www.npmjs.com/package/social-skills-coach-mcp)
 [![CI](https://github.com/john-data-chen/social-skill-ai-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/social-skill-ai-coach/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/john-data-chen/social-skill-ai-coach/graph/badge.svg?token=Gj6H1mEAAz)](https://codecov.io/gh/john-data-chen/social-skill-ai-coach)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_social-skill-ai-coach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-🔗 **[Live Demo](https://social-skill-ai-coach.vercel.app)** · 🎬 **[Demo](#demo)** · ▶️ **[Video](https://youtu.be/sTXtDH4aJDM)** · 📦 **[npm: `social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇹🇼 **[繁體中文](./README-cht.md)**
+🔗 **[Live Demo](https://social-skill-ai-coach.vercel.app)**  · ▶️ **[Video](https://youtu.be/sTXtDH4aJDM)** · 📦 **[npm: social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇹🇼 **[中文說明](./README-cht.md)**
 
-> ⚠️ Conceptual MVP for the [Kaggle AI Agents Capstone](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) (track: **Agents for Good**), for review and research only. **It cannot replace a licensed psychologist or therapist.** Full disclaimer at the bottom.
+> ⚠️ Conceptual MVP for the [Kaggle AI Agents Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) (track: **Agents for Good**), for review and research only. **It cannot replace a licensed psychologist or therapist.** Full disclaimer at the bottom.
 
 <p align="center">
   <a id="demo"></a>

@@ -1,6 +1,6 @@
 # social-skills-coach-mcp
 
-[![npm version](https://img.shields.io/npm/v/social-skills-coach-mcp.svg?logo=npm)](https://www.npmjs.com/package/social-skills-coach-mcp)
+[![npm downloads](https://img.shields.io/npm/dm/social-skills-coach-mcp.svg)](https://www.npmjs.com/package/social-skills-coach-mcp)
 [![Node](https://img.shields.io/node/v/social-skills-coach-mcp.svg)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -81,13 +81,10 @@ social-skills-coach-mcp               # 執行 stdio 伺服器
 
 ## ⚠️ 免責聲明
 
-本專案為概念性最小可行產品(MVP),為
-[Kaggle AI Agents Capstone](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project)
-(團隊 **Agents for Good**)而作,僅供有興趣者審閱與研究。它**無法取代受過專業訓練、
-具執照的心理師或助人工作者**,亦不提供任何醫療診治或諮商。
+本專案為概念性最小可行產品(MVP)，為了參與 [Kaggle AI Agents Capstone Project ](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) (參加組別 **Agents for Good**) 而作，僅供有興趣者審閱與研究。
+**本專案無法取代受過專業訓練且擁有合格證照的心理師或諮商師， 且無法提供任何醫療與諮商行為**。
 
-你正在與 AI 對話:請避免提供個人資訊(真實姓名、電話、地址)。AI 可能犯錯與產生幻覺 ——
-所有建議僅供參考。
+請始終記住:**您是在跟 AI 對話。** 應避免在對話中提及真實姓名、電話、地址等個人資訊，必要時用化名。AI 可能會出錯與幻覺——所有建議僅供參考。
 
 ## 授權
 
