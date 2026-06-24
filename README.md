@@ -124,7 +124,7 @@ Continuing the same example — respectfully befriending a classmate — from th
 - **4-stage coaching loop** — Analyzer → Coach → Role-Play → Reflection.
 - **Curriculum-grounded advice** — the Coach answers only from curriculum slices retrieved for _your_ situation (RAG), not generic tips.
 - **Agent Skill curriculum** — social-skills knowledge authored once as a reusable Skill, the single source of truth; drop it into any agent CLI's skills folder (`.agents/skills`, `.claude/skills`) and it's recognized automatically.
-- **MCP server (bring your own model)** — the four agents are exposed as MCP prompts + knowledge tools, so any MCP client can run the whole coach with its own model. Shipped as an npm stdio package, [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp).
+- **MCP server (bring your own model)** — the four agents are exposed as MCP prompts + knowledge tools, so any MCP client can run the whole coach with its own model. Shipped as an npm stdio package, [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp). The standalone MCP received 600+ downloads within 3 days of publishing, with no promotion — suggesting genuine demand for accessible social-skills tooling.
 - **Multi-model** — switch between Xiaomi MiMo and DeepSeek; automatic failover when the demo key expires.
 - **Attachments** — upload images and text files (`.md`, `.txt`, `.csv`) for the AI to analyze.
 - **Mobile-first** — designed to reach for in the moment: with a connection and the demo page, the coach is in your pocket anytime. It has been tested on Pixel + Chrome / iPhone + Safari (both total market share 90+%) and still works smoothly even on older phones from four years ago.
