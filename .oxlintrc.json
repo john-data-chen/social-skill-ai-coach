@@ -7,7 +7,7 @@
     "react/no-unescaped-entities": "warn",
     "react/no-unknown-property": "warn",
     "react/jsx-curly-brace-presence": ["warn", "never"],
-    "no-unused-vars": "warn",
+    "no-unused-vars": ["warn", { "ignoreRestSiblings": true }],
     "no-debugger": "off",
     "no-var": "warn",
     "no-void": ["warn", { "allowAsStatement": true }],

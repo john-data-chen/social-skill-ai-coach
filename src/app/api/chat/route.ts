@@ -179,16 +179,15 @@ Write all text in the same language the user used.
           if (!(provider === "mimo" && mode === "demo")) {
             throw err
           }
+          if (!process.env.DEEPSEEK_API_KEY && isAuthError(err)) {
+            return new Response(
+              JSON.stringify({
+                error: "Xiaomi MiMo API Key expired and no DEEPSEEK_API_KEY fallback is available."
+              }),
+              { status: 401 }
+            )
+          }
           if (!process.env.DEEPSEEK_API_KEY) {
-            if (isAuthError(err)) {
-              return new Response(
-                JSON.stringify({
-                  error:
-                    "Xiaomi MiMo API Key expired and no DEEPSEEK_API_KEY fallback is available."
-                }),
-                { status: 401 }
-              )
-            }
             throw err
           }
           const deepseekProvider = getProvider("deepseek", process.env.DEEPSEEK_API_KEY)
