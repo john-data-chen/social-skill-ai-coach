@@ -34,7 +34,7 @@ vi.mock("@/components/ui/select", () => {
   }
   function MockSelectValue({ children }: any) {
     const val = useContext(SelectCtx)
-    return typeof children === "function" ? children(val) : val ?? null
+    return typeof children === "function" ? children(val) : (val ?? null)
   }
   return {
     Select: MockSelect,
@@ -63,7 +63,12 @@ describe("Settings", () => {
   })
 
   it("auto-fixes invalid model when dialog opens", () => {
-    useAppStore.setState({ model: "invalid-model", provider: "deepseek", mode: "byok", apiKey: "test-key" })
+    useAppStore.setState({
+      model: "invalid-model",
+      provider: "deepseek",
+      mode: "byok",
+      apiKey: "test-key"
+    })
     render(<Settings />)
 
     // Draft normalization only happens on open
@@ -107,7 +112,12 @@ describe("Settings", () => {
   })
 
   it("updates model using select", () => {
-    useAppStore.setState({ mode: "byok", provider: "mimo", apiKey: "test-key", baseUrl: "https://test" })
+    useAppStore.setState({
+      mode: "byok",
+      provider: "mimo",
+      apiKey: "test-key",
+      baseUrl: "https://test"
+    })
     render(<Settings />)
 
     fireEvent.click(screen.getByText("Settings"))
@@ -194,7 +204,12 @@ describe("Settings", () => {
   })
 
   it("falls back to mimo models for unknown provider", () => {
-    useAppStore.setState({ provider: "unknown" as any, model: "mimo-v2.5-pro", mode: "byok", apiKey: "test-key" })
+    useAppStore.setState({
+      provider: "unknown" as any,
+      model: "mimo-v2.5-pro",
+      mode: "byok",
+      apiKey: "test-key"
+    })
     render(<Settings />)
     fireEvent.click(screen.getByText("Settings"))
 

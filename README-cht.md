@@ -40,10 +40,10 @@
 
 單一聊天機器人會把四件性質完全不同的工作混在一起。教練本質上是一條**專家流水線**，所以本應用每個工作各用一個代理，並由確定性（deterministic）階段路由器推進流水線，再由 LLM orchestrator 為 Coach 做課程落地（RAG）:
 
-| 階段 | 代理                      | 工作                                                                    |
-| :--- | :------------------------ | :---------------------------------------------------------------------- |
+| 階段 | 代理                      | 工作                                                                     |
+| :--- | :------------------------ | :----------------------------------------------------------------------- |
 | 1    | **Analyzer（分析）**      | 結構化整理情境（誰／什麼／何地、管道、情境類型、目標），此階段不給建議。 |
-| 2    | **Coach（教練）**         | 給出具體、貼合情境的建議——只依據為此情境挑選出的課程片段。              |
+| 2    | **Coach（教練）**         | 給出具體、貼合情境的建議——只依據為此情境挑選出的課程片段。               |
 | 3    | **Role-Play（角色扮演）** | 扮演對方讓你練習，並依你的社交表現給出真實反應。                         |
 | 4    | **Reflection（復盤）**    | 依評分準則檢視角色扮演逐字稿，回傳結構化、逐面向的評估。                 |
 
@@ -108,14 +108,14 @@
 
 ### 對應到課程概念
 
-| 概念                  | 位置        | 如何呈現                                                                                                     |
-| :-------------------- | :---------- | :----------------------------------------------------------------------------------------------------------- |
-| **Agent／多代理系統** | Code        | 四個專職代理組成階段式流水線，以確定性階段路由推進，另由 LLM orchestrator 做知識路由（RAG）為 Coach 落地。     |
-| **MCP Server**        | Code        | `/api/mcp` 以 MCP 形式對外開放 `list_social_topics` + `get_social_knowledge`（tools）與四個代理（prompts）。 |
-| **Agent Skills**      | Code        | `skills/social-skills-coach/` 把課程封裝成可載入的 Skill——所有知識的唯一來源;放進 skills 目錄即被 Antigravity CLI／Claude Code 原樣識別。                               |
-| **安全性**            | Code        | BYOK（你的 API key 留在瀏覽器 session、不在 server 端儲存）+ 於 API 信任邊界用 zod 驗證每一個請求。          |
-| **可部署性**          | Docs／Video | 已部署於 Vercel;重現步驟見下文。                                                                             |
-| **Antigravity**       | Video       | 以 Antigravity IDE + CLI 開發，於投稿影片中展示。                                                             |
+| 概念                  | 位置        | 如何呈現                                                                                                                                  |
+| :-------------------- | :---------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| **Agent／多代理系統** | Code        | 四個專職代理組成階段式流水線，以確定性階段路由推進，另由 LLM orchestrator 做知識路由（RAG）為 Coach 落地。                                |
+| **MCP Server**        | Code        | `/api/mcp` 以 MCP 形式對外開放 `list_social_topics` + `get_social_knowledge`（tools）與四個代理（prompts）。                              |
+| **Agent Skills**      | Code        | `skills/social-skills-coach/` 把課程封裝成可載入的 Skill——所有知識的唯一來源;放進 skills 目錄即被 Antigravity CLI／Claude Code 原樣識別。 |
+| **安全性**            | Code        | BYOK（你的 API key 留在瀏覽器 session、不在 server 端儲存）+ 於 API 信任邊界用 zod 驗證每一個請求。                                       |
+| **可部署性**          | Docs／Video | 已部署於 Vercel;重現步驟見下文。                                                                                                          |
+| **Antigravity**       | Video       | 以 Antigravity IDE + CLI 開發，於投稿影片中展示。                                                                                         |
 
 ---
 
@@ -159,10 +159,10 @@ cp -r skills/social-skills-coach ~/.claude/skills/  # 與 Claude 共用
 ```
 
 | Runtime                     | 從這裡被識別                                                    |
-| :-------------------------- | :------------------------------------------------------------ |
-| Antigravity CLI — workspace | `.agents/skills/social-skills-coach/SKILL.md`                  |
+| :-------------------------- | :-------------------------------------------------------------- |
+| Antigravity CLI — workspace | `.agents/skills/social-skills-coach/SKILL.md`                   |
 | Antigravity CLI — global    | `~/.gemini/antigravity-cli/skills/social-skills-coach/SKILL.md` |
-| Claude Code／shared         | `~/.claude/skills/social-skills-coach/SKILL.md`                |
+| Claude Code／shared         | `~/.claude/skills/social-skills-coach/SKILL.md`                 |
 
 <table>
   <tr>
@@ -312,10 +312,10 @@ pnpm build        # 正式建置（typecheck + Next build）
 
 本應用採 **BYOK**（自帶金鑰）：你提供一把 API key，只在瀏覽器 session 中使用，永不存到 server 端。下列**擇一**:
 
-| 供應商          | 取得金鑰                                                          | 費用              | 環境變數                                                                                              |
-| :-------------- | :--------------------------------------------------------------- | :---------------- | :--------------------------------------------------------------------------------------------------- |
+| 供應商          | 取得金鑰                                                           | 費用               | 環境變數                                                                                               |
+| :-------------- | :----------------------------------------------------------------- | :----------------- | :----------------------------------------------------------------------------------------------------- |
 | **Xiaomi MiMo** | 訂閱 [MiMo token plan](https://platform.xiaomimimo.com/token-plan) | 最低 **6 美金/月** | `MIMO_API_KEY` + `MIMO_API_BASE_URL`（依你的方案調整，例如 `https://token-plan-cn.xiaomimimo.com/v1`） |
-| **DeepSeek**    | 到 [DeepSeek](https://platform.deepseek.com/) 充值               | 最低 **2 美金**   | `DEEPSEEK_API_KEY`                                                                                   |
+| **DeepSeek**    | 到 [DeepSeek](https://platform.deepseek.com/) 充值                 | 最低 **2 美金**    | `DEEPSEEK_API_KEY`                                                                                     |
 
 兩種用法擇一:
 

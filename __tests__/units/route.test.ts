@@ -1018,9 +1018,7 @@ describe("POST /api/chat", () => {
   it("handles empty first chunk (done immediately)", async () => {
     mockStreamText.mockReturnValue({
       textStream: {
-        getReader: vi
-          .fn()
-          .mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
+        getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
       }
     })
     mockGetProvider.mockReturnValue(() => vi.fn())
