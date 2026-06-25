@@ -256,7 +256,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col p-8 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="flex min-h-screen flex-col p-4 sm:p-8 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
           <h1 className="text-3xl sm:text-4xl font-bold">Social Skills Coach</h1>
@@ -459,6 +459,10 @@ export default function Home() {
                 <Button type="submit" className="w-full h-11 text-base" disabled={isLoading}>
                   {isLoading ? "Thinking..." : "Send"}
                 </Button>
+                <p className="text-xs text-muted-foreground">
+                  You are talking to an AI. Avoid sharing personal info (real name, phone, address,
+                  etc.). AI can make mistakes; suggestions are for reference only.
+                </p>
               </form>
             </div>
           </CardContent>
