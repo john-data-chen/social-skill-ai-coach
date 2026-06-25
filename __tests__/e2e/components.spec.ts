@@ -6,7 +6,7 @@ test.describe("UI Components E2E", () => {
     page.on("pageerror", (err) => console.error("BROWSER ERROR:", err))
 
     await page.addInitScript(() => {
-      window.localStorage.setItem("hasSeenCommands", "true");
+      window.localStorage.setItem("hasSeenCommands", "true")
     })
     // Go to the home page
     await page.goto("/")

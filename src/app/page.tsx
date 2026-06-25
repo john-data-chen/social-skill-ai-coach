@@ -256,7 +256,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col p-8 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="flex min-h-screen flex-col p-4 sm:p-8 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
           <h1 className="text-3xl sm:text-4xl font-bold">Social Skills Coach</h1>
@@ -459,6 +459,10 @@ export default function Home() {
                 <Button type="submit" className="w-full h-11 text-base" disabled={isLoading}>
                   {isLoading ? "Thinking..." : "Send"}
                 </Button>
+                <p className="text-xs text-muted-foreground">
+                  You are talking to an AI. Avoid sharing personal info (real name, phone, address,
+                  etc.). AI can make mistakes; suggestions are for reference only.
+                </p>
               </form>
             </div>
           </CardContent>
@@ -473,22 +477,17 @@ export default function Home() {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 text-sm mt-4">
-            <div className="flex flex-col gap-2">
-              <code className="bg-muted px-2 py-1 rounded w-fit">/analyzer [message]</code>
-              <p className="text-muted-foreground ml-2">Describe the situation.</p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <code className="bg-muted px-2 py-1 rounded w-fit">/coach [message]</code>
-              <p className="text-muted-foreground ml-2">Ask for advice.</p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <code className="bg-muted px-2 py-1 rounded w-fit">/role-play [message]</code>
-              <p className="text-muted-foreground ml-2">Practice the conversation.</p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <code className="bg-muted px-2 py-1 rounded w-fit">/reflection [message]</code>
-              <p className="text-muted-foreground ml-2">Review your practice.</p>
-            </div>
+            {[
+              ["/analyzer [message]", "Describe the situation."],
+              ["/coach [message]", "Ask for advice."],
+              ["/role-play [message]", "Practice the conversation."],
+              ["/reflection [message]", "Review your practice."]
+            ].map(([cmd, desc]) => (
+              <div key={cmd} className="flex flex-col gap-2">
+                <code className="bg-muted px-2 py-1 rounded w-fit">{cmd}</code>
+                <p className="text-muted-foreground ml-2">{desc}</p>
+              </div>
+            ))}
             <p className="text-xs text-muted-foreground mt-4 italic">
               Example: &ldquo;/coach how should I reply?&rdquo;
             </p>

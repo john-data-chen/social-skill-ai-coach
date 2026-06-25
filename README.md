@@ -10,7 +10,7 @@
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_social-skill-ai-coach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_social-skill-ai-coach)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-🔗 **[Live Demo](https://social-skill-ai-coach.vercel.app)**  · ▶️ **[Video](https://youtu.be/QsxvIu60pY8)** · 📦 **[npm: social-skills-coach-mcp](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇹🇼 **[中文說明](./README-cht.md)**
+🔗 **[Live Demo](https://social-skill-ai-coach.vercel.app)** · ▶️ **[Video](https://youtu.be/QsxvIu60pY8)** · 📦 **[npm: social-skills-coach-mcp](https://www.npmjs.com/package/social-skills-coach-mcp)** · 🇹🇼 **[中文說明](./README-cht.md)**
 
 > ⚠️ Conceptual MVP for the [Kaggle AI Agents Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) (track: **Agents for Good**), for review and research only. **It cannot replace a licensed psychologist or therapist.** Full disclaimer at the bottom.
 
@@ -108,14 +108,14 @@ Continuing the same example — respectfully befriending a classmate — from th
 
 ### Course concepts demonstrated
 
-| Concept                        | Where        | How it is demonstrated                                                                                                                                         |
-| :----------------------------- | :----------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Agent / Multi-agent system** | Code         | Four specialized agents in a staged pipeline with deterministic stage routing, plus an LLM orchestrator that does knowledge routing (RAG) to ground the Coach. |
-| **MCP Server**                 | Code         | `/api/mcp` exposes `list_social_topics` + `get_social_knowledge` (tools) and the four agents (prompts) over MCP for any external client.                       |
-| **Agent Skills**               | Code         | `skills/social-skills-coach/` packages the curriculum as a loadable Skill — the single source of truth, recognized as-is by Antigravity CLI / Claude Code when dropped into their skills folder.                                      |
-| **Security features**          | Code         | BYOK (your API key stays in the browser session, never stored server-side) + zod validation of every request at the API trust boundary.                        |
-| **Deployability**              | Docs / Video | Deployed on Vercel; reproduce steps below.                                                                                                                     |
-| **Antigravity**                | Video        | Built with the Antigravity IDE + CLI; shown in the submission video.                                                                                           |
+| Concept                        | Where        | How it is demonstrated                                                                                                                                                                           |
+| :----------------------------- | :----------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Agent / Multi-agent system** | Code         | Four specialized agents in a staged pipeline with deterministic stage routing, plus an LLM orchestrator that does knowledge routing (RAG) to ground the Coach.                                   |
+| **MCP Server**                 | Code         | `/api/mcp` exposes `list_social_topics` + `get_social_knowledge` (tools) and the four agents (prompts) over MCP for any external client.                                                         |
+| **Agent Skills**               | Code         | `skills/social-skills-coach/` packages the curriculum as a loadable Skill — the single source of truth, recognized as-is by Antigravity CLI / Claude Code when dropped into their skills folder. |
+| **Security features**          | Code         | BYOK (your API key stays in the browser session, never stored server-side) + zod validation of every request at the API trust boundary.                                                          |
+| **Deployability**              | Docs / Video | Deployed on Vercel; reproduce steps below.                                                                                                                                                       |
+| **Antigravity**                | Video        | Built with the Antigravity IDE + CLI; shown in the submission video.                                                                                                                             |
 
 ---
 
@@ -159,10 +159,10 @@ cp -r skills/social-skills-coach ~/.claude/skills/  # shared with Claude
 ```
 
 | Runtime                     | Picked up from                                                  |
-| :-------------------------- | :------------------------------------------------------------- |
-| Antigravity CLI — workspace | `.agents/skills/social-skills-coach/SKILL.md`                  |
+| :-------------------------- | :-------------------------------------------------------------- |
+| Antigravity CLI — workspace | `.agents/skills/social-skills-coach/SKILL.md`                   |
 | Antigravity CLI — global    | `~/.gemini/antigravity-cli/skills/social-skills-coach/SKILL.md` |
-| Claude Code / shared        | `~/.claude/skills/social-skills-coach/SKILL.md`                |
+| Claude Code / shared        | `~/.claude/skills/social-skills-coach/SKILL.md`                 |
 
 <table>
   <tr>
@@ -312,10 +312,10 @@ pnpm build        # production build (typecheck + Next build)
 
 This app is **BYOK** (bring your own key): you supply one API key, used only in your browser session — never stored server-side. Pick **one** provider:
 
-| Provider        | Get a key                                                                  | Cost            | Env vars                                                                                                |
-| :-------------- | :------------------------------------------------------------------------- | :-------------- | :----------------------------------------------------------------------------------------------------- |
-| **Xiaomi MiMo** | Subscribe a [MiMo token plan](https://platform.xiaomimimo.com/token-plan)  | from **$6/mo**  | `MIMO_API_KEY` + `MIMO_API_BASE_URL` (match your plan, e.g. `https://token-plan-cn.xiaomimimo.com/v1`) |
-| **DeepSeek**    | Top up at [DeepSeek](https://platform.deepseek.com/)                       | from **$2**     | `DEEPSEEK_API_KEY`                                                                                      |
+| Provider        | Get a key                                                                 | Cost           | Env vars                                                                                               |
+| :-------------- | :------------------------------------------------------------------------ | :------------- | :----------------------------------------------------------------------------------------------------- |
+| **Xiaomi MiMo** | Subscribe a [MiMo token plan](https://platform.xiaomimimo.com/token-plan) | from **$6/mo** | `MIMO_API_KEY` + `MIMO_API_BASE_URL` (match your plan, e.g. `https://token-plan-cn.xiaomimimo.com/v1`) |
+| **DeepSeek**    | Top up at [DeepSeek](https://platform.deepseek.com/)                      | from **$2**    | `DEEPSEEK_API_KEY`                                                                                     |
 
 Use it one of two ways:
 

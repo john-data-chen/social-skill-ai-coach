@@ -185,13 +185,16 @@ export function Settings() {
                   value={draft.apiKey || ""}
                   onChange={(e) => {
                     setDraft((prev) => ({ ...prev, apiKey: e.target.value }))
-                    if (errors.apiKey) {setErrors((prev) => { const { apiKey, ...rest } = prev; return rest; })}
+                    if (errors.apiKey) {
+                      setErrors((prev) => {
+                        const { apiKey, ...rest } = prev
+                        return rest
+                      })
+                    }
                   }}
                   placeholder="sk-..."
                 />
-                {errors.apiKey && (
-                  <p className="text-sm text-destructive mt-1">{errors.apiKey}</p>
-                )}
+                {errors.apiKey && <p className="text-sm text-destructive mt-1">{errors.apiKey}</p>}
               </div>
             </div>
           )}
@@ -207,7 +210,12 @@ export function Settings() {
                   value={draft.baseUrl || ""}
                   onChange={(e) => {
                     setDraft((prev) => ({ ...prev, baseUrl: e.target.value }))
-                    if (errors.baseUrl) {setErrors((prev) => { const { baseUrl, ...rest } = prev; return rest; })}
+                    if (errors.baseUrl) {
+                      setErrors((prev) => {
+                        const { baseUrl, ...rest } = prev
+                        return rest
+                      })
+                    }
                   }}
                   placeholder="Mimo token plan only — e.g. https://token-plan-cn.xiaomimimo.com/v1"
                 />
