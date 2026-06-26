@@ -126,6 +126,7 @@ Continuing the same example — respectfully befriending a classmate — from th
 - **Agent Skill curriculum** — social-skills knowledge authored once as a reusable Skill, the single source of truth; drop it into any agent CLI's skills folder (`.agents/skills`, `.claude/skills`) and it's recognized automatically.
 - **MCP server (bring your own model)** — the four agents are exposed as MCP prompts + knowledge tools, so any MCP client can run the whole coach with its own model. Shipped as an npm stdio package, [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp). The standalone MCP received 600+ downloads within 3 days of publishing, with no promotion — suggesting genuine demand for accessible social-skills tooling.
 - **Multi-model** — switch between Xiaomi MiMo and DeepSeek; automatic failover when the demo key expires.
+- **Multilingual** — the AI replies in whatever language you write in, so you can practice in your mother tongue. Language quality depends on the model; tested working in English, Chinese, and Spanish on MiMo / DeepSeek.
 - **Attachments** — upload images and text files (`.md`, `.txt`, `.csv`) for the AI to analyze.
 - **Mobile-first** — designed to reach for in the moment: with a connection and the demo page, the coach is in your pocket anytime. It has been tested on Pixel + Chrome / iPhone + Safari (both total market share 90+%) and still works smoothly even on older phones from four years ago.
 - **Dark / light themes** — reduces eye strain, important for light sensitivity.
@@ -381,6 +382,8 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating track is **Agents for Good**, and it is for review and research by interested parties only. All functions (including but not limited to the Demo, AI agents, Skill, and MCP) **cannot replace professionally trained and licensed psychologists or therapists**, and cannot provide any medical treatment or consultation.
 
 The demo website uses the [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) to operate with a minimum monthly token plan. It can be used directly. **The monthly token plan will be expired after Kaggle review, and no DeepSeek key has been prepared.**
+
+The demo video and screenshots are in English for the Kaggle review. You can talk to the AI in your own language — how well it does depends on the model. I tested English, Chinese, and Spanish on MiMo / DeepSeek, and all worked smoothly.
 
 Please always remember: **you are talking to an AI.** Avoid mentioning personal information such as your real name, phone number, or address; use a pseudonym if needed. AI can make mistakes and hallucinate — all suggestions are for reference only.
 
