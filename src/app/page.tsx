@@ -261,7 +261,8 @@ export default function Home() {
         <div>
           <h1 className="text-3xl sm:text-4xl font-bold">Social Skills Coach</h1>
           <p className="text-gray-500 text-sm sm:text-base mt-1">
-            Practice and improve your social interactions
+            Practice and improve your social interactions — chat in your own language (quality
+            varies by model).
           </p>
         </div>
         <div className="flex gap-2 w-full sm:w-auto justify-end">

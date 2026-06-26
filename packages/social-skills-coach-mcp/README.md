@@ -38,7 +38,7 @@ so:
   - `list_social_topics()` — list the 12 curriculum topics (call this first)
   - `get_social_knowledge({ topics })` — fetch the verbatim curriculum slice(s)
 
-The agents reply in the **same language the user writes in**.
+The agents reply in the **same language the user writes in**, so you can practice in your mother tongue. Language quality depends on the model you connect; tested working in English, Chinese, and Spanish on MiMo / DeepSeek.
 
 ## Use with Claude Desktop
 
@@ -86,6 +86,8 @@ social-skills-coach-mcp               # runs the stdio server
 ## ⚠️ Disclaimer
 
 This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating track is **Agents for Good**, and it is for review and research by interested parties only. All functions **cannot replace professionally trained and licensed psychologists or therapists**, and cannot provide any medical treatment or consultation.
+
+The demo video and screenshots are in English for the Kaggle review. You can talk to the AI in your own language — how well it does depends on the model. I tested English, Chinese, and Spanish on MiMo / DeepSeek, and all worked smoothly.
 
 Please always remember: **you are talking to an AI.** Avoid mentioning personal information such as your real name, phone number, or address; use a pseudonym if needed. AI can make mistakes and hallucinate — all suggestions are for reference only.
 

@@ -34,7 +34,7 @@
   - `list_social_topics()` —— 列出 12 個課程主題(請先呼叫這個)
   - `get_social_knowledge({ topics })` —— 取得逐字的課程片段
 
-所有 agent 會以**使用者輸入時所用的相同語言**回覆。
+所有 agent 會以**使用者輸入時所用的相同語言**回覆,所以你可以用母語練習。語言品質依你接上的模型而定;已在 MiMo / DeepSeek 上測試英文、中文、西班牙文皆能順利運作。
 
 ## 搭配 Claude Desktop 使用
 
@@ -83,6 +83,8 @@ social-skills-coach-mcp               # 執行 stdio 伺服器
 
 本專案為概念性最小可行產品(MVP)，為了參與 [Kaggle AI Agents Capstone Project ](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) (參加組別 **Agents for Good**) 而作，僅供有興趣者審閱與研究。
 **本專案無法取代受過專業訓練且擁有合格證照的心理師或諮商師， 且無法提供任何醫療與諮商行為**。
+
+示範影片與截圖為了 Kaggle 評審以英文為主。你可以直接用母語與 AI 對話——支援度依模型能力而有所不同。我在 MiMo / DeepSeek 上測試過英文、中文、西班牙文,皆能順利運作。
 
 請始終記住:**您是在跟 AI 對話。** 應避免在對話中提及真實姓名、電話、地址等個人資訊，必要時用化名。AI 可能會出錯與幻覺——所有建議僅供參考。
 
