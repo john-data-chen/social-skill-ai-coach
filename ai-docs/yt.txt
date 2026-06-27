@@ -1,0 +1,43 @@
+Practice real social situations with a multi-agent AI coach — Analyze → Coach → Role-Play → Reflect — anytime, for the cost of an API key.
+
+🔗 Demo: https://social-skill-ai-coach.vercel.app
+💻 Github: github.com/john-data-chen/social-skill-ai-coach
+📦 NPM: www.npmjs.com/package/social-skills-coach-mcp
+
+Social skills can be learned — but they're hard to *practice*. Real conversations are high-risk, one-off, and
+almost no one gives you honest feedback in the moment. Evidence-based programs like PEERS run $2,800–$3,600 for a
+14–16 week course. Social Skills AI Coach turns a PEERS-style curriculum into a private, judgment-free coach you
+can rehearse with anytime — one specialized AI agent per stage, grounded in a real curriculum.
+
+How it works
+• Analyzer — structures your situation (who/what/where, channel, goal), no advice yet
+• Coach — concrete, curriculum-grounded advice and exact phrases you can say
+• Role-Play — the AI plays the other person so you rehearse a realistic back-and-forth
+• Reflection — a structured, per-dimension rubric evaluation of how you did
+
+Under the hood
+• Multi-agent pipeline with deterministic stage routing + an LLM orchestrator doing retrieval-augmented grounding
+(RAG)
+• The curriculum is a single Agent Skill — one source of truth, consumed three ways (in-process, as a drop-in
+SKILL.md skill, and over MCP)
+• Also a standalone MCP server: the four agents are MCP prompts that run on YOUR model — the server holds no API
+key and runs no inference
+• BYOK (your key stays in the browser session, never stored), zod-validated, stateless
+• Next.js + TypeScript, tested (Vitest + Playwright), deployed on Vercel
+
+Built for the Kaggle AI Agents: Intensive Vibe Coding Capstone — track: Agents for Good. Vibe-coded with the
+Antigravity IDE + CLI.
+
+Chapters
+0:00 The problem
+0:20 What it is
+0:37 Live demo (Analyze → Coach → Role-Play → Reflect)
+1:21 Architecture — why multi-agent + MCP
+1:56 The build (Antigravity)
+2:07 Try it
+
+⚠️ Conceptual MVP for review and research only. It cannot replace a licensed psychologist or therapist and provides
+no medical or clinical advice. You're talking to an AI — avoid sharing personal information; all suggestions are
+for reference only.
+
+#AIagents #MCP #Kaggle #AgentsForGood #SocialSkills
