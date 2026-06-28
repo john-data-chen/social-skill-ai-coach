@@ -8,7 +8,7 @@
 
 一個 [MCP](https://modelcontextprotocol.io) 伺服器,將 PEERS 式的社交技巧課程轉成完整的教練循環 —— **分析 → 教練 → 角色扮演 → 復盤** —— 讓**任何 MCP client 都能用自己的模型執行**。
 
-它在沒有進行任何付費廣告下，發布後 3 天內就獲得了 600 多次下載，這表明對易於使用的社交技能工具的真正需求。
+它在沒有任何付費廣告下，發布首週即逾 1,600 次下載，顯示市場對易用社交技能工具的真實需求。
 
 它是 [Social Skills AI Coach](https://github.com/john-data-chen/social-skill-ai-coach) 專案的獨立、可發布套件（試試 **[線上 Demo](https://social-skill-ai-coach.vercel.app)**、或 **[影片](https://youtu.be/QsxvIu60pY8)**）:
 描述一個情境,獲得以課程為依據的具體建議,透過角色扮演演練,再得到結構化的復盤回饋。
