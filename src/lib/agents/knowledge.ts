@@ -2,9 +2,9 @@
  * Social-skills knowledge — now sourced from the `social-skills-coach` Agent Skill
  * (`skills/social-skills-coach/`). These named exports are a thin adapter so each
  * stage prompt can keep composing the exact slices it needs; the skill markdown is
- * the single source of truth (distilled from the 8-lesson course). The agents still
- * reply to the user in Traditional Chinese — enforced by each prompt's CRITICAL
- * RULE, not by the language of this reference material.
+ * the single source of truth (distilled from the 8-lesson course). The agents reply
+ * to the user in the same language the user writes in — enforced by each prompt's
+ * CRITICAL RULE, not by the language of this reference material.
  */
 import { getKnowledge } from "@/lib/knowledge"
 

@@ -10,7 +10,7 @@ to one file in `references/`. Load only the slices relevant to the user's
 scenario and channel — do not dump unrelated topics.
 
 This material is reference knowledge in English; the coaching agents reply to the
-end user in Traditional Chinese (enforced by each agent's own prompt, not here).
+end user in the same language the user writes in (enforced by each agent's own prompt, not here).
 
 ## Topic index
 
