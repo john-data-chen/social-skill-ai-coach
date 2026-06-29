@@ -6,7 +6,7 @@
 
 > For English, see [README.md](https://github.com/john-data-chen/social-skill-ai-coach/blob/main/packages/social-skills-coach-mcp/README.md).
 
-一個 [MCP](https://modelcontextprotocol.io) 伺服器,將 PEERS 式的社交技巧課程轉成完整的教練循環 —— **分析 → 教練 → 角色扮演 → 復盤** —— 讓**任何 MCP client 都能用自己的模型執行**。
+一個 [MCP](https://modelcontextprotocol.io) 伺服器,將 [PEERS 社交技巧課程](https://www.semel.ucla.edu/peers/) 轉成完整的教練循環 —— **分析 → 教練 → 角色扮演 → 復盤** —— 讓**任何 MCP client 都能用自己的模型執行**。
 
 它在沒有任何付費廣告下，發布首週即逾 1,600 次下載，顯示市場對易用社交技能工具的真實需求。
 

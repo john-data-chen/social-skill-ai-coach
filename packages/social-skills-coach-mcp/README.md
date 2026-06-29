@@ -6,7 +6,7 @@
 
 > 中文說明請見 [README-cht.md](https://github.com/john-data-chen/social-skill-ai-coach/blob/main/packages/social-skills-coach-mcp/README-cht.md)。
 
-An [MCP](https://modelcontextprotocol.io) server that turns a PEERS-style social-skills
+An [MCP](https://modelcontextprotocol.io) server that turns a [PEERS-style](https://www.semel.ucla.edu/peers/) social-skills
 curriculum into a full coaching loop — **Analyze → Coach → Role-Play → Reflect** — that
 **any MCP client can run with its own model**.
 
