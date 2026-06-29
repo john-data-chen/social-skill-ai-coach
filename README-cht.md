@@ -374,6 +374,9 @@ Next.js（App Router）· React · TypeScript（strict）· TailwindCSS · Verce
 ## 📋 未來發展
 
 - 支持更多 AI 模型或供應商如: Anthropic、OpenAI、Google Gemini...等等
+- 語音角色扮演功能，提升練習效果。
+- 四個階段的進度可保存（僅限本地）。
+- 與智能耳機 / 眼鏡相結合，在對話進行時提供更即時的協助。
 
 ---
 
