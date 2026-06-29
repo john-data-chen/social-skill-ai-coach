@@ -376,7 +376,7 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 - Support more models and providers: Anthropic, OpenAI, Google Gemini...etc
 - Voice role-play for higher-fidelity practice.
 - Saved (local-only) progress across the four stages.
-- Combine with smart headphones/glasses to provides more immediate assistance during conversations.
+- Combine with smart headphones/glasses to provides more instant assistance during conversations.
 
 ---
 
