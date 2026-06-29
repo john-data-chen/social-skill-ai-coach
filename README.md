@@ -374,6 +374,7 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 ## 📋 Roadmap
 
 - Support more models and providers: Anthropic, OpenAI, Google Gemini...etc
+- Combine with smart headphones/glasses to provides more immediate assistance during conversations.
 
 ---
 

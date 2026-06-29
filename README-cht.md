@@ -374,6 +374,7 @@ Next.js（App Router）· React · TypeScript（strict）· TailwindCSS · Verce
 ## 📋 未來發展
 
 - 支持更多 AI 模型或供應商如: Anthropic、OpenAI、Google Gemini...等等
+- 與智能耳機 / 眼鏡相結合，在對話進行時提供更即時的協助。
 
 ---
 
