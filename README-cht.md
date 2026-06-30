@@ -176,7 +176,7 @@ cp -r skills/social-skills-coach ~/.claude/skills/  # 與 Claude 共用
   </tr>
 </table>
 
-<p align="center"><em>同一份 SKILL.md，跨 runtime 被識別——零接線、不必改。</em></p>
+<p align="center"><em>同一份 SKILL.md，跨客戶端被識別——不必程式碼串接、不必改。</em></p>
 
 這是同一份課程被消費的第二種方式（與 in-process、MCP 並列）:撰寫一次，到處重用。
 
@@ -199,7 +199,7 @@ cp -r skills/social-skills-coach ~/.claude/skills/  # 與 Claude 共用
   </tr>
 </table>
 
-<p align="center"><em>一個 MCP 伺服器，任何 client、任何模型——不必改、不用為各客戶端寫程式碼串接。</em></p>
+<p align="center"><em>一個 MCP 伺服器，任何客戶端、任何模型——不必改、不用為各客戶端寫程式碼串接。</em></p>
 
 **它開放了什麼:**
 
@@ -235,7 +235,7 @@ curl -s -X POST http://localhost:3000/api/mcp \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_social_knowledge","arguments":{"topics":["opening"]}}}'
 ```
 
-兩種形式共用同一個 core（`registerSocialSkillsMcp`）與同一份課程來源（Agent Skill），不會漂移。
+兩種形式共用同一個 core（`registerSocialSkillsMcp`）與同一份課程來源（Agent Skill），不會偏移。
 
 ---
 
