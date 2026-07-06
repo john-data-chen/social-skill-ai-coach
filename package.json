@@ -59,7 +59,7 @@
     "@types/react-dom": "19.2.3",
     "@typescript/native-preview": "beta",
     "@vitejs/plugin-react": "^6.0.3",
-    "@vitest/coverage-v8": "^4.1.9",
+    "@vitest/coverage-v8": "^4.1.10",
     "commitizen": "^4.3.2",
     "dotenv": "^17.4.2",
     "husky": "^9.1.7",
@@ -68,7 +68,7 @@
     "oxfmt": "^0.57.0",
     "oxlint": "^1.72.0",
     "oxlint-tsgolint": "^0.24.0",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.10"
   },
   "lint-staged": {
     "{src/!(components)/**/*.{js,jsx,ts,tsx,css,scss},src/components/!(ui)/**/*.{js,jsx,ts,tsx,css,scss}}": [
@@ -92,5 +92,5 @@
   "engines": {
     "node": ">=24"
   },
-  "packageManager": "pnpm@11.9.0"
+  "packageManager": "pnpm@11.10.0"
 }
