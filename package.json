@@ -22,14 +22,14 @@
     "typecheck": "tsgo --noEmit"
   },
   "dependencies": {
-    "@ai-sdk/openai-compatible": "^3.0.5",
-    "@ai-sdk/react": "^4.0.16",
+    "@ai-sdk/openai-compatible": "^3.0.6",
+    "@ai-sdk/react": "^4.0.19",
     "@base-ui/react": "^1.6.0",
     "@modelcontextprotocol/sdk": "1.29.0",
     "@tailwindcss/postcss": "^4.3.2",
     "@tailwindcss/typography": "^0.5.20",
     "@vercel/analytics": "^2.0.1",
-    "ai": "^7.0.15",
+    "ai": "^7.0.18",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.23.0",
@@ -48,7 +48,7 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
-    "@commitlint/cli": "^21.2.0",
+    "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^21.2.0",
     "@commitlint/cz-commitlint": "^21.2.0",
     "@playwright/test": "^1.61.1",
@@ -65,8 +65,8 @@
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
     "lint-staged": "^17.0.8",
-    "oxfmt": "^0.57.0",
-    "oxlint": "^1.72.0",
+    "oxfmt": "^0.58.0",
+    "oxlint": "^1.73.0",
     "oxlint-tsgolint": "^0.24.0",
     "vitest": "^4.1.10"
   },
