@@ -80,5 +80,9 @@
     "typescript/unbound-method": "warn",
     "typescript/use-unknown-in-catch-callback-variable": "warn"
   },
-  "ignorePatterns": ["node_modules/", ".agents", "src/components/ui/**", "next-env.d.ts"]
+  "ignorePatterns": ["node_modules/", ".agents", "src/components/ui/**", "next-env.d.ts"],
+  "options": {
+    "typeAware": true,
+    "typeCheck": true
+  }
 }
