@@ -315,7 +315,7 @@ This app is **BYOK** (bring your own key): you supply one API key, used only in 
 
 | Provider        | Get a key                                                                 | Cost           | Env vars                                                                                               |
 | :-------------- | :------------------------------------------------------------------------ | :------------- | :----------------------------------------------------------------------------------------------------- |
-| **Grok (xAI)**  | Get a key at [x.ai](https://console.x.ai/)                               | from **$5**    | `GROK_API_KEY`                                                                                         |
+| **Grok (xAI)**  | Get a key at [x.ai](https://console.x.ai/)                                | from **$5**    | `GROK_API_KEY`                                                                                         |
 | **Xiaomi MiMo** | Subscribe a [MiMo token plan](https://platform.xiaomimimo.com/token-plan) | from **$6/mo** | `MIMO_API_KEY` + `MIMO_API_BASE_URL` (match your plan, e.g. `https://token-plan-cn.xiaomimimo.com/v1`) |
 | **DeepSeek**    | Top up at [DeepSeek](https://platform.deepseek.com/)                      | from **$2**    | `DEEPSEEK_API_KEY`                                                                                     |
 
@@ -374,10 +374,16 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 
 ## 📋 Roadmap
 
-- Support more models and providers: Anthropic, OpenAI, Google Gemini...etc
-- Voice role-play for higher-fidelity practice.
-- Saved (local-only) progress across the four stages.
-- Combine with smart headphones/glasses to provides more instant assistance during conversations.
+### Done
+
+- [x] Add support of Grok
+
+### Todo
+
+- [ ] Support more models and providers: Anthropic, OpenAI, Google Gemini...etc
+- [ ] Voice role-play for higher-fidelity practice.
+- [ ] Saved (local-only) progress across the four stages.
+- [ ] Combine with smart headphones/glasses to provides more instant assistance during conversations.
 
 ---
 
@@ -385,7 +391,7 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 
 This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating track is **Agents for Good**, and it is for review and research by interested parties only. All functions (including but not limited to the Demo, AI agents, Skill, and MCP) **cannot replace professionally trained and licensed psychologists or therapists**, and cannot provide any medical treatment or consultation.
 
-The demo website uses the [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) to operate with a minimum monthly token plan. It can be used directly. **The monthly token plan will be expired after Kaggle review**. If you want to continue using it, please bring your own key - [see Get an API key (BYOK)](#byok)
+The demo website uses [Grok (xAI)](https://console.x.ai/) as the default model. It can be used directly. **The API key will be expired after Kaggle review**. If you want to continue using it, please bring your own key - [see Get an API key (BYOK)](#byok)
 
 The demo video and screenshots are in English for the Kaggle review. You can talk to the AI in your own language — how well it does depends on the model. I tested English, Chinese, and Spanish on MiMo / DeepSeek, and all worked smoothly.
 

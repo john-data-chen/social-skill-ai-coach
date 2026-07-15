@@ -315,7 +315,7 @@ pnpm build        # 正式建置（typecheck + Next build）
 
 | 供應商          | 取得金鑰                                                           | 費用               | 環境變數                                                                                               |
 | :-------------- | :----------------------------------------------------------------- | :----------------- | :----------------------------------------------------------------------------------------------------- |
-| **Grok (xAI)**  | 到 [x.ai](https://console.x.ai/) 取得金鑰                         | 最低 **5 美金**    | `GROK_API_KEY`                                                                                         |
+| **Grok (xAI)**  | 到 [x.ai](https://console.x.ai/) 取得金鑰                          | 最低 **5 美金**    | `GROK_API_KEY`                                                                                         |
 | **Xiaomi MiMo** | 訂閱 [MiMo token plan](https://platform.xiaomimimo.com/token-plan) | 最低 **6 美金/月** | `MIMO_API_KEY` + `MIMO_API_BASE_URL`（依你的方案調整，例如 `https://token-plan-cn.xiaomimimo.com/v1`） |
 | **DeepSeek**    | 到 [DeepSeek](https://platform.deepseek.com/) 充值                 | 最低 **2 美金**    | `DEEPSEEK_API_KEY`                                                                                     |
 
@@ -374,10 +374,16 @@ Next.js（App Router）· React · TypeScript（strict）· TailwindCSS · Verce
 
 ## 📋 未來發展
 
-- 支持更多 AI 模型或供應商如: Anthropic、OpenAI、Google Gemini...等等
-- 語音角色扮演功能，提升練習效果。
-- 四個階段的進度可保存（僅限本地）。
-- 與智能耳機 / 眼鏡相結合，在對話進行時提供更即時的協助。
+### 已完成
+
+- [x] 增加 Grok 作為預設模型
+
+### 待完成
+
+- [ ] 支持更多 AI 模型或供應商如: Anthropic、OpenAI、Google Gemini...等等
+- [ ] 語音角色扮演功能，提升練習效果。
+- [ ] 四個階段的進度可保存（僅限本地）。
+- [ ] 與智能耳機 / 眼鏡相結合，在對話進行時提供更即時的協助。
 
 ---
 
@@ -385,7 +391,7 @@ Next.js（App Router）· React · TypeScript（strict）· TailwindCSS · Verce
 
 此專案是為了 [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) 所開發的概念性產品（最小可行性產品），參加 **Agents for Good**，僅供評審與有興趣者研究。專案所有功能（包含但不限於 Demo、AI agent、Skill、MCP）**皆無法取代受過專業訓練且擁有合格證照的心理師或諮商師， 且無法提供任何醫療與諮商行為**。
 
-示範網站使用 [Xiaomi MiMo token plan](https://platform.xiaomimimo.com/token-plan) 以最低月訂閱計畫運作，可以直接使用，**在 Kaggle 審核過後訂閱計畫就會失效**。若要繼續使用請自備金鑰——見 [取得 API 金鑰（BYOK）](#byok)。
+示範網站使用 [Grok (xAI)](https://console.x.ai/) 作為預設模型，可以直接使用，**API key 在 Kaggle 審核過後會失效**。若要繼續使用請自備金鑰——見 [取得 API 金鑰（BYOK）](#byok)。
 
 示範影片與截圖為了 Kaggle 評審以英文為主。你可以直接用母語與 AI 對話——支援度依模型能力而有所不同。我在 MiMo / DeepSeek 上測試過英文、中文、西班牙文，皆能順利運作。
 

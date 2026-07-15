@@ -22,7 +22,7 @@ vi.mock("@/components/ui/select", () => {
         <select
           data-testid="mock-select"
           value={value}
-          onChange={(e) => onValueChange(e.target.value)}
+          onChange={(e) =>{  onValueChange(e.target.value); }}
         >
           {children}
         </select>
@@ -203,10 +203,10 @@ describe("Settings", () => {
     expect(useAppStore.getState().model).toBe("deepseek-v4-pro")
   })
 
-  it("falls back to mimo models for unknown provider", () => {
+  it("falls back to grok models for unknown provider", () => {
     useAppStore.setState({
       provider: "unknown" as any,
-      model: "mimo-v2.5-pro",
+      model: "grok-4-fast",
       mode: "byok",
       apiKey: "test-key"
     })
@@ -214,6 +214,6 @@ describe("Settings", () => {
     fireEvent.click(screen.getByText("Settings"))
 
     fireEvent.click(screen.getByText("Confirm"))
-    expect(useAppStore.getState().model).toBe("mimo-v2.5-pro")
+    expect(useAppStore.getState().model).toBe("grok-4-fast")
   })
 })
