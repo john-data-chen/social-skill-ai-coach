@@ -125,7 +125,7 @@
 - **課程落地的建議**——Coach 只依據為**你的**情境檢索出的課程片段（RAG）回答，而非通用建議。
 - **Agent Skill 課程**——社交知識撰寫成可重用的 Skill，唯一真實來源;丟進任何 agent CLI 的 skills 目錄（`.agents/skills`、`.claude/skills`）即被自動識別。
 - **MCP 伺服器（自帶你的模型）**——四個 agent 以 MCP prompts + 知識 tools 形式開放，任何 MCP client 都能用自己的模型跑整套教練。發佈為 npm stdio 套件 [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)。獨立 MCP 在沒有任何付費廣告下，發布首週即逾 1,600 次下載，顯示市場對易用社交技能工具的真實需求。
-- **多模型**——可在 Xiaomi MiMo 與 DeepSeek 間切換;demo key 失效時自動切換備援。
+- **多模型**——可在 Grok（xAI，預設）、Xiaomi MiMo 與 DeepSeek 間切換;demo key 失效時自動 fallback 至 DeepSeek。
 - **多語言**——AI 會用你輸入的語言回覆,所以你可以用母語練習。語言品質依模型能力而定;已在 MiMo / DeepSeek 上測試英文、中文、西班牙文皆能順利運作。
 - **附件**——上傳圖片與文字檔（`.md`、`.txt`、`.csv`）供 AI 分析。
 - **針對手機操作優化**——讓你在當下就能掏出來用:只要能聯網打開 Demo 網頁，教練隨時隨地在你口袋裡。已在 Pixel + Chrome / iPhone + Safari (兩者總和市占率 90+%) 上實機測試，即便是四年前的舊手機仍運作順暢。
@@ -264,7 +264,7 @@ curl -s -X POST http://localhost:3000/api/mcp \
 │       ├── mcp/server-setup.ts       # 共用 MCP 註冊（tools + agent prompts）
 │       ├── orchestrator.ts           # LLM 主題挑選 + 落地（server-only）
 │       ├── router.ts                 # Deterministic 階段路由（client 安全）
-│       ├── ai.ts                     # 供應商初始化（MiMo / DeepSeek）
+│       ├── ai.ts                     # 供應商初始化（Grok / MiMo / DeepSeek）
 │       └── store.ts                  # Zustand 狀態（歷史、設定）
 ├── public/
 │   └── images/                  # 架構 PNG、封面、截圖（README／媒體素材）
@@ -293,7 +293,7 @@ pnpm install
 
 ```bash
 cp env.example .env
-# 接著填入 MIMO_API_KEY + MIMO_API_BASE_URL ／ DEEPSEEK_API_KEY
+# 接著填入 GROK_API_KEY ／ MIMO_API_KEY + MIMO_API_BASE_URL ／ DEEPSEEK_API_KEY
 ```
 
 ### 4. 執行
@@ -315,6 +315,7 @@ pnpm build        # 正式建置（typecheck + Next build）
 
 | 供應商          | 取得金鑰                                                           | 費用               | 環境變數                                                                                               |
 | :-------------- | :----------------------------------------------------------------- | :----------------- | :----------------------------------------------------------------------------------------------------- |
+| **Grok (xAI)**  | 到 [x.ai](https://console.x.ai/) 取得金鑰                         | 最低 **5 美金**    | `GROK_API_KEY`                                                                                         |
 | **Xiaomi MiMo** | 訂閱 [MiMo token plan](https://platform.xiaomimimo.com/token-plan) | 最低 **6 美金/月** | `MIMO_API_KEY` + `MIMO_API_BASE_URL`（依你的方案調整，例如 `https://token-plan-cn.xiaomimimo.com/v1`） |
 | **DeepSeek**    | 到 [DeepSeek](https://platform.deepseek.com/) 充值                 | 最低 **2 美金**    | `DEEPSEEK_API_KEY`                                                                                     |
 
@@ -327,7 +328,7 @@ pnpm build        # 正式建置（typecheck + Next build）
 
 ## 🚀 部署（Vercel）
 
-本 repo 是 public template —— 一鍵部署你自己的實例，立刻以 **BYOK** 模式使用（打開 **設定**，貼上你自己的 MiMo 或 DeepSeek key——見 [取得 API 金鑰（BYOK）](#byok)）；免登入、免付費。
+本 repo 是 public template —— 一鍵部署你自己的實例，立刻以 **BYOK** 模式使用（打開 **設定**，貼上你自己的 Grok、MiMo 或 DeepSeek key——見 [取得 API 金鑰（BYOK）](#byok)）；免登入、免付費。
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/john-data-chen/social-skill-ai-coach)
 
@@ -355,7 +356,7 @@ pnpm build        # 正式建置（typecheck + Next build）
   <img src="./public/images/deploy-3.png" alt="Environment Variables 頁 —— Add Environment Variable 按鈕" width="520" />
 </p>
 
-加入 [BYOK 表格](#byok) 中的金鑰（MiMo / DeepSeek 擇一），打開 **Sensitive**，按 **Save**——再重新部署。
+加入 [BYOK 表格](#byok) 中的金鑰（Grok / MiMo / DeepSeek 擇一），打開 **Sensitive**，按 **Save**——再重新部署。
 
 <p align="center">
   <img src="./public/images/deploy-4.png" alt="Add Environment Variable —— 填入 MIMO_API_KEY 與 MIMO_API_BASE_URL 並開啟 Sensitive" width="520" />

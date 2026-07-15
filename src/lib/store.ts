@@ -17,7 +17,7 @@ export type Stage = "analyzer" | "coach" | "roleplay" | "reflection"
 
 export interface AppState {
   // Config state (Persisted)
-  provider: "mimo" | "deepseek" | "demo"
+  provider: "mimo" | "deepseek" | "grok" | "demo"
   model: string
   apiKey: string
   baseUrl: string
@@ -41,8 +41,8 @@ export interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
-      provider: "mimo",
-      model: "mimo-v2.5-pro",
+      provider: "grok",
+      model: "grok-4-fast",
       apiKey: "",
       baseUrl: "",
       mode: "demo",
