@@ -51,17 +51,24 @@ export async function POST(req: Request) {
 
     let apiKey = byokKey
     if (mode === "demo") {
-      if (!process.env.MIMO_API_KEY && !process.env.DEEPSEEK_API_KEY) {
+      if (!process.env.GROK_API_KEY && !process.env.MIMO_API_KEY && !process.env.DEEPSEEK_API_KEY) {
         return new Response(
           JSON.stringify({
             error:
-              "Server missing environment variables: Please set MIMO_API_KEY or DEEPSEEK_API_KEY."
+              "Server missing environment variables: Please set GROK_API_KEY, MIMO_API_KEY, or DEEPSEEK_API_KEY."
           }),
           { status: 400 }
         )
       }
 
-      if (provider === "mimo") {
+      if (provider === "grok") {
+        if (!process.env.GROK_API_KEY) {
+          return new Response(JSON.stringify({ error: "Grok API Key is missing." }), {
+            status: 400
+          })
+        }
+        apiKey = process.env.GROK_API_KEY
+      } else if (provider === "mimo") {
         if (!process.env.MIMO_API_KEY || !process.env.MIMO_API_BASE_URL) {
           return new Response(
             JSON.stringify({
@@ -89,7 +96,7 @@ export async function POST(req: Request) {
     // MiMo paid plans need a plan-specific base URL: demo reads it from the
     // server env, BYOK reads the user-supplied value. DeepSeek ignores it.
     const mimoBaseURL = mode === "demo" ? process.env.MIMO_API_BASE_URL : baseUrl
-    const aiProvider = getProvider(provider as "mimo" | "deepseek", apiKey, mimoBaseURL)
+    const aiProvider = getProvider(provider as "mimo" | "deepseek" | "grok", apiKey, mimoBaseURL)
 
     let selectedModel = aiProvider(model) as any
 
@@ -176,13 +183,13 @@ Write all text in the same language the user used.
         } catch (err: any) {
           // Fall back to DeepSeek for the demo MiMo key — whether it expired (auth) or just kept
           // producing unparseable / schema-invalid output after retries.
-          if (!(provider === "mimo" && mode === "demo")) {
+          if (!((provider === "mimo" || provider === "grok") && mode === "demo")) {
             throw err
           }
           if (!process.env.DEEPSEEK_API_KEY && isAuthError(err)) {
             return new Response(
               JSON.stringify({
-                error: "Xiaomi MiMo API Key expired and no DEEPSEEK_API_KEY fallback is available."
+                error: `${provider === "grok" ? "Grok" : "Xiaomi MiMo"} API Key expired and no DEEPSEEK_API_KEY fallback is available.`
               }),
               { status: 401 }
             )
@@ -224,14 +231,14 @@ ${obj.feedback}
           err.message?.includes("403") ||
           err.message?.toLowerCase().includes("unauthorized")
         if (
-          provider === "mimo" &&
+          (provider === "mimo" || provider === "grok") &&
           mode === "demo" &&
           isAuthError &&
           !process.env.DEEPSEEK_API_KEY
         ) {
           return new Response(
             JSON.stringify({
-              error: "Xiaomi MiMo API Key expired and no DEEPSEEK_API_KEY fallback is available."
+              error: `${provider === "grok" ? "Grok" : "Xiaomi MiMo"} API Key expired and no DEEPSEEK_API_KEY fallback is available.`
             }),
             { status: 401 }
           )
@@ -331,7 +338,7 @@ ${obj.feedback}
         err.message?.includes("401") ||
         err.message?.includes("403") ||
         err.message?.toLowerCase().includes("unauthorized")
-      if (provider === "mimo" && mode === "demo" && isAuthError) {
+      if ((provider === "mimo" || provider === "grok") && mode === "demo" && isAuthError) {
         if (process.env.DEEPSEEK_API_KEY) {
           const deepseekProvider = getProvider("deepseek", process.env.DEEPSEEK_API_KEY)
           result = streamText({
@@ -355,7 +362,7 @@ ${obj.feedback}
         } else {
           return new Response(
             JSON.stringify({
-              error: "Xiaomi MiMo API Key expired and no DEEPSEEK_API_KEY fallback is available."
+              error: `${provider === "grok" ? "Grok" : "Xiaomi MiMo"} API Key expired and no DEEPSEEK_API_KEY fallback is available.`
             }),
             { status: 401 }
           )

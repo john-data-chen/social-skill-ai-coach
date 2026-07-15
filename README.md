@@ -125,7 +125,7 @@ Continuing the same example — respectfully befriending a classmate — from th
 - **Curriculum-grounded advice** — the Coach answers only from curriculum slices retrieved for _your_ situation (RAG), not generic tips.
 - **Agent Skill curriculum** — social-skills knowledge authored once as a reusable Skill, the single source of truth; drop it into any agent CLI's skills folder (`.agents/skills`, `.claude/skills`) and it's recognized automatically.
 - **MCP server (bring your own model)** — the four agents are exposed as MCP prompts + knowledge tools, so any MCP client can run the whole coach with its own model. Shipped as an npm stdio package, [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp). The standalone MCP surpassed 1,600 downloads in its first week, with no promotion — suggesting genuine demand for accessible social-skills tooling.
-- **Multi-model** — switch between Xiaomi MiMo and DeepSeek; automatic failover when the demo key expires.
+- **Multi-model** — switch between Grok (xAI, default), Xiaomi MiMo, and DeepSeek; automatic failover to DeepSeek when the demo key expires.
 - **Multilingual** — the AI replies in whatever language you write in, so you can practice in your mother tongue. Language quality depends on the model; tested working in English, Chinese, and Spanish on MiMo / DeepSeek.
 - **Attachments** — upload images and text files (`.md`, `.txt`, `.csv`) for the AI to analyze.
 - **Mobile-first** — designed to reach for in the moment: with a connection and the demo page, the coach is in your pocket anytime. It has been tested on Pixel + Chrome / iPhone + Safari (both total market share 90+%) and still works smoothly even on older phones from four years ago.
@@ -264,7 +264,7 @@ Both forms share one core (`registerSocialSkillsMcp`) and one curriculum source 
 │       ├── mcp/server-setup.ts       # Shared MCP registration (tools + agent prompts)
 │       ├── orchestrator.ts           # LLM topic selection + grounding (server-only)
 │       ├── router.ts                 # Deterministic stage routing (client-safe)
-│       ├── ai.ts                     # Provider init (MiMo / DeepSeek)
+│       ├── ai.ts                     # Provider init (Grok / MiMo / DeepSeek)
 │       └── store.ts                  # Zustand state (history, config)
 ├── public/
 │   └── images/                  # Architecture PNG, cover, screenshots (README / Media Gallery)
@@ -293,7 +293,7 @@ The app defaults to **BYOK**: paste your own API key in the Settings dialog, no 
 
 ```bash
 cp env.example .env
-# then fill in MIMO_API_KEY + MIMO_API_BASE_URL and/or DEEPSEEK_API_KEY
+# then fill in GROK_API_KEY and/or MIMO_API_KEY + MIMO_API_BASE_URL and/or DEEPSEEK_API_KEY
 ```
 
 ### 4. Run
@@ -315,6 +315,7 @@ This app is **BYOK** (bring your own key): you supply one API key, used only in 
 
 | Provider        | Get a key                                                                 | Cost           | Env vars                                                                                               |
 | :-------------- | :------------------------------------------------------------------------ | :------------- | :----------------------------------------------------------------------------------------------------- |
+| **Grok (xAI)**  | Get a key at [x.ai](https://console.x.ai/)                               | from **$5**    | `GROK_API_KEY`                                                                                         |
 | **Xiaomi MiMo** | Subscribe a [MiMo token plan](https://platform.xiaomimimo.com/token-plan) | from **$6/mo** | `MIMO_API_KEY` + `MIMO_API_BASE_URL` (match your plan, e.g. `https://token-plan-cn.xiaomimimo.com/v1`) |
 | **DeepSeek**    | Top up at [DeepSeek](https://platform.deepseek.com/)                      | from **$2**    | `DEEPSEEK_API_KEY`                                                                                     |
 
@@ -327,7 +328,7 @@ Use it one of two ways:
 
 ## 🚀 Deployment (Vercel)
 
-This repo is a public template — deploy your own instance in one click. It runs immediately in **BYOK** mode (open **Settings**, paste your own MiMo or DeepSeek key — see [Get an API key (BYOK)](#byok)); no login, no paywall.
+This repo is a public template — deploy your own instance in one click. It runs immediately in **BYOK** mode (open **Settings**, paste your own Grok, MiMo, or DeepSeek key — see [Get an API key (BYOK)](#byok)); no login, no paywall.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/john-data-chen/social-skill-ai-coach)
 
@@ -355,7 +356,7 @@ Click **Add Environment Variable**:
   <img src="./public/images/deploy-3.png" alt="Environment Variables page — Add Environment Variable button" width="520" />
 </p>
 
-Add the keys from the [BYOK table](#byok) (one of MiMo / DeepSeek), turn on **Sensitive**, and **Save** — then redeploy.
+Add the keys from the [BYOK table](#byok) (Grok / MiMo / DeepSeek), turn on **Sensitive**, and **Save** — then redeploy.
 
 <p align="center">
   <img src="./public/images/deploy-4.png" alt="Add Environment Variable — MIMO_API_KEY and MIMO_API_BASE_URL with Sensitive enabled" width="520" />

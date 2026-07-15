@@ -29,11 +29,13 @@ const MODE_LABELS: Record<string, string> = {
 }
 
 const PROVIDER_LABELS: Record<string, string> = {
+  grok: "Grok (xAI)",
   mimo: "Xiaomi MiMo",
   deepseek: "DeepSeek"
 }
 
 const MODELS: Record<string, string[]> = {
+  grok: ["grok-4-fast", "grok-4"],
   mimo: ["mimo-v2.5-pro", "mimo-v2.5"],
   deepseek: ["deepseek-v4-pro", "deepseek-v4-flash"]
 }
@@ -47,7 +49,7 @@ export function Settings() {
   const handleOpenChange = (isOpen: boolean) => {
     if (isOpen) {
       let draftModel = store.model
-      const allowedModels = MODELS[store.provider] || MODELS["mimo"]!
+      const allowedModels = MODELS[store.provider] || MODELS["grok"]!
       if (!allowedModels.includes(draftModel)) {
         draftModel = allowedModels[0]!
       }
@@ -130,7 +132,7 @@ export function Settings() {
             <Select
               value={draft.provider}
               onValueChange={(val) => {
-                const newProvider = val as "mimo" | "deepseek"
+                const newProvider = val as "grok" | "mimo" | "deepseek"
                 setDraft((prev) => ({
                   ...prev,
                   provider: newProvider,
@@ -144,6 +146,7 @@ export function Settings() {
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="grok">Grok (xAI)</SelectItem>
                 <SelectItem value="mimo">Xiaomi MiMo</SelectItem>
                 <SelectItem value="deepseek">DeepSeek</SelectItem>
               </SelectContent>
@@ -164,7 +167,7 @@ export function Settings() {
                 <SelectValue placeholder="Select model" />
               </SelectTrigger>
               <SelectContent>
-                {(MODELS[draft.provider as string] || MODELS["mimo"]!).map((m) => (
+                {(MODELS[draft.provider as string] || MODELS["grok"]!).map((m) => (
                   <SelectItem key={m} value={m}>
                     {m}
                   </SelectItem>
