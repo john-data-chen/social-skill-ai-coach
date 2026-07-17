@@ -44,7 +44,8 @@ export function Settings() {
   const handleOpenChange = (isOpen: boolean) => {
     if (isOpen) {
       let draftModel = store.model
-      const allowedModels: readonly string[] = MODELS[store.provider as ProviderName] || MODELS.deepseek
+      const allowedModels: readonly string[] =
+        MODELS[store.provider as ProviderName] || MODELS.deepseek
       if (!allowedModels.includes(draftModel)) {
         draftModel = allowedModels[0]!
       }
