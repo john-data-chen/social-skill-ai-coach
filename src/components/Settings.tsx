@@ -30,9 +30,9 @@ const MODE_LABELS: Record<string, string> = {
 }
 
 const PROVIDER_LABELS: Record<ProviderName, string> = {
+  deepseek: "DeepSeek",
   grok: "Grok (xAI)",
-  mimo: "Xiaomi MiMo",
-  deepseek: "DeepSeek"
+  mimo: "Xiaomi MiMo"
 }
 
 export function Settings() {
@@ -44,7 +44,7 @@ export function Settings() {
   const handleOpenChange = (isOpen: boolean) => {
     if (isOpen) {
       let draftModel = store.model
-      const allowedModels: readonly string[] = MODELS[store.provider as ProviderName] || MODELS.grok
+      const allowedModels: readonly string[] = MODELS[store.provider as ProviderName] || MODELS.deepseek
       if (!allowedModels.includes(draftModel)) {
         draftModel = allowedModels[0]!
       }
@@ -141,9 +141,9 @@ export function Settings() {
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="deepseek">DeepSeek</SelectItem>
                 <SelectItem value="grok">Grok (xAI)</SelectItem>
                 <SelectItem value="mimo">Xiaomi MiMo</SelectItem>
-                <SelectItem value="deepseek">DeepSeek</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -162,7 +162,7 @@ export function Settings() {
                 <SelectValue placeholder="Select model" />
               </SelectTrigger>
               <SelectContent>
-                {(MODELS[draft.provider as ProviderName] || MODELS.grok).map((m) => (
+                {(MODELS[draft.provider as ProviderName] || MODELS.deepseek).map((m) => (
                   <SelectItem key={m} value={m}>
                     {m}
                   </SelectItem>
