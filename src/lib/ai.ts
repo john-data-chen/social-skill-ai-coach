@@ -10,11 +10,11 @@ export function getProvider(
   baseURL?: string
 ) {
   const resolvedBaseURL =
-    providerName === "mimo"
-      ? baseURL || DEFAULT_MIMO_BASE_URL
-      : providerName === "grok"
-        ? GROK_BASE_URL
-        : DEEPSEEK_BASE_URL
+    providerName === "grok"
+      ? GROK_BASE_URL
+      : providerName === "deepseek"
+        ? DEEPSEEK_BASE_URL
+        : baseURL || DEFAULT_MIMO_BASE_URL
 
   return createOpenAICompatible({
     name: providerName,

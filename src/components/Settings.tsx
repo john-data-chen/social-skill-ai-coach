@@ -35,7 +35,7 @@ const PROVIDER_LABELS: Record<string, string> = {
 }
 
 const MODELS: Record<string, string[]> = {
-  grok: ["grok-4-fast", "grok-4"],
+  grok: ["grok-4.5", "grok-4.1-fast"],
   mimo: ["mimo-v2.5-pro", "mimo-v2.5"],
   deepseek: ["deepseek-v4-pro", "deepseek-v4-flash"]
 }

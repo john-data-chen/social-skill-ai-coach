@@ -42,7 +42,7 @@ export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
       provider: "grok",
-      model: "grok-4-fast",
+      model: "grok-4.1-fast",
       apiKey: "",
       baseUrl: "",
       mode: "demo",
