@@ -1,12 +1,13 @@
 import { describe, it, expect, beforeEach } from "vitest"
 
+import { MODELS } from "../../src/lib/ai"
 import { useAppStore } from "../../src/lib/store"
 
 describe("store", () => {
   beforeEach(() => {
     useAppStore.setState({
       provider: "mimo",
-      model: "mimo-v2.5-pro",
+      model: MODELS.mimo[0],
       apiKey: "",
       mode: "byok",
       currentStage: "analyzer",
