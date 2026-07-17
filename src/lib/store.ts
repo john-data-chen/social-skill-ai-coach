@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from "zustand/middleware"
 
-import type { ProviderName } from "@/lib/ai"
+import { MODELS, type ProviderName } from "@/lib/ai"
 
 export interface Attachment {
   name: string
@@ -44,8 +44,8 @@ export interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
-      provider: "grok",
-      model: "grok-4.1-fast",
+      provider: "deepseek",
+      model: MODELS.deepseek[0],
       apiKey: "",
       baseUrl: "",
       mode: "demo",

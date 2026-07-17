@@ -10,7 +10,7 @@ export const MIMO_CUSTOM_BASE_URL_EXAMPLE = "https://token-plan-cn.xiaomimimo.co
 export const DEEPSEEK_FALLBACK_MODEL = "deepseek-chat"
 
 export const MODELS = {
-  grok: ["grok-4.5", "grok-4.1-fast"],
+  grok: ["grok-4.5", "grok-4.3"],
   mimo: ["mimo-v2.5-pro", "mimo-v2.5"],
   deepseek: ["deepseek-v4-pro", "deepseek-v4-flash"]
 } as const

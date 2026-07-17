@@ -125,8 +125,8 @@
 - **課程落地的建議**——Coach 只依據為**你的**情境檢索出的課程片段（RAG）回答，而非通用建議。
 - **Agent Skill 課程**——社交知識撰寫成可重用的 Skill，唯一真實來源;丟進任何 agent CLI 的 skills 目錄（`.agents/skills`、`.claude/skills`）即被自動識別。
 - **MCP 伺服器（自帶你的模型）**——四個 agent 以 MCP prompts + 知識 tools 形式開放，任何 MCP client 都能用自己的模型跑整套教練。發佈為 npm stdio 套件 [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp)。獨立 MCP 在沒有任何付費廣告下，發布首週即逾 1,600 次下載，顯示市場對易用社交技能工具的真實需求。
-- **多模型**——可在 Grok（xAI，預設）、Xiaomi MiMo 與 DeepSeek 間切換;demo key 失效時自動 fallback 至 DeepSeek。
-- **多語言**——AI 會用你輸入的語言回覆,所以你可以用母語練習。語言品質依模型能力而定;已在 MiMo / DeepSeek 上測試英文、中文、西班牙文皆能順利運作。
+- **多模型**——可在 DeepSeek（預設）、Grok（xAI）、Xiaomi MiMo 間切換。
+- **多語言**——AI 會用你輸入的語言回覆,所以你可以用母語練習。語言品質依模型能力而定; 已測試英文、中文、西班牙文皆能順利運作。
 - **附件**——上傳圖片與文字檔（`.md`、`.txt`、`.csv`）供 AI 分析。
 - **針對手機操作優化**——讓你在當下就能掏出來用:只要能聯網打開 Demo 網頁，教練隨時隨地在你口袋裡。已在 Pixel + Chrome / iPhone + Safari (兩者總和市占率 90+%) 上實機測試，即便是四年前的舊手機仍運作順暢。
 - **深色／淺色主題**——減少眼睛疲勞，對光敏感的人尤其重要。
@@ -184,7 +184,7 @@ cp -r skills/social-skills-coach ~/.claude/skills/  # 與 Claude 共用
 
 ## 🧰 當成 MCP 伺服器用（自帶你的模型）
 
-整套教練能力**同時也是一個獨立 MCP 伺服器**——可在**任何** MCP client、用**你選的任何模型**跑。四個 sub-agent 以 MCP **prompts** 形式開放:它們在**連線客戶端的模型**上執行，所以伺服器本身不持有任何 API key、也不跑任何推論。可換上比 Demo 用的 MiMo/DeepSeek 更強的模型，或你本地已經在跑的模型。
+整套教練能力**同時也是一個獨立 MCP 伺服器**——可在**任何** MCP client、用**你選的任何模型**跑。四個 sub-agent 以 MCP **prompts** 形式開放:它們在**連線客戶端的模型**上執行，所以伺服器本身不持有任何 API key、也不跑任何推論。可直接連接任何你想用的模型。
 
 **一個 server，多個 client，多種模型。** 以下是它在兩個獨立 MCP client 中實際運作——同一個套件、不必改:
 
@@ -376,7 +376,7 @@ Next.js（App Router）· React · TypeScript（strict）· TailwindCSS · Verce
 
 ### 已完成
 
-- [x] 增加 Grok 作為預設模型
+- [x] 增加 Grok 的支援。
 
 ### 待完成
 
@@ -391,9 +391,9 @@ Next.js（App Router）· React · TypeScript（strict）· TailwindCSS · Verce
 
 此專案是為了 [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) 所開發的概念性產品（最小可行性產品），參加 **Agents for Good**，僅供評審與有興趣者研究。專案所有功能（包含但不限於 Demo、AI agent、Skill、MCP）**皆無法取代受過專業訓練且擁有合格證照的心理師或諮商師， 且無法提供任何醫療與諮商行為**。
 
-示範網站使用 [Grok (xAI)](https://console.x.ai/) 作為預設模型，可以直接使用，**API key 在 Kaggle 審核過後會失效**。若要繼續使用請自備金鑰——見 [取得 API 金鑰（BYOK）](#byok)。
+示範網站使用 [DeepSeek](https://platform.deepseek.com/) 作為預設模型，可以直接使用，**API key 在 Kaggle 審核過後會失效**。若要繼續使用請自備金鑰——見 [取得 API 金鑰（BYOK）](#byok)。
 
-示範影片與截圖為了 Kaggle 評審以英文為主。你可以直接用母語與 AI 對話——支援度依模型能力而有所不同。我在 MiMo / DeepSeek 上測試過英文、中文、西班牙文，皆能順利運作。
+示範影片與截圖為了 Kaggle 評審以英文為主。你可以直接用母語與 AI 對話——支援度依模型能力而有所不同。我測試過英文、中文、西班牙文，皆能順利運作。
 
 請始終記住:**您是在跟 AI 對話。** 應避免在對話中提及真實姓名、電話、地址等個人資訊，必要時用化名。AI 可能會出錯與幻覺——所有建議僅供參考。
 

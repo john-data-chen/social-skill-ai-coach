@@ -222,6 +222,6 @@ describe("Settings", () => {
     fireEvent.click(screen.getByText("Settings"))
 
     fireEvent.click(screen.getByText("Confirm"))
-    expect(useAppStore.getState().model).toBe(MODELS.grok[0])
+    expect(useAppStore.getState().model).toBe(MODELS.deepseek[0])
   })
 })

@@ -125,8 +125,8 @@ Continuing the same example — respectfully befriending a classmate — from th
 - **Curriculum-grounded advice** — the Coach answers only from curriculum slices retrieved for _your_ situation (RAG), not generic tips.
 - **Agent Skill curriculum** — social-skills knowledge authored once as a reusable Skill, the single source of truth; drop it into any agent CLI's skills folder (`.agents/skills`, `.claude/skills`) and it's recognized automatically.
 - **MCP server (bring your own model)** — the four agents are exposed as MCP prompts + knowledge tools, so any MCP client can run the whole coach with its own model. Shipped as an npm stdio package, [`social-skills-coach-mcp`](https://www.npmjs.com/package/social-skills-coach-mcp). The standalone MCP surpassed 1,600 downloads in its first week, with no promotion — suggesting genuine demand for accessible social-skills tooling.
-- **Multi-model** — switch between Grok (xAI, default), Xiaomi MiMo, and DeepSeek; automatic failover to DeepSeek when the demo key expires.
-- **Multilingual** — the AI replies in whatever language you write in, so you can practice in your mother tongue. Language quality depends on the model; tested working in English, Chinese, and Spanish on MiMo / DeepSeek.
+- **Multi-model** — switch between DeepSeek (default), Grok (xAI), and Xiaomi MiMo.
+- **Multilingual** — the AI replies in whatever language you write in, so you can practice in your mother tongue. Language quality depends on the model; tested working in English, Chinese, and Spanish.
 - **Attachments** — upload images and text files (`.md`, `.txt`, `.csv`) for the AI to analyze.
 - **Mobile-first** — designed to reach for in the moment: with a connection and the demo page, the coach is in your pocket anytime. It has been tested on Pixel + Chrome / iPhone + Safari (both total market share 90+%) and still works smoothly even on older phones from four years ago.
 - **Dark / light themes** — reduces eye strain, important for light sensitivity.
@@ -184,7 +184,7 @@ The second way the one curriculum is consumed (alongside in-process and MCP): au
 
 ## 🧰 Use it as an MCP server (bring your own model)
 
-The whole coaching capability is **also a standalone MCP server** — so it runs in _any_ MCP client, on _any_ model you choose. The four sub-agents are exposed as MCP **prompts**: they execute on the _connecting client's_ model, so the server holds no API key and runs no inference itself. Plug in a model more capable than the demo's MiMo/DeepSeek — or whatever your local already runs.
+The whole coaching capability is **also a standalone MCP server** — so it runs in _any_ MCP client, on _any_ model you choose. The four sub-agents are exposed as MCP **prompts**: they execute on the _connecting client's_ model, so the server holds no API key and runs no inference itself. Plug in whatever model you want to use.
 
 **One server, many clients, many models.** Here it is live in two independent MCP clients — same package, no edits:
 
@@ -376,7 +376,7 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 
 ### Done
 
-- [x] Add support of Grok
+- [x] Add support of Grok.
 
 ### Todo
 
@@ -391,9 +391,9 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 
 This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating track is **Agents for Good**, and it is for review and research by interested parties only. All functions (including but not limited to the Demo, AI agents, Skill, and MCP) **cannot replace professionally trained and licensed psychologists or therapists**, and cannot provide any medical treatment or consultation.
 
-The demo website uses [Grok (xAI)](https://console.x.ai/) as the default model. It can be used directly. **The API key will be expired after Kaggle review**. If you want to continue using it, please bring your own key - [see Get an API key (BYOK)](#byok)
+The demo website uses [DeepSeek](https://platform.deepseek.com/) as the default model. It can be used directly. **The API key will be expired after Kaggle review**. If you want to continue using it, please bring your own key - [see Get an API key (BYOK)](#byok)
 
-The demo video and screenshots are in English for the Kaggle review. You can talk to the AI in your own language — how well it does depends on the model. I tested English, Chinese, and Spanish on MiMo / DeepSeek, and all worked smoothly.
+The demo video and screenshots are in English for the Kaggle review. You can talk to the AI in your own language — how well it does depends on the model. I tested English, Chinese, and Spanish, and all worked smoothly.
 
 Please always remember: **you are talking to an AI.** Avoid mentioning personal information such as your real name, phone number, or address; use a pseudonym if needed. AI can make mistakes and hallucinate — all suggestions are for reference only.
 
