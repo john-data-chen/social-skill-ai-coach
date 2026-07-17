@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+import { MODELS } from "@/lib/ai"
 import { useAppStore } from "@/lib/store"
 
 vi.mock("@/components/ui/select", () => {
@@ -22,7 +23,9 @@ vi.mock("@/components/ui/select", () => {
         <select
           data-testid="mock-select"
           value={value}
-          onChange={(e) =>{  onValueChange(e.target.value); }}
+          onChange={(e) => {
+            onValueChange(e.target.value)
+          }}
         >
           {children}
         </select>
@@ -51,7 +54,7 @@ describe("Settings", () => {
   beforeEach(() => {
     useAppStore.setState({
       provider: "mimo",
-      model: "mimo-v2.5-pro",
+      model: MODELS.mimo[0],
       apiKey: "",
       mode: "byok"
     })
@@ -78,7 +81,7 @@ describe("Settings", () => {
     expect(useAppStore.getState().model).toBe("invalid-model")
 
     fireEvent.click(screen.getByText("Confirm"))
-    expect(useAppStore.getState().model).toBe("deepseek-v4-pro")
+    expect(useAppStore.getState().model).toBe(MODELS.deepseek[0])
   })
 
   it("changes in dialog do not affect store until confirmed", () => {
@@ -124,10 +127,10 @@ describe("Settings", () => {
 
     const selects = screen.getAllByTestId("mock-select")
     // index 0: mode, 1: provider, 2: model
-    fireEvent.change(selects[2]!, { target: { value: "mimo-v2.5" } })
+    fireEvent.change(selects[2]!, { target: { value: MODELS.mimo[1] } })
 
     fireEvent.click(screen.getByText("Confirm"))
-    expect(useAppStore.getState().model).toBe("mimo-v2.5")
+    expect(useAppStore.getState().model).toBe(MODELS.mimo[1])
   })
 
   it("changes mode to demo", () => {
@@ -152,7 +155,7 @@ describe("Settings", () => {
     fireEvent.click(screen.getByText("Confirm"))
 
     expect(useAppStore.getState().provider).toBe("deepseek")
-    expect(useAppStore.getState().model).toBe("deepseek-v4-pro")
+    expect(useAppStore.getState().model).toBe(MODELS.deepseek[0])
   })
 
   it("hides API key field when in demo mode", () => {
@@ -192,7 +195,12 @@ describe("Settings", () => {
   })
 
   it("normalizes model to first allowed when switching provider", () => {
-    useAppStore.setState({ provider: "mimo", model: "mimo-v2.5", mode: "byok", apiKey: "test-key" })
+    useAppStore.setState({
+      provider: "mimo",
+      model: MODELS.mimo[1],
+      mode: "byok",
+      apiKey: "test-key"
+    })
     render(<Settings />)
     fireEvent.click(screen.getByText("Settings"))
 
@@ -200,13 +208,13 @@ describe("Settings", () => {
     fireEvent.change(selects[1]!, { target: { value: "deepseek" } })
     fireEvent.click(screen.getByText("Confirm"))
 
-    expect(useAppStore.getState().model).toBe("deepseek-v4-pro")
+    expect(useAppStore.getState().model).toBe(MODELS.deepseek[0])
   })
 
   it("falls back to grok models for unknown provider", () => {
     useAppStore.setState({
       provider: "unknown" as any,
-      model: "grok-4-fast",
+      model: "retired-model-id",
       mode: "byok",
       apiKey: "test-key"
     })
@@ -214,6 +222,6 @@ describe("Settings", () => {
     fireEvent.click(screen.getByText("Settings"))
 
     fireEvent.click(screen.getByText("Confirm"))
-    expect(useAppStore.getState().model).toBe("grok-4-fast")
+    expect(useAppStore.getState().model).toBe(MODELS.grok[0])
   })
 })

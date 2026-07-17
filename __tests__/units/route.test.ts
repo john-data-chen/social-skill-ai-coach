@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+import { MIMO_CUSTOM_BASE_URL_EXAMPLE } from "../../src/lib/ai"
+
 const mockStreamText = vi.fn()
 const mockGenerateText = vi.fn()
 
@@ -22,7 +24,8 @@ vi.mock("../../src/lib/orchestrator", () => ({
 }))
 
 const mockGetProvider = vi.fn()
-vi.mock("../../src/lib/ai", () => ({
+vi.mock("../../src/lib/ai", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../src/lib/ai")>()),
   getProvider: (...args: any[]) => mockGetProvider(...args)
 }))
 
@@ -114,22 +117,18 @@ describe("POST /api/chat", () => {
         messages: [{ role: "user", content: "hi" }],
         provider: "mimo",
         model: "m1",
-        baseUrl: "https://token-plan-cn.xiaomimimo.com/v1",
+        baseUrl: MIMO_CUSTOM_BASE_URL_EXAMPLE,
         mode: "byok",
         stage: "analyzer"
       },
       { Authorization: "Bearer my-key" }
     )
     await POST(req)
-    expect(mockGetProvider).toHaveBeenCalledWith(
-      "mimo",
-      "my-key",
-      "https://token-plan-cn.xiaomimimo.com/v1"
-    )
+    expect(mockGetProvider).toHaveBeenCalledWith("mimo", "my-key", MIMO_CUSTOM_BASE_URL_EXAMPLE)
   })
 
   it("uses MIMO_API_BASE_URL env in demo mode", async () => {
-    process.env.MIMO_API_BASE_URL = "https://token-plan-cn.xiaomimimo.com/v1"
+    process.env.MIMO_API_BASE_URL = MIMO_CUSTOM_BASE_URL_EXAMPLE
     mockStreamText.mockReturnValue({
       textStream: {
         getReader: vi.fn().mockReturnValue({ read: vi.fn().mockResolvedValue({ done: true }) })
@@ -148,7 +147,7 @@ describe("POST /api/chat", () => {
     expect(mockGetProvider).toHaveBeenCalledWith(
       "mimo",
       "env-mimo-key",
-      "https://token-plan-cn.xiaomimimo.com/v1"
+      MIMO_CUSTOM_BASE_URL_EXAMPLE
     )
     delete process.env.MIMO_API_BASE_URL
   })

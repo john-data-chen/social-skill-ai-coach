@@ -8,7 +8,7 @@ import {
   reflectionPrompt,
   reflectionSchema
 } from "@/lib/agents"
-import { getProvider } from "@/lib/ai"
+import { DEEPSEEK_FALLBACK_MODEL, getProvider, type ProviderName } from "@/lib/ai"
 import { groundingFor, selectKnowledgeTopics } from "@/lib/orchestrator"
 
 // [SECURITY: Trust Boundary Validation]
@@ -96,7 +96,7 @@ export async function POST(req: Request) {
     // MiMo paid plans need a plan-specific base URL: demo reads it from the
     // server env, BYOK reads the user-supplied value. DeepSeek ignores it.
     const mimoBaseURL = mode === "demo" ? process.env.MIMO_API_BASE_URL : baseUrl
-    const aiProvider = getProvider(provider as "mimo" | "deepseek" | "grok", apiKey, mimoBaseURL)
+    const aiProvider = getProvider(provider as ProviderName, apiKey, mimoBaseURL)
 
     let selectedModel = aiProvider(model) as any
 
@@ -198,7 +198,7 @@ Write all text in the same language the user used.
             throw err
           }
           const deepseekProvider = getProvider("deepseek", process.env.DEEPSEEK_API_KEY)
-          obj = await generateReflection(deepseekProvider("deepseek-chat") as any, 2)
+          obj = await generateReflection(deepseekProvider(DEEPSEEK_FALLBACK_MODEL) as any, 2)
         }
         const dimensionsSection =
           obj.dimensions && obj.dimensions.length
@@ -342,7 +342,7 @@ ${obj.feedback}
         if (process.env.DEEPSEEK_API_KEY) {
           const deepseekProvider = getProvider("deepseek", process.env.DEEPSEEK_API_KEY)
           result = streamText({
-            model: deepseekProvider("deepseek-chat") as any,
+            model: deepseekProvider(DEEPSEEK_FALLBACK_MODEL) as any,
             system: systemPrompt,
             messages: coreMessages,
             onError: ({ error }) => {

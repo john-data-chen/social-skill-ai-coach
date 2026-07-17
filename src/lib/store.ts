@@ -1,5 +1,8 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from "zustand/middleware"
+
+import type { ProviderName } from "@/lib/ai"
+
 export interface Attachment {
   name: string
   contentType: string
@@ -17,7 +20,7 @@ export type Stage = "analyzer" | "coach" | "roleplay" | "reflection"
 
 export interface AppState {
   // Config state (Persisted)
-  provider: "mimo" | "deepseek" | "grok" | "demo"
+  provider: ProviderName | "demo"
   model: string
   apiKey: string
   baseUrl: string

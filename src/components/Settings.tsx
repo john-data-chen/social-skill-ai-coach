@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
+import { MIMO_CUSTOM_BASE_URL_EXAMPLE, MODELS, type ProviderName } from "@/lib/ai"
 import { useAppStore, type AppState } from "@/lib/store"
 
 const MODE_LABELS: Record<string, string> = {
@@ -28,16 +29,10 @@ const MODE_LABELS: Record<string, string> = {
   byok: "BYOK (Bring Your Own Key)"
 }
 
-const PROVIDER_LABELS: Record<string, string> = {
+const PROVIDER_LABELS: Record<ProviderName, string> = {
   grok: "Grok (xAI)",
   mimo: "Xiaomi MiMo",
   deepseek: "DeepSeek"
-}
-
-const MODELS: Record<string, string[]> = {
-  grok: ["grok-4.5", "grok-4.1-fast"],
-  mimo: ["mimo-v2.5-pro", "mimo-v2.5"],
-  deepseek: ["deepseek-v4-pro", "deepseek-v4-flash"]
 }
 
 export function Settings() {
@@ -49,7 +44,7 @@ export function Settings() {
   const handleOpenChange = (isOpen: boolean) => {
     if (isOpen) {
       let draftModel = store.model
-      const allowedModels = MODELS[store.provider] || MODELS["grok"]!
+      const allowedModels: readonly string[] = MODELS[store.provider as ProviderName] || MODELS.grok
       if (!allowedModels.includes(draftModel)) {
         draftModel = allowedModels[0]!
       }
@@ -132,17 +127,17 @@ export function Settings() {
             <Select
               value={draft.provider}
               onValueChange={(val) => {
-                const newProvider = val as "grok" | "mimo" | "deepseek"
+                const newProvider = val as ProviderName
                 setDraft((prev) => ({
                   ...prev,
                   provider: newProvider,
-                  model: MODELS[newProvider]![0]!
+                  model: MODELS[newProvider][0]
                 }))
               }}
             >
               <SelectTrigger className="col-span-3 w-full">
                 <SelectValue placeholder="Select provider">
-                  {(v: any) => (v ? PROVIDER_LABELS[v as string] : null)}
+                  {(v: any) => (v ? PROVIDER_LABELS[v as ProviderName] : null)}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
@@ -167,7 +162,7 @@ export function Settings() {
                 <SelectValue placeholder="Select model" />
               </SelectTrigger>
               <SelectContent>
-                {(MODELS[draft.provider as string] || MODELS["grok"]!).map((m) => (
+                {(MODELS[draft.provider as ProviderName] || MODELS.grok).map((m) => (
                   <SelectItem key={m} value={m}>
                     {m}
                   </SelectItem>
@@ -220,7 +215,7 @@ export function Settings() {
                       })
                     }
                   }}
-                  placeholder="Mimo token plan only — e.g. https://token-plan-cn.xiaomimimo.com/v1"
+                  placeholder={`Mimo token plan only — e.g. ${MIMO_CUSTOM_BASE_URL_EXAMPLE}`}
                 />
                 {errors.baseUrl && (
                   <p className="text-sm text-destructive mt-1">{errors.baseUrl}</p>

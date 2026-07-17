@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
+import { MODELS } from "@/lib/ai"
 import { useAppStore } from "@/lib/store"
 
 import Page from "../../src/app/page"
@@ -34,7 +35,7 @@ describe("Page", () => {
   beforeEach(() => {
     useAppStore.setState({
       provider: "mimo",
-      model: "mimo-v2.5-pro",
+      model: MODELS.mimo[0],
       apiKey: "",
       mode: "byok",
       currentStage: "analyzer",
