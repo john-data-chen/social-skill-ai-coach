@@ -16,7 +16,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: 11.10.0
+          version: 11.15.1
           run_install: false
           cache: true
 
