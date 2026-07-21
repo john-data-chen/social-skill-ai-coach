@@ -391,7 +391,7 @@ Next.js (App Router) · React · TypeScript (strict) · TailwindCSS · Vercel AI
 
 This project is a conceptual product (minimum viable product) developed for the [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project). The participating track is **Agents for Good**, and it is for review and research by interested parties only. All functions (including but not limited to the Demo, AI agents, Skill, and MCP) **cannot replace professionally trained and licensed psychologists or therapists**, and cannot provide any medical treatment or consultation.
 
-The demo website uses [DeepSeek](https://platform.deepseek.com/) as the default model. It can be used directly. **The API key will be expired after Kaggle review**. If you want to continue using it, please bring your own key - [see Get an API key (BYOK)](#byok)
+The demo website uses [DeepSeek](https://platform.deepseek.com/) as the default model. It can be used directly. **Xiaomi MiMo key expired on July 21, other keys will expire after Kaggle review (end of July)**. If you want to continue using it, please bring your own key - [see Get an API key (BYOK)](#byok)
 
 The demo video and screenshots are in English for the Kaggle review. You can talk to the AI in your own language — how well it does depends on the model. I tested English, Chinese, and Spanish, and all worked smoothly.
 
