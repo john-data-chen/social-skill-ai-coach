@@ -391,7 +391,7 @@ Next.js（App Router）· React · TypeScript（strict）· TailwindCSS · Verce
 
 此專案是為了 [Kaggle AI Agents: Intensive Vibe Coding Capstone Project](https://www.kaggle.com/competitions/vibecoding-agents-capstone-project) 所開發的概念性產品（最小可行性產品），參加 **Agents for Good**，僅供評審與有興趣者研究。專案所有功能（包含但不限於 Demo、AI agent、Skill、MCP）**皆無法取代受過專業訓練且擁有合格證照的心理師或諮商師， 且無法提供任何醫療與諮商行為**。
 
-示範網站使用 [DeepSeek](https://platform.deepseek.com/) 作為預設模型，可以直接使用，**API key 在 Kaggle 審核過後會失效**。若要繼續使用請自備金鑰——見 [取得 API 金鑰（BYOK）](#byok)。
+示範網站使用 [DeepSeek](https://platform.deepseek.com/) 作為預設模型，可以直接使用，**小米 MiMo key 在 7/21 失效，其他 key 將在 Kaggle 審核 (7月) 過後失效**。若要繼續使用請自備金鑰——見 [取得 API 金鑰（BYOK）](#byok)。
 
 示範影片與截圖為了 Kaggle 評審以英文為主。你可以直接用母語與 AI 對話——支援度依模型能力而有所不同。我測試過英文、中文、西班牙文，皆能順利運作。
 
